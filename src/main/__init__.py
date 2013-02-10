@@ -96,7 +96,7 @@ C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)
 class Circle (pygame.sprite.Sprite):
 
     def __init__(self):
-        self.image, self.rect = load_image('ring.png', None)
+        # self.image, self.rect = load_image('ring.png', None)
         self.size = 0
         self.color = (0, 0, 0)
 
@@ -107,14 +107,15 @@ class Circle (pygame.sprite.Sprite):
         self.color = (r, g, b)
 
 
-# --TESTING the full-screen function//--
-for i in range(2):
-    try:
-    # toggle_fullscreen returns a 1/0 based on if it worked
-        attempt_fullscreen = pygame.display.toggle_fullscreen()
-        scn_tst = "About the full-screen, there were no errors boss!"
-    except Exception as e:
-        scn_tst = "Full-screen error({0}): {1}".format(e.errno, e.strerror)
+def fullscreen_test():
+    # --TESTING the full-screen function//--
+    for i in range(2):
+        try:
+            # toggle_fullscreen returns a 1/0 based on if it worked
+            attempt_fullscreen = pygame.display.toggle_fullscreen()
+            scn_tst = "About the full-screen, there were no errors boss!"
+        except Exception as e:
+            scn_tst = "Full-screen error({0}): {1}".format(e.errno, e.strerror)
 
 # --FUNCTIONS to create our resources//--
 def load_image(name, colorkey=None):
@@ -152,14 +153,14 @@ def main():
     orig_stdout = sys.stdout
     current_circle_quantity = 0
     display_antialiasing = False
-    ring_img, ring_rect = load_image('ring.png', None)
+    ring_img, ring_rect = load_image('ring_silver.png', None)
     box_img, box_rect = load_image('letter_box.png', None)
     BACKGROUND_COLOR = pygame.color.Color('white')  # background color
     box_rect.center = (CENTER_X, CENTER_Y)
     ring_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
     rotation_speed = 2
-    pygame.transform.set_smoothscale_backend('GENERIC')
+#    pygame.transform.set_smoothscale_backend('GENERIC')
 
 # --Main Game Loop//--
     made_background = False
@@ -221,19 +222,19 @@ def main():
             elif event.type == KEYUP and event.key == K_RIGHT:
                 rotate_by += -rotation_speed
         # --non-game-play events//--
-        # if u is pressed, toggle AAing.
+        # if U is pressed, toggle AAing.
             elif event.type == KEYDOWN and event.key == K_u:
                 if display_antialiasing == True:
                     display_antialiasing = False
                 else:
                     display_antialiasing = True
-        # if i is pressed, toggle context display
+        # if I is pressed, toggle context display
             elif event.type == KEYDOWN and event.key == K_i:
                 if display_sprites == True:
                     display_sprites = False
                 else:
                     display_sprites = True
-        # if q is pressed, print output to file log.txt
+        # if Q is pressed, print output to file log.txt
             elif event.type == KEYDOWN and event.key == K_q:
                 if orig_stdout == sys.stdout:
                     rep_log = open('data/log.txt', 'a')
@@ -245,7 +246,7 @@ def main():
                     print "LOGGING TO FILE ENDING--"
                     sys.stdout = orig_stdout
                     rep_log.close()
-        # if p is pressed, pause game.
+        # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
                 for p in pygame.key.get_pressed():
@@ -256,7 +257,7 @@ def main():
                         else:
                             paused = True
                             print "INTO PAUSE!!"
-        # if l is pressed, toggle black auto-black circle.
+        # if L is pressed, toggle black auto-black circle.
             elif event.type == KEYDOWN and event.key == K_l:
                 if total_input == 0:
                     total_input = 100
