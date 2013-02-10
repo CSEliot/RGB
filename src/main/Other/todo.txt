@@ -1,0 +1,32 @@
+0.1.5+ // xx.xx.2013.xx:xx - 	Added: 
+							-Title Splash Screen
+							-Music, but temporary
+							-hitboxes, classes, detection, fun stuff
+						Changed:
+							-Circles generated as images
+							-Ring Changes including seperate images per color, and a darker ring
+							-More organization and speed improvements to code.
+						Removed:
+						Bug Fixes: 
+							-Fullscreen TOGGLE not working (all not working on mac)
+
+--Planned--
+*Beta*
+0.2.0+// 02.xx.2013.xx:xx - 	Added:
+							-Menu Screen / Game States
+							-Hitboxes for the Ring-Arrow!
+							-Choice between Free-Mode (make your own circles) and Arcade Mode (actual game)
+							-An AI to Control Circle generation.
+							- Sound Effects 
+						Changed:
+							-Improved Image Quality
+							-Input feedback from RGB letters to arrow
+							-controls from toggle to choosing your own
+						Removed:
+							-RGB input response buttons at the bottom
+							-visual acknowledgment of toggle controls
+*Final*
+1.0.0 // xx.xx.2013.xx:xx - Added:
+							-Gameplay
+							-Music
+							-Gameplay

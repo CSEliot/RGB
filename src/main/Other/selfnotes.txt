@@ -1,0 +1,67 @@
+Disclaimer: These are notes to myself, nobody has to read this.
+
+Visual Feedback: 
+	"""NOTE: CIRCLES DO NOT SHOOT TILL YOU GET A RIGHT CIRCLE COLOR!!
+		OR
+	The circles will be a bit brighter when you're right, and a bit darker when you're wrong.
+
+Backstory:
+	It is the year 00000000000.1 and the Universe is just beginning! The very fabrics of color are now being spread throughout the universe! It is your job to catch these colors. In doing so, the 3rd dimension will slowly be created and EXPLODE from the center of the Universe. You must catch these 3D objects, also known as CUBES, with your Apply Rift Riding Oscilator of Wisdom, aka A.R.R.O.W., by rotating it to the cubes, so that the Universe can be organized into a 3D space of colors and things!!
+
+Music:
+	FFXI OST- RuLude Gardens
+
+Circle Quality:
+Currently, there ARE ways to draw an antialiased filled circle in pygame, but it involves complicated algorithms and CPU drain,
+so what I might do is just have a .png for each colored circle, have it HUGE, then size it down with transform.rotozoom, and have it 
+enlarge back up to it's original .png size.
+
+
+Randomizer: 
+Once the Color AI is installed, it will work like this:
+All current code will require minimum changes.
+The AI will randomyl change a list of R, G and B. 
+it will swap out R, G, or B with 0.
+So the if statements will detect if list[0] has R, etc.
+It will not use the same color twice. 
+At the end of the AI's code, it will set current list = to old_list.
+old_list will then be compared to the list upon AI rerun, and if equal, rerun the AI again.
+(yes i know it isn't technically AI)
+
+Circle lists:
+When dealing with human controls, a new circle will be created each time there is input, so while holding down input, continuous 
+circles are created. This lowers framerate, but will not be a problem once the AI is handling circle generation.
+
+
+Code Dump:
+	
+    new_event_list = None
+        old_event_list = pygame.event.get()
+        if old_event_list == new_event_list:
+            print 'events are the same!'
+        else:
+            print 'events are not the same'
+            new_event_list = old_event_list
+       new_event_list = pygame.event.get()
+
+
+
+
+
+
+    """if direction == 'right':
+        catx += 5
+        if catx == 280:
+            direction = 'down'
+    elif direction == 'down':
+        caty += 5
+        if caty == 220:
+            direction = 'left'
+    elif direction == 'left':
+        catx -= 5
+        if catx == 10:
+            direction = 'up'
+    elif direction == 'up':
+        caty -= 5
+        if caty == 10:
+            direction = 'right'"""
