@@ -1,0 +1,10 @@
+NOTE: before testing, PLEASE press Q to begin recording to log.txt. It MUST be pressed (Q) again to turn off the recording and save to file.
+
+The following things should be tested every time:
+	Frame Rate
+	Possible bugs/glitches
+	Just work every crevice of the program to it's knees.
+
+New for the latest update(0.1.4c):
+	Fullscreen, defaulted
+	Pausing and Input (before, you could hold down a button, press 'P', release the button, and the release wouldn't register.) 
