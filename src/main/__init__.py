@@ -100,6 +100,8 @@ class Circle (pygame.sprite.Sprite):
         self.size = 0
         self.color = (0, 0, 0)
 
+    def increase_size(self):
+        self.size += CIRCLE_GROWTH_SPEED
 
 
 
