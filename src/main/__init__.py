@@ -1,3 +1,4 @@
+#===============================================================================
 # File:   RGB - alpha
 # Author: Eliot Carney-Seim
 # Date:   1/20/2013
@@ -5,6 +6,7 @@
 # Description:
 #        A rhythm game based around the monitor's use of RGB pixels to create
 # images to be displayed to the screen.
+#===============================================================================
 
 import pygame, sys, os, pygame.gfxdraw, pygame.surface
 from pygame.locals import *  # @UnusedWildImport
@@ -13,6 +15,7 @@ from pygame.compat import geterror
 # from PIL.Image import ANTIALIAS
 # from IPython.utils.timing import clock
 import math as m
+# os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
 
@@ -30,8 +33,9 @@ KEY:
 _______________________________________________________________________________
 '''
 
+
 """FULLSCREEN ON STARTUP?"""
-FULLSCREEN_RES = True
+FULLSCREEN_RES = False
 """||||||||||||||||||||||"""
 
 """SCREEN INFORMATION"""
@@ -39,6 +43,8 @@ user_screen_data = pygame.display.Info()
 window_width = user_screen_data.current_w
 window_height = user_screen_data.current_h
 pygame.display.set_caption('RGB - The Game of COLORS by Eliot C-S')
+
+# Making a screen, w/ 4 different possible outcomes.
 if FULLSCREEN_RES == True:
     try:
         options = (FULLSCREEN | DOUBLEBUF | HWSURFACE)
@@ -58,8 +64,8 @@ else:
         DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
         which_display = "Display 3"
     except Exception as e:
-    # If for some reason this resolution does not fit user's display, it will
-    # fit to their native resolution.
+        # If for some reason this resolution does not fit user's display it will
+        # fit to their native resolution.
         options = 0
         std_res = (window_width - 100, window_height - 100)
         DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
@@ -67,30 +73,33 @@ else:
         screen_error = "Window Error {0}: {1}".format(e.errno, e.strerror)
 
 
-# --constants//--
-"""_________ALL_VARIABLES_BELOW_MAY_BE_MODIFIED_FOR_EXPERIMENTING____________"""
-CIRCLE_GROWTH_SPEED = 3
-FPS = 60  # frames per second ceiling setting
-RED = pygame.color.Color('red')
-GREEN = pygame.color.Color('green')
-BLUE = pygame.color.Color('blue')
-pygame.mouse.set_visible(0)
-# ring_img = pygame.image.load("ring_gray.png")
-"""_________ALL_VARIABLES_ABOVE_MAY_BE_MODIFIED_FOR_EXPERIMENTING____________"""
-WHITE = (255, 255, 255)
-BLANK = (0, 233, 0, 10)
-BLACK = (0, 0, 0)
-fpsClock = pygame.time.Clock()
-fontObj_large = pygame.font.Font('freesansbold.ttf', 32)
-fontObj_small = pygame.font.Font('freesansbold.ttf', 8)
-version_num = 'v0.1.4c'
-CENTER_X = (DISPLAYSURFACE.get_width() / 2)
-CENTER_Y = (DISPLAYSURFACE.get_height() / 2)
-# a^2 + b^2 = c^2. This calculates the longest distance from rectangle center.
-C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)
+
+
+class Ring(pygame.sprite.Sprite):
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image, self.rect = load_image('ring.png', -1)
+        self.MAX_COLLIDE_SIZE = 290
+        self.MIN_COLLIDE_SIZE = 280
+        self.angle = 0.0
+        self.rotate_by = 0.0
+        self.rotation_speed = 2
+
+    def set_direction(self, direction):  # 1 for left, -1 for right
+        if direction == -1:
+            rotate_by += rotation_speed
 
 
 
+    def spin(self):  # Will change ring angle, based on direction
+        # --Spin the Ring//--
+        if direction == -1:
+
+            angle += -rotate_by * 2
+        else:
+            angle += rotate_by * 2
+        ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
 
 
 class Circle (pygame.sprite.Sprite):
@@ -107,15 +116,9 @@ class Circle (pygame.sprite.Sprite):
         self.color = (r, g, b)
 
 
-def fullscreen_test():
-    # --TESTING the full-screen function//--
-    for i in range(2):
-        try:
-            # toggle_fullscreen returns a 1/0 based on if it worked
-            attempt_fullscreen = pygame.display.toggle_fullscreen()
-            scn_tst = "About the full-screen, there were no errors boss!"
-        except Exception as e:
-            scn_tst = "Full-screen error({0}): {1}".format(e.errno, e.strerror)
+
+
+
 
 # --FUNCTIONS to create our resources//--
 def load_image(name, colorkey=None):
@@ -131,6 +134,49 @@ def load_image(name, colorkey=None):
             colorkey = image.get_at((0, 0))
         image.set_colorkey(colorkey, RLEACCEL)
     return image, image.get_rect()
+
+def log(orig_stdout, rep_log):
+    # --TESTING the full-screen function//--
+    for i in range(2):
+        try:
+            # toggle_fullscreen returns a 1/0 based on if it worked
+            attempt_fullscreen = pygame.display.toggle_fullscreen()
+            scn_tst = "About the full-screen, there were no errors boss!"
+        except Exception as e:
+            attempt_fullscreen = "Fullscreen Failed"
+            scn_tst = "Full-screen error({0}): {1}".format(e.errno, e.strerror)
+    # --LOGGING
+    if orig_stdout == sys.stdout:
+        rep_log = open('data/log.txt', 'a')
+        sys.stdout = rep_log
+        print "LOGGING TO FILE BEGINNING--"
+        print "Display Info: {0}".format(which_display)
+        print attempt_fullscreen, scn_tst
+        return rep_log
+    else:
+        print "LOGGING TO FILE ENDING--"
+        sys.stdout = orig_stdout
+        rep_log.close()
+
+# --constants//--
+##############################################################################
+CIRCLE_GROWTH_SPEED = 3
+FPS = 60  # frames per second ceiling setting
+RED = pygame.color.Color('red')
+GREEN = pygame.color.Color('green')
+BLUE = pygame.color.Color('blue')
+NO_MOUSE = pygame.mouse.set_visible(0)
+WHITE = (255, 255, 255)
+BLANK = (0, 233, 0, 10)
+BLACK = (0, 0, 0)
+FPSCLOCK = pygame.time.Clock()
+FONT_LARGE = pygame.font.Font('freesansbold.ttf', 32)
+FONT_SMALL = pygame.font.Font('freesansbold.ttf', 8)
+VERSION = 'v0.2-BETA'
+CENTER_X = (DISPLAYSURFACE.get_width() / 2)
+CENTER_Y = (DISPLAYSURFACE.get_height() / 2)
+C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)  # equates screen diagonal.
+DEBUG = True
 
 # --main//--
 def main():
@@ -149,11 +195,12 @@ def main():
     toggle_color_g = BLACK
     toggle_color_b = BLACK
     display_sprites = True
-    rep_log = file.__class__
+    # rep_log = file.__class__  # logging file
     orig_stdout = sys.stdout
     current_circle_quantity = 0
     display_antialiasing = False
-    ring_img, ring_rect = load_image('ring_silver.png', None)
+    ring_img, ring_rect = load_image('ring.png', -1)
+    # ring_img, ring_rect = load_image('ring.png', None)
     box_img, box_rect = load_image('letter_box.png', None)
     BACKGROUND_COLOR = pygame.color.Color('white')  # background color
     box_rect.center = (CENTER_X, CENTER_Y)
@@ -215,10 +262,13 @@ def main():
         # Ring Spinning
             elif event.type == KEYDOWN and event.key == K_LEFT:
                 rotate_by += -rotation_speed
+                # ring.set_direction(1)
             elif event.type == KEYDOWN and event.key == K_RIGHT:
                 rotate_by += rotation_speed
+                # ring.set_direction(-1)
             elif event.type == KEYUP and event.key == K_LEFT:
                 rotate_by += rotation_speed
+                # ring.set_direction
             elif event.type == KEYUP and event.key == K_RIGHT:
                 rotate_by += -rotation_speed
         # --non-game-play events//--
@@ -236,16 +286,7 @@ def main():
                     display_sprites = True
         # if Q is pressed, print output to file log.txt
             elif event.type == KEYDOWN and event.key == K_q:
-                if orig_stdout == sys.stdout:
-                    rep_log = open('data/log.txt', 'a')
-                    sys.stdout = rep_log
-                    print "LOGGING TO FILE BEGINNING--"
-                    print "Display Info: {0}".format(which_display)
-                    print attempt_fullscreen, scn_tst
-                else:
-                    print "LOGGING TO FILE ENDING--"
-                    sys.stdout = orig_stdout
-                    rep_log.close()
+                rep_log = (orig_stdout)
         # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
@@ -295,7 +336,7 @@ def main():
             angle += -rotate_by * 2
         else:
             angle += rotate_by * 2
-        ring_imgNew = ring_img  # .convert()
+       # ring_imgNew = pygame.transform.scale(ring_img, (angle, angle))
         ring_imgNew = pygame.transform.rotozoom(ring_img, angle, 1)
         ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
 
@@ -365,20 +406,20 @@ def main():
                 current_circle_quantity += -1
 
         """BUTTON / SPRITE RENDERING"""
-        r_SurfaceObj = fontObj_large.render('R', True, toggle_color_r)
+        r_SurfaceObj = FONT_LARGE.render('R', True, toggle_color_r)
         r_RectObj = r_SurfaceObj.get_rect()
         r_RectObj.center = (CENTER_X - 50, (CENTER_Y * 2) - 25)
 
-        g_SurfaceObj = fontObj_large.render('G', True, toggle_color_g)
+        g_SurfaceObj = FONT_LARGE.render('G', True, toggle_color_g)
         g_RectObj = g_SurfaceObj.get_rect()
         g_RectObj.center = (CENTER_X, (CENTER_Y * 2) - 25)
 
-        b_SurfaceObj = fontObj_large.render('B', True, toggle_color_b)
+        b_SurfaceObj = FONT_LARGE.render('B', True, toggle_color_b)
         b_RectObj = b_SurfaceObj.get_rect()
         b_RectObj.center = (CENTER_X + 50, (CENTER_Y * 2) - 25)
 
     # display the version ID
-        font_renderObj = fontObj_small.render(version_num, False, BLACK, WHITE)
+        font_renderObj = FONT_SMALL.render(VERSION, False, BLACK, WHITE)
         versionID_SurfaceObj = font_renderObj
         versionID_RectObj = versionID_SurfaceObj.get_rect()
         versionID_RectObj.topleft = (0, 0)
@@ -393,9 +434,6 @@ def main():
             DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
             DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-            DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-            DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-            DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
             DISPLAYSURFACE.blit(box_img, r_RectObj)
             DISPLAYSURFACE.blit(box_img, g_RectObj)
             DISPLAYSURFACE.blit(box_img, b_RectObj)
@@ -404,12 +442,12 @@ def main():
 
         """LOGGING output information: FPS, event info, AA, etc."""
         num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))
-        print fpsClock.get_fps(), num_compare
+        print FPSCLOCK.get_fps(), num_compare
         if len(circle_size_list) > 0:
             print circle_size_list[0]
 
         """UPDATE AND DELAY"""
-        fpsClock.tick_busy_loop(FPS)
+        FPSCLOCK.tick_busy_loop(FPS)
         pygame.display.flip()
 
     try:

@@ -1,32 +1,40 @@
-0.1.5+ // xx.xx.2013.xx:xx - 	Added: 
-							-Title Splash Screen
-							-Music, but temporary
-							-hitboxes, classes, detection, fun stuff
-						Changed:
-							-Circles generated as images
-							-Ring Changes including seperate images per color, and a darker ring
-							-More organization and speed improvements to code.
-						Removed:
-						Bug Fixes: 
-							-Fullscreen TOGGLE not working (all not working on mac)
-
 --Planned--
 *Beta*
-0.2.0+// 02.xx.2013.xx:xx - 	Added:
+0.2.0+// 03.xx.2013.xx:xx - 
+						Added:
 							-Menu Screen / Game States
+							-An AI to Control Circle generation.
+							-pre-window launch settings window
+							-Music, but temporary*
+							-hitboxes, classes, detection, fun stuff*
+							-game is installed and launched via .exe
+						Changed:
+							-Input feedback from RGB letters to arrow
+							-Improved Image Quality
+							-controls from toggle to choosing your own
+							-Circles generated as images*
+							-Code reporting to file done instantly and automatically
+							-errors also printed to the file
+							-Ring Changes including seperate images per color, and a darker ring*
+							
+
+0.2.1+// 03.xx.2013.xx:xx - 	
+						Added:
 							-Hitboxes for the Ring-Arrow!
 							-Choice between Free-Mode (make your own circles) and Arcade Mode (actual game)
-							-An AI to Control Circle generation.
-							- Sound Effects 
+							-Sound Effects
+							-Title Splash Screen*
 						Changed:
-							-Improved Image Quality
-							-Input feedback from RGB letters to arrow
-							-controls from toggle to choosing your own
+							-More improved image quality
+							-More organization and speed improvements to code.*
 						Removed:
 							-RGB input response buttons at the bottom
 							-visual acknowledgment of toggle controls
+						Bug Fixes:
+							-Fullscreen TOGGLE not working (all not working on mac)*
 *Final*
 1.0.0 // xx.xx.2013.xx:xx - Added:
 							-Gameplay
 							-Music
 							-Gameplay
+							-Pretty things

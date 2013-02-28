@@ -1,10 +1,54 @@
-0.0.1 // 01.20.2013.06:41 - first version, circles render indefinitely, don't grow after first action.
-0.0.2 // 01.21.2013.01:23 - circles now continue to grow forever.
-0.1.1 // 01.21.2013.20:45 - Larger Screen, maybe final size, and circles 
-0.1.2 // 01.21.2013.21:32 - FULLSCREEN, not so subtle, but it's there.
-0.1.3 // 01.22.2013.23:45 - Program title updated, frame rate increased, circle growth speed decreased, code readability increased,
-						background changed, input response verification added to the bottom.
-0.1.4 // 01.25.2013.06:35 - 	Added: 
+Changelog
+
+0.2.0a // xx.xx.2013.xx:xx	Added:
+								- Actual gameplay elements!
+								- A scoreboard.
+								- Music! (this is temporary, I do not technically own this music)
+								- An Instructions page!
+								- Game States!
+							Changed:
+								- Fullscreen is temporarily unavailable.
+								- How log files log. With more accuracy and verbosity.
+								- Circle speed is slower, this will probably be the default easy mode speed.
+							Removed:
+							Fixed:
+							Code:
+								- Ring and circles are their own class, everything handled inside there.
+							
+							
+							
+							
+							
+							
+							
+							
+---------------------------ALPHA-----------------------------------------
+0.1.4.c//01.27.2013.07:11   	Added:
+							-Fullscreen will be tested everytime now, and results will be sent to log.txt if enabled.
+							-More info will be printed to the log.
+							-Alternate which arrow correspondes to clockwise/counter. Press o.
+							-Glossy-ness to RGB buttons.
+							-Press l to toggle automatic black circles.
+						Removed:
+							-Fullscreen toggle removed, fullscreen is default, can be changed in source code.
+							-LAG! Now the game runs off of your graphics card, not the internal video software.
+						Changed:
+							-AntiAliasing should be more effective, but but 3x heavier on the cpu.
+							-log.txt is saved to the data folder now.
+							-Game will not pause if buttons are pressed, will not unpause if buttons are pressed.
+						Bug Fixes:
+							-LAG!
+							-Solved the wobbling. (still WiP)
+							-P will no longer pause while a button is pressed. It will not longer UNPAUSE until buttons are  	                              				released.       
+						Changed:
+							-Fullscreen is default.
+							
+0.1.4b // 01.25.2013.06:35   Bug Fixes:
+							-Fixed the image importing error
+0.1.4a // 01.25.2013.06:35   Bug Fixes:
+							-Removed some unused, imcompatible import statements.
+							
+0.1.4 // 01.25.2013.06:35 - Added: 
 							-classes and object support
 							-Program quits via closing window or hitting escape 
 							-Pausing
@@ -26,27 +70,57 @@
 							-Static Circle Speed
 						Bug Fixes:
 							-Continuous circle creation when holding
-0.1.4a // 01.25.2013.06:35   Bug Fixes:
-							-Removed some unused, imcompatible import statements.
-0.1.4b // 01.25.2013.06:35   Bug Fixes:
-							-Fixed the image importing error.
-0.1.4.c//01.27.2013.07:11   	Added:
-							-Fullscreen will be tested everytime now, and results will be sent to log.txt if enabled.
-							-More info will be printed to the log.
-							-Alternate which arrow correspondes to clockwise/counter. Press o.
-							-Glossy-ness to RGB buttons.
-							-Press l to toggle automatic black circles.
-						Removed:
-							-Fullscreen toggle removed, fullscreen is default, can be changed in source code.
-							-LAG! Now the game runs off of your graphics card, not the internal video software.
-						Changed:
-							-AntiAliasing should be more effective, but but 3x heavier on the cpu.
-							-log.txt is saved to the data folder now.
-							-Game will not pause if buttons are pressed, will not unpause if buttons are pressed.
-						Bug Fixes:
-							-LAG!
-							-Solved the wobbling. (still WiP)
-							-P will no longer pause while a button is pressed. It will not longer UNPAUSE until buttons are  	                              				released.       
-						Changed:
-							-Fullscreen is default.
+
+
+0.1.3 // 01.22.2013.23:45 - Program title updated, frame rate increased, circle growth speed decreased, code readability increased,
+							background changed, input response verification added to the bottom.
+0.1.2 // 01.21.2013.21:32 - FULLSCREEN, not so subtle, but it's there.
+0.1.1 // 01.21.2013.20:45 - Larger Screen, maybe final size, and circles 
+0.0.2 // 01.21.2013.01:23 - circles now continue to grow forever.
+0.0.1 // 01.20.2013.06:41 - first version, circles render indefinitely, don't grow after first action.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 						
