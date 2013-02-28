@@ -1,19 +1,37 @@
 Disclaimer: These are notes to myself, nobody has to read this.
 
+
+New gameplay element ideas: 
+	up and down rotate a whole ninety degrees, smoothly.
+	possibly accomplishable by using modulus by 90, and easing in to it.
+
+	A video playing in the background, circles will be slightly opaque.
+
+
 Visual Feedback: 
 	"""NOTE: CIRCLES DO NOT SHOOT TILL YOU GET A RIGHT CIRCLE COLOR!!
 		OR
-	The circles will be a bit brighter when you're right, and a bit darker when you're wrong.
+	The circles will be a bit brighter when you're right, 
+	and a bit darker when you're wrong.
 
 Backstory:
-	It is the year 00000000000.1 and the Universe is just beginning! The very fabrics of color are now being spread throughout the universe! It is your job to catch these colors. In doing so, the 3rd dimension will slowly be created and EXPLODE from the center of the Universe. You must catch these 3D objects, also known as CUBES, with your Apply Rift Riding Oscilator of Wisdom, aka A.R.R.O.W., by rotating it to the cubes, so that the Universe can be organized into a 3D space of colors and things!!
+	It is the year 00000000000.1 and the Universe is just beginning! 
+	The very fabrics of color are now being spread throughout the universe! 
+	It is your job to catch these colors. In doing so, the 3rd dimension will 
+	slowly be created and EXPLODE from the center of the Universe. 
+	You must catch these 3D objects, also known as CUBES, with your 
+	Apply Rift Riding Oscilator of Wisdom, aka A.R.R.O.W., 
+	by rotating it to the cubes, so that the Universe can be organized into a 
+	3D space of colors and things!!
 
 Music:
-	FFXI OST- RuLude Gardens
+	temporary placeholder: FFXI OST- RuLude Gardens
 
 Circle Quality:
-Currently, there ARE ways to draw an antialiased filled circle in pygame, but it involves complicated algorithms and CPU drain,
-so what I might do is just have a .png for each colored circle, have it HUGE, then size it down with transform.rotozoom, and have it 
+Currently, there ARE ways to draw an antialiased filled circle in pygame,
+but it involves complicated algorithms and CPU drain,
+so what I might do is just have a .png for each colored circle, 
+have it HUGE, then size it down with transform.rotozoom, and have it 
 enlarge back up to it's original .png size.
 
 
