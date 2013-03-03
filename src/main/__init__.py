@@ -8,15 +8,16 @@
 # images to be displayed to the screen.
 #===============================================================================
 
-import pygame, sys, os, pygame.gfxdraw, pygame.surface
+import pygame, sys, os, pygame.gfxdraw, pygame.surface, datetime, platform
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror
 # from cgi import escape
 # from PIL.Image import ANTIALIAS
 # from IPython.utils.timing import clock
 import math as m
-# os.environ['SDL_VIDEO_CENTERED'] = '1'
-
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+if platform.system() == 'Windows':
+    os.environ['SDL_VIDEODRIVER'] = 'windib'
 pygame.init()
 
 main_dir = os.path.split(os.path.abspath(__file__))[0]
@@ -73,7 +74,28 @@ else:
         screen_error = "Window Error {0}: {1}".format(e.errno, e.strerror)
 
 
-
+# --constants//--
+##############################################################################
+CIRCLE_GROWTH_SPEED = 3
+FPS = 1000  # frames per second ceiling setting
+RED = pygame.color.Color('red')
+GREEN = pygame.color.Color('green')
+BLUE = pygame.color.Color('blue')
+NO_MOUSE = pygame.mouse.set_visible(0)
+WHITE = (255, 255, 255)
+BLANK = (0, 233, 0, 10)
+BLACK = (0, 0, 0)
+FPSCLOCK = pygame.time.Clock()
+FONT_LARGE = pygame.font.Font('freesansbold.ttf', 32)
+FONT_SMALL = pygame.font.Font('freesansbold.ttf', 8)
+VERSION = 'v0.2-BETA'
+CENTER_X = (DISPLAYSURFACE.get_width() / 2)
+CENTER_Y = (DISPLAYSURFACE.get_height() / 2)
+C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)  # equates screen diagonal.
+DATE = datetime.date.timetuple(datetime.date.today())[0] , \
+       datetime.date.timetuple(datetime.date.today())[1] , \
+       datetime.date.timetuple(datetime.date.today())[2]
+DEBUG = True
 
 class Ring(pygame.sprite.Sprite):
 
@@ -126,7 +148,7 @@ def load_image(name, colorkey=None):
     try:
         image = pygame.image.load(fullname).convert_alpha()
     except pygame.error:
-        print ('Cannot load image:', fullname)
+        debug(DEBUG, ('Cannot load image:', fullname))
         raise SystemExit(str(geterror()))
     # image = image.convert()
     if colorkey is not None:
@@ -149,36 +171,25 @@ def log(orig_stdout, rep_log):
     if orig_stdout == sys.stdout:
         rep_log = open('data/log.txt', 'a')
         sys.stdout = rep_log
-        print "LOGGING TO FILE BEGINNING--"
-        print "Display Info: {0}".format(which_display)
-        print attempt_fullscreen, scn_tst
+        debug(DEBUG, "LOGGING TO FILE BEGINNING--")
+        debug(DEBUG, DATE)
+        debug(DEBUG, "Display Info: {0}".format(which_display))
+        debug(DEBUG, (attempt_fullscreen, scn_tst))
         return rep_log
     else:
-        print "LOGGING TO FILE ENDING--"
+        debug(DEBUG, "LOGGING TO FILE ENDING--")
         sys.stdout = orig_stdout
         rep_log.close()
 
-# --constants//--
-##############################################################################
-CIRCLE_GROWTH_SPEED = 3
-FPS = 60  # frames per second ceiling setting
-RED = pygame.color.Color('red')
-GREEN = pygame.color.Color('green')
-BLUE = pygame.color.Color('blue')
-NO_MOUSE = pygame.mouse.set_visible(0)
-WHITE = (255, 255, 255)
-BLANK = (0, 233, 0, 10)
-BLACK = (0, 0, 0)
-FPSCLOCK = pygame.time.Clock()
-FONT_LARGE = pygame.font.Font('freesansbold.ttf', 32)
-FONT_SMALL = pygame.font.Font('freesansbold.ttf', 8)
-VERSION = 'v0.2-BETA'
-CENTER_X = (DISPLAYSURFACE.get_width() / 2)
-CENTER_Y = (DISPLAYSURFACE.get_height() / 2)
-C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)  # equates screen diagonal.
-DEBUG = True
+def debug(debugBool, info):
 
-# --main//--
+    if (debugBool):
+        print "\nDEBUG INFO: ", info
+        return True
+    return False
+
+
+
 def main():
 
 # --Initialize Everything//--
@@ -195,14 +206,14 @@ def main():
     toggle_color_g = BLACK
     toggle_color_b = BLACK
     display_sprites = True
-    # rep_log = file.__class__  # logging file
+    rep_log = file.__class__  # logging file
     orig_stdout = sys.stdout
     current_circle_quantity = 0
     display_antialiasing = False
     ring_img, ring_rect = load_image('ring.png', -1)
     # ring_img, ring_rect = load_image('ring.png', None)
     box_img, box_rect = load_image('letter_box.png', None)
-    BACKGROUND_COLOR = pygame.color.Color('white')  # background color
+    background, background_rect, = load_image('starBg.png')  # background color
     box_rect.center = (CENTER_X, CENTER_Y)
     ring_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
@@ -214,22 +225,22 @@ def main():
     going = True
     while going:
 
-    # Paint the background color, which CAN change.
-        DISPLAYSURFACE.fill(BACKGROUND_COLOR)
+        # Paint the background color, which CAN change.
+        DISPLAYSURFACE.blit(background, (0, 0))
 
         """RECORD UNCHANGED RGB"""
-    # record unchanged r, g, b values.
+        # record unchanged r, g, b values.
         old_rgb = [r, g, b]
 
         """EVENT HANDLING INPUT"""
-    # grab all the latest input
+        # grab all the latest input
         latest_events = pygame.event.get()
         for event in latest_events:
             if event.type == QUIT:
                 going = False
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 going = False
-        # --game-play events//--
+            # --game-play events//--
             elif event.type == KEYDOWN and event.key == K_r:
                 r = 255
                 toggle_color_r = RED
@@ -259,7 +270,7 @@ def main():
                     inverted = True
                 else:
                     inverted = False
-        # Ring Spinning
+            # Ring Spinning
             elif event.type == KEYDOWN and event.key == K_LEFT:
                 rotate_by += -rotation_speed
                 # ring.set_direction(1)
@@ -271,42 +282,45 @@ def main():
                 # ring.set_direction
             elif event.type == KEYUP and event.key == K_RIGHT:
                 rotate_by += -rotation_speed
-        # --non-game-play events//--
-        # if U is pressed, toggle AAing.
+            #====================================
+            # --non-game-play events//--
+            #====================================
+            # if U is pressed, toggle AAing.
             elif event.type == KEYDOWN and event.key == K_u:
                 if display_antialiasing == True:
                     display_antialiasing = False
                 else:
                     display_antialiasing = True
-        # if I is pressed, toggle context display
+            # if I is pressed, toggle context display
             elif event.type == KEYDOWN and event.key == K_i:
                 if display_sprites == True:
                     display_sprites = False
                 else:
                     display_sprites = True
-        # if Q is pressed, print output to file log.txt
+            # if Q is pressed, print output to file log.txt
             elif event.type == KEYDOWN and event.key == K_q:
-                rep_log = (orig_stdout)
-        # if P is pressed, pause game.
+                rep_log = log(orig_stdout, rep_log)
+            # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
                 for p in pygame.key.get_pressed():
                         if p == True:
-                            print "A KEY IS PRESSED, CAN NOT PAUSE"
+                            debug(DEBUG, "A KEY IS PRESSED, CAN NOT PAUSE")
                             paused = False
-                            break
+                            # break
                         else:
                             paused = True
-                            print "INTO PAUSE!!"
-        # if L is pressed, toggle black auto-black circle.
+                            debug(DEBUG, "INTO PAUSE!!")
+            # if L is pressed, toggle black auto-black circle.
             elif event.type == KEYDOWN and event.key == K_l:
                 if total_input == 0:
                     total_input = 100
                 else:
                     total_input = 0
+
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
-                print event.dict
+                debug(DEBUG, event.dict)
 
     # --function controls//--
     # if paused is set to true, wait for p to be pressed again.
@@ -317,12 +331,12 @@ def main():
                     pygame.event.pump()
                     for p in pygame.key.get_pressed():
                         if p == True:
-                            print "A KEY IS PRESSED, CAN NOT UNPAUSE"
+                            debug(DEBUG, "A KEY IS PRESSED, CAN NOT UNPAUSE")
                             paused = True
-                            break
+                            # break
                         else:
                             paused = False
-                            print "OUT OF PAUSE!"
+                            debug(DEBUG, "OUT OF PAUSE!")
                 if x_event.type == QUIT:
                     sys.exit()
                     pygame.quit()
@@ -438,13 +452,13 @@ def main():
             DISPLAYSURFACE.blit(box_img, g_RectObj)
             DISPLAYSURFACE.blit(box_img, b_RectObj)
             # pygame.draw.circle(DISPLAYSURFACE, BLACK, ring_imgNew.get_rect().center, 5, 2)
-            print pygame.transform.get_smoothscale_backend()
+            # debug(DEBUG, pygame.transform.get_smoothscale_backend())
 
         """LOGGING output information: FPS, event info, AA, etc."""
         num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))
-        print FPSCLOCK.get_fps(), num_compare
+        debug(DEBUG, (FPSCLOCK.get_fps(), num_compare))
         if len(circle_size_list) > 0:
-            print circle_size_list[0]
+            debug(DEBUG, circle_size_list[0])
 
         """UPDATE AND DELAY"""
         FPSCLOCK.tick_busy_loop(FPS)
@@ -453,7 +467,7 @@ def main():
     try:
         rep_log.close()
     except Exception:
-        print "File never opened"
+        debug(DEBUG, "File never opened")
     pygame.quit()
     sys.exit()
 if __name__ == '__main__':
