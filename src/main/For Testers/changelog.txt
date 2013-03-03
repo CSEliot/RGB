@@ -6,6 +6,7 @@ Changelog
 								- Music! (this is temporary, I do not technically own this music)
 								- An Instructions page!
 								- Game States!
+								- A sexy background ;)
 							Changed:
 								- Fullscreen is temporarily unavailable.
 								- How log files log. With more accuracy and verbosity.
