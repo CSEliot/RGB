@@ -99,50 +99,50 @@ DATE = datetime.date.timetuple(datetime.date.today())[0] , \
        datetime.date.timetuple(datetime.date.today())[2]
 DEBUG = True
 
-class Ring(pygame.sprite.Sprite):
+#class Ring(pygame.sprite.Sprite):
+#
+#    def __init__(self):
+#        pygame.sprite.Sprite.__init__(self)
+#        self.image, self.rect = load_image('ring.png', -1)
+#        self.MAX_COLLIDE_SIZE = 290
+#        self.MIN_COLLIDE_SIZE = 280
+#        self.angle = 0.0
+#        self.rotate_by = 0.0
+#        self.rotation_speed = 2
+#
+#    def set_direction(self, direction):  # 1 for left, -1 for right
+#        if direction == -1:
+#            self.rotate_by += self.rotation_speed
+#
+#
+#
+#    def spin(self):  # Will change ring angle, based on direction
+#        # --Spin the Ring//--
+#        if self.direction == -1:
+#            self.angle += -self.rotate_by * 2
+#        else:
+#            self.angle += self.rotate_by * 2
+#        ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
 
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_image('ring.png', -1)
-        self.MAX_COLLIDE_SIZE = 290
-        self.MIN_COLLIDE_SIZE = 280
-        self.angle = 0.0
-        self.rotate_by = 0.0
-        self.rotation_speed = 2
 
-    def set_direction(self, direction):  # 1 for left, -1 for right
-        if direction == -1:
-            rotate_by += rotation_speed
-
-
-
-    def spin(self):  # Will change ring angle, based on direction
-        # --Spin the Ring//--
-        if direction == -1:
-
-            angle += -rotate_by * 2
-        else:
-            angle += rotate_by * 2
-        ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
-
-
-class Circle (pygame.sprite.Sprite):
-
-    def __init__(self, color, speed):
-        # self.image, self.rect = load_image('ring.png', None)
-        self.size = 0
-        self.color = color
-        self.image = None
-        self.image_rect = self.image.get_rect()
-
-    def update(self):
-        self.size += CIRCLE_GROWTH_SPEED * speed
-        imageNew = pygame.transform.smoothscale(image, (self.size, self.size))
-        imageNew_rect = image_rect.get_rect()
-        ImageNew_rect.center = CENTER
-
-    def set_color(self, r=0, g=0, b=0):
-        self.color = (r, g, b)
+#class Circle (pygame.sprite.Sprite):
+#
+#    def __init__(self, color, speed):
+#        # self.image, self.rect = load_image('ring.png', None)
+#        self.size = 0
+#        self.color = color
+#        self.image = None
+#        self.image_rect = self.image.get_rect()
+#        self.speed = speed
+#
+#    def update(self):
+#        self.size += CIRCLE_GROWTH_SPEED * self.speed
+#        imageNew = pygame.transform.smoothscale(self.image, (self.size, self.size))
+#        imageNew_rect = image_rect.get_rect()
+#        ImageNew_rect.center = CENTER
+#
+#    def set_color(self, r=0, g=0, b=0):
+#        self.color = (r, g, b)
 
 
 
@@ -222,7 +222,7 @@ def game_loop():
     ring_img, ring_rect = load_image('ring.png', -1)
     # ring_img, ring_rect = load_image('ring.png', None)
     box_img, box_rect = load_image('letter_box.png', None)
-    background, background_rect = load_image('starBg.png')
+    #background, background_rect = load_image('starBg.png')
     fadeBG, fadeBG_rect = load_image('fadeBG.png')
     # --------cropping the fade to the right size
     # First, get the screen size and other variables
@@ -236,18 +236,17 @@ def game_loop():
     box_rect.center = (CENTER_X, CENTER_Y)
     ring_rect.center = (CENTER_X, CENTER_Y)
     fadeBG_rect.center = (CENTER_X, CENTER_Y)
-    background_rect.center = (CENTER_X, CENTER_Y)
+    #background_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
     rotation_speed = 2
 #    pygame.transform.set_smoothscale_backend('GENERIC')
 
 # --Main Game Loop//--
-    made_background = False
     going = True
     while going:
 
         # Paint the background color, which CAN change.
-        DISPLAYSURFACE.blit(background, background_rect)
+        #DISPLAYSURFACE.blit(background, background_rect)
 
         """RECORD UNCHANGED RGB"""
         # record unchanged r, g, b values.
@@ -430,13 +429,12 @@ def game_loop():
 
 
 
-        """POP LARGE CIRCLES"""
+        """POP DELETE LARGE CIRCLES"""
     # get rid of big circles
         if len(circle_size_list) >= 1:
-            if circle_size_list[0] >= C_LENGTH:
+            if circle_size_list[0] >= C_LENGTH/4:
                 circle_size_list.pop(0)
     # paint the background to the color of the last circle
-                BACKGROUND_COLOR = circle_color_list[0]
                 circle_color_list.pop(0)
                 current_circle_quantity += -1
 
