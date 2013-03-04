@@ -8,6 +8,7 @@
 							-Music, but temporary*
 							-hitboxes, classes, detection, fun stuff*
 							-game is installed and launched via .exe
+							-arrow sticking is smooth
 						Changed:
 							-Input feedback from RGB letters to arrow
 							-Improved Image Quality

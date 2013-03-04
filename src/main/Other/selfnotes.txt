@@ -13,6 +13,8 @@ Visual Feedback:
 		OR
 	The circles will be a bit brighter when you're right, 
 	and a bit darker when you're wrong.
+	
+	THE STARS' BRIGHTNESS!!!
 
 Backstory:
 	It is the year 00000000000.1 and the Universe is just beginning! 

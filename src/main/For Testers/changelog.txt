@@ -7,10 +7,13 @@ Changelog
 								- An Instructions page!
 								- Game States!
 								- A sexy background ;)
+								- Up and down arrows stick the ring to NEWS
 							Changed:
 								- Fullscreen is temporarily unavailable.
 								- How log files log. With more accuracy and verbosity.
 								- Circle speed is slower, this will probably be the default easy mode speed.
+								- Debugging occurs automatically, AND exports to log.txt automatically.
+								- Each FPS is an average of the framerate of about every second
 							Removed:
 							Fixed:
 							Code:
