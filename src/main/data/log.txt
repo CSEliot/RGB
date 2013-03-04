@@ -1,0 +1,18 @@
+
+DEBUG INFO:  LOGGING TO FILE BEGINNING--
+
+DEBUG INFO:  (2013, 3, 3)
+
+DEBUG INFO:  Display Info: Display 1
+
+DEBUG INFO:  (1, 'About the full-screen, there were no errors boss!')
+
+DEBUG INFO:  {'scancode': 24, 'key': 113, 'unicode': u'q', 'mod': 0}
+
+DEBUG INFO:  {'scancode': 0, 'key': 113, 'mod': 0}
+
+DEBUG INFO:  {'scancode': 113, 'key': 276, 'unicode': u'', 'mod': 0}
+
+DEBUG INFO:  {'scancode': 113, 'key': 276, 'mod': 0}
+
+DEBUG INFO:  {'scancode': 9, 'key': 27, 'unicode': u'\x1b', 'mod': 0}

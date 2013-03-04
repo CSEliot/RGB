@@ -9,6 +9,7 @@
 #===============================================================================
 
 import pygame, sys, os, pygame.gfxdraw, pygame.surface, datetime, platform
+from numpy import *
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror
 # from cgi import escape
@@ -36,7 +37,7 @@ _______________________________________________________________________________
 
 
 """FULLSCREEN ON STARTUP?"""
-FULLSCREEN_RES = False
+FULLSCREEN_RES = True
 """||||||||||||||||||||||"""
 
 """SCREEN INFORMATION"""
@@ -77,7 +78,7 @@ else:
 # --constants//--
 ##############################################################################
 CIRCLE_GROWTH_SPEED = 3
-FPS = 1000  # frames per second ceiling setting
+FPS = 200  # frames per second ceiling setting
 RED = pygame.color.Color('red')
 GREEN = pygame.color.Color('green')
 BLUE = pygame.color.Color('blue')
@@ -91,6 +92,7 @@ FONT_SMALL = pygame.font.Font('freesansbold.ttf', 8)
 VERSION = 'v0.2-BETA'
 CENTER_X = (DISPLAYSURFACE.get_width() / 2)
 CENTER_Y = (DISPLAYSURFACE.get_height() / 2)
+CENTER = (CENTER_X, CENTER_Y)
 C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)  # equates screen diagonal.
 DATE = datetime.date.timetuple(datetime.date.today())[0] , \
        datetime.date.timetuple(datetime.date.today())[1] , \
@@ -126,13 +128,18 @@ class Ring(pygame.sprite.Sprite):
 
 class Circle (pygame.sprite.Sprite):
 
-    def __init__(self):
+    def __init__(self, color, speed):
         # self.image, self.rect = load_image('ring.png', None)
         self.size = 0
-        self.color = (0, 0, 0)
+        self.color = color
+        self.image = None
+        self.image_rect = self.image.get_rect()
 
-    def increase_size(self):
-        self.size += CIRCLE_GROWTH_SPEED
+    def update(self):
+        self.size += CIRCLE_GROWTH_SPEED * speed
+        imageNew = pygame.transform.smoothscale(image, (self.size, self.size))
+        imageNew_rect = image_rect.get_rect()
+        ImageNew_rect.center = CENTER
 
     def set_color(self, r=0, g=0, b=0):
         self.color = (r, g, b)
@@ -190,9 +197,10 @@ def debug(debugBool, info):
 
 
 
-def main():
+def game_loop():
 
 # --Initialize Everything//--
+    frame = 0
     r = 0
     g = 0
     b = 0
@@ -200,6 +208,7 @@ def main():
     rotate_by = 0
     paused = False
     total_input = 0
+    fpsList = []
     circle_size_list = []
     circle_color_list = []
     toggle_color_r = BLACK
@@ -213,9 +222,21 @@ def main():
     ring_img, ring_rect = load_image('ring.png', -1)
     # ring_img, ring_rect = load_image('ring.png', None)
     box_img, box_rect = load_image('letter_box.png', None)
-    background, background_rect, = load_image('starBg.png')  # background color
+    background, background_rect = load_image('starBg.png')
+    fadeBG, fadeBG_rect = load_image('fadeBG.png')
+    # --------cropping the fade to the right size
+    # First, get the screen size and other variables
+    fadeTemp = pygame.Surface((DISPLAYSURFACE.get_width(),
+                               DISPLAYSURFACE.get_height()))
+    # blit a cropped copy of fadeBG onto the temp object
+    fadeTemp.blit(fadeBG, (0, 0), (0, 0, DISPLAYSURFACE.get_width(),
+                                         DISPLAYSURFACE.get_height()))
+    # then put the cropped copy as the original
+    fadeBG, fadeBG_rect = fadeTemp.copy(), fadeTemp.get_rect()
     box_rect.center = (CENTER_X, CENTER_Y)
     ring_rect.center = (CENTER_X, CENTER_Y)
+    fadeBG_rect.center = (CENTER_X, CENTER_Y)
+    background_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
     rotation_speed = 2
 #    pygame.transform.set_smoothscale_backend('GENERIC')
@@ -226,7 +247,7 @@ def main():
     while going:
 
         # Paint the background color, which CAN change.
-        DISPLAYSURFACE.blit(background, (0, 0))
+        DISPLAYSURFACE.blit(background, background_rect)
 
         """RECORD UNCHANGED RGB"""
         # record unchanged r, g, b values.
@@ -446,19 +467,25 @@ def main():
             DISPLAYSURFACE.blit(r_SurfaceObj, r_RectObj)
             DISPLAYSURFACE.blit(g_SurfaceObj, g_RectObj)
             DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
-            DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
+            DISPLAYSURFACE.blit(fadeBG, fadeBG_rect)
             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
             DISPLAYSURFACE.blit(box_img, r_RectObj)
             DISPLAYSURFACE.blit(box_img, g_RectObj)
             DISPLAYSURFACE.blit(box_img, b_RectObj)
+            DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
             # pygame.draw.circle(DISPLAYSURFACE, BLACK, ring_imgNew.get_rect().center, 5, 2)
             # debug(DEBUG, pygame.transform.get_smoothscale_backend())
 
         """LOGGING output information: FPS, event info, AA, etc."""
         num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))
-        debug(DEBUG, (FPSCLOCK.get_fps(), num_compare))
-        if len(circle_size_list) > 0:
-            debug(DEBUG, circle_size_list[0])
+        frame += 1
+        fpsList.append(FPSCLOCK.get_fps())
+        if frame == FPS:
+            debug(DEBUG, (mean(fpsList), num_compare))
+            frame = 0
+            fpsList = []
+            if len(circle_size_list) > 0:
+                debug(DEBUG, 'Size: ' + str(circle_size_list[0]))
 
         """UPDATE AND DELAY"""
         FPSCLOCK.tick_busy_loop(FPS)
@@ -471,4 +498,4 @@ def main():
     pygame.quit()
     sys.exit()
 if __name__ == '__main__':
-    main()
+    game_loop()
