@@ -222,17 +222,17 @@ def game_loop():
     ring_img, ring_rect = load_image('ring.png', -1)
     # ring_img, ring_rect = load_image('ring.png', None)
     box_img, box_rect = load_image('letter_box.png', None)
-    #background, background_rect = load_image('starBg.png')
+    background, background_rect = load_image('starBg.png')
     fadeBG, fadeBG_rect = load_image('fadeBG.png')
     # --------cropping the fade to the right size
-    # First, get the screen size and other variables
-    fadeTemp = pygame.Surface((DISPLAYSURFACE.get_width(),
-                               DISPLAYSURFACE.get_height()))
-    # blit a cropped copy of fadeBG onto the temp object
-    fadeTemp.blit(fadeBG, (0, 0), (0, 0, DISPLAYSURFACE.get_width(),
-                                         DISPLAYSURFACE.get_height()))
-    # then put the cropped copy as the original
-    fadeBG, fadeBG_rect = fadeTemp.copy(), fadeTemp.get_rect()
+#    # First, get the screen size and other variables
+#    fadeTemp = pygame.Surface((DISPLAYSURFACE.get_width(),
+#                               DISPLAYSURFACE.get_height()))
+#    # blit a cropped copy of fadeBG onto the temp object
+#    fadeTemp.blit(fadeBG, (0, 0), (0, 0, DISPLAYSURFACE.get_width(),
+#                                         DISPLAYSURFACE.get_height()))
+#    # then put the cropped copy as the original
+    fadeBG_rect.center = (CENTER_X, CENTER_Y)# fadeTemp.copy(), fadeTemp.get_rect()
     box_rect.center = (CENTER_X, CENTER_Y)
     ring_rect.center = (CENTER_X, CENTER_Y)
     fadeBG_rect.center = (CENTER_X, CENTER_Y)
@@ -246,7 +246,7 @@ def game_loop():
     while going:
 
         # Paint the background color, which CAN change.
-        #DISPLAYSURFACE.blit(background, background_rect)
+        DISPLAYSURFACE.blit(background, background_rect)
 
         """RECORD UNCHANGED RGB"""
         # record unchanged r, g, b values.
