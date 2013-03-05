@@ -37,7 +37,7 @@ _______________________________________________________________________________
 
 
 """FULLSCREEN ON STARTUP?"""
-FULLSCREEN_RES = True
+FULLSCREEN_RES = False
 """||||||||||||||||||||||"""
 
 """SCREEN INFORMATION"""
@@ -99,7 +99,7 @@ DATE = datetime.date.timetuple(datetime.date.today())[0] , \
        datetime.date.timetuple(datetime.date.today())[2]
 DEBUG = True
 
-#class Ring(pygame.sprite.Sprite):
+# class Ring(pygame.sprite.Sprite):
 #
 #    def __init__(self):
 #        pygame.sprite.Sprite.__init__(self)
@@ -125,7 +125,7 @@ DEBUG = True
 #        ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
 
 
-#class Circle (pygame.sprite.Sprite):
+# class Circle (pygame.sprite.Sprite):
 #
 #    def __init__(self, color, speed):
 #        # self.image, self.rect = load_image('ring.png', None)
@@ -224,6 +224,7 @@ def game_loop():
     box_img, box_rect = load_image('letter_box.png', None)
     background, background_rect = load_image('starBg.png')
     fadeBG, fadeBG_rect = load_image('fadeBG.png')
+
     # --------cropping the fade to the right size
 #    # First, get the screen size and other variables
 #    fadeTemp = pygame.Surface((DISPLAYSURFACE.get_width(),
@@ -232,11 +233,11 @@ def game_loop():
 #    fadeTemp.blit(fadeBG, (0, 0), (0, 0, DISPLAYSURFACE.get_width(),
 #                                         DISPLAYSURFACE.get_height()))
 #    # then put the cropped copy as the original
-    fadeBG_rect.center = (CENTER_X, CENTER_Y)# fadeTemp.copy(), fadeTemp.get_rect()
+    fadeBG_rect.center = (CENTER_X, CENTER_Y)  # fadeTemp.copy(), fadeTemp.get_rect()
     box_rect.center = (CENTER_X, CENTER_Y)
     ring_rect.center = (CENTER_X, CENTER_Y)
     fadeBG_rect.center = (CENTER_X, CENTER_Y)
-    #background_rect.center = (CENTER_X, CENTER_Y)
+    # background_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
     rotation_speed = 2
 #    pygame.transform.set_smoothscale_backend('GENERIC')
@@ -432,7 +433,7 @@ def game_loop():
         """POP DELETE LARGE CIRCLES"""
     # get rid of big circles
         if len(circle_size_list) >= 1:
-            if circle_size_list[0] >= C_LENGTH/4:
+            if circle_size_list[0] >= C_LENGTH:
                 circle_size_list.pop(0)
     # paint the background to the color of the last circle
                 circle_color_list.pop(0)
@@ -462,10 +463,10 @@ def game_loop():
 
         """DISPLAY SPRITE TOGGLE"""
         if display_sprites == True:
+            DISPLAYSURFACE.blit(fadeBG, fadeBG_rect)
             DISPLAYSURFACE.blit(r_SurfaceObj, r_RectObj)
             DISPLAYSURFACE.blit(g_SurfaceObj, g_RectObj)
             DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
-            DISPLAYSURFACE.blit(fadeBG, fadeBG_rect)
             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
             DISPLAYSURFACE.blit(box_img, r_RectObj)
             DISPLAYSURFACE.blit(box_img, g_RectObj)
