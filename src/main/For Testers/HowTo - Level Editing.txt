@@ -1,0 +1,33 @@
+Ifr you want to make the game play to your own music, you can type out a simple
+string of commands to a .txt file and the game will play along to it.
+
+The beta comes with 1 song and 1 file already made for it. The file.txt must
+match the name of the song being played. You'll save both the song and the 
+songname.txt into the data folder. Then when the game starts, it'll prompt you
+asking if you want to import a new song. you give the songname and it will do 
+the rest. This won't be the only way to create levels for the music in the final
+version. 
+
+Here are the commands:
+(each command must be seperated with a space.)
+
+Beg:      	-The song will begin playing.
+W#			-Wait for # seconds before doing the next action.
+WSP#		-Automatically set a standard wait time for each command.
+Cx#			-Spawn a circle, where x is R,G,B or a combination of the 3.
+			*note: a number MAY be placed after each circle spawn command,
+			 	telling it to grow at a certain # speed.
+CSPy		- this will change the standard	speed y at which ALL colors grow. 
+			*note: all speed variables work where a speed of 2 means it takes
+				2 seconds to reach the ring's edge. So a speed of 1 means 1 
+				second to reach the edge. Decimal values are allowed.
+Fx			- Spawn a shooting star at angle x.
+Fx,y			- Spawn a shooting star at angle x and speed y. 
+FSPy		- change the standard speed at which all stars move. 
+:End		- Stop the song.
+
+
+
+Example:
+
+WSP.5 FSP1 CSP1 Beg: CR CRG CRB2 F45 F46 F47 F90,2 CSP3 B :End" 
