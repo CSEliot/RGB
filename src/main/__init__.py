@@ -9,6 +9,7 @@
 #===============================================================================
 
 import pygame, sys, os, pygame.gfxdraw, pygame.surface, datetime, platform
+import pgext
 from numpy import *
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror
@@ -44,7 +45,7 @@ FULLSCREEN_RES = False
 user_screen_data = pygame.display.Info()
 window_width = user_screen_data.current_w
 window_height = user_screen_data.current_h
-pygame.display.set_caption('RGB - The Game of COLORS by Eliot C-S')
+pygame.display.set_caption('RGB - The Musical Game')
 
 # Making a screen, w/ 4 different possible outcomes.
 if FULLSCREEN_RES == True:
@@ -125,25 +126,24 @@ DEBUG = True
 #        ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
 
 
-# class Circle (pygame.sprite.Sprite):
-#
-#    def __init__(self, color, speed):
-#        # self.image, self.rect = load_image('ring.png', None)
-#        self.size = 0
-#        self.color = color
-#        self.image = None
-#        self.image_rect = self.image.get_rect()
-#        self.speed = speed
-#
-#    def update(self):
-#        self.size += CIRCLE_GROWTH_SPEED * self.speed
-#        imageNew = pygame.transform.smoothscale(self.image, (self.size, self.size))
-#        imageNew_rect = image_rect.get_rect()
-#        ImageNew_rect.center = CENTER
-#
-#    def set_color(self, r=0, g=0, b=0):
-#        self.color = (r, g, b)
+class Circle (pygame.sprite.Sprite):
 
+    def __init__(self, color, image):
+        pygame.sprite.Sprite.__init__(self)
+        self.size = 0
+        self.color = color
+        self.image = image
+        self.rect = image.get_rect()
+        self.imageOG = self.image
+        self.speed = None
+        pgext.color.setColor(self.image, self.color)
+
+
+    def update(self):
+        self.size += CIRCLE_GROWTH_SPEED * self.speed
+        self.image = pygame.transform.smoothscale(self.imageOG, (self.size, self.size))
+        self.rect = self.image.get_rect()
+        self.rect.center = CENTER
 
 
 
@@ -197,7 +197,7 @@ def debug(debugBool, info):
 
 
 
-def game_loop():
+def game_screen():
 
 # --Initialize Everything//--
     frame = 0
@@ -211,43 +211,63 @@ def game_loop():
     fpsList = []
     circle_size_list = []
     circle_color_list = []
-    toggle_color_r = BLACK
-    toggle_color_g = BLACK
-    toggle_color_b = BLACK
+    toggle_color_r = False
+    toggle_color_g = False
+    toggle_color_b = False
     display_sprites = True
     rep_log = file.__class__  # logging file
     orig_stdout = sys.stdout
     current_circle_quantity = 0
     display_antialiasing = False
-    ring_img, ring_rect = load_image('ring.png', -1)
+    circ_img, __ = load_image('R_small.png')
+#    circ = Circle((0, 255, 0), circ_img)
+    ring_img, ring_rect = load_image('ring.png')
     # ring_img, ring_rect = load_image('ring.png', None)
     box_img, box_rect = load_image('letter_box.png', None)
     background, background_rect = load_image('starBg.png')
     fadeBG, fadeBG_rect = load_image('fadeBG.png')
-
-    # --------cropping the fade to the right size
-#    # First, get the screen size and other variables
-#    fadeTemp = pygame.Surface((DISPLAYSURFACE.get_width(),
-#                               DISPLAYSURFACE.get_height()))
-#    # blit a cropped copy of fadeBG onto the temp object
-#    fadeTemp.blit(fadeBG, (0, 0), (0, 0, DISPLAYSURFACE.get_width(),
-#                                         DISPLAYSURFACE.get_height()))
-#    # then put the cropped copy as the original
-    fadeBG_rect.center = (CENTER_X, CENTER_Y)  # fadeTemp.copy(), fadeTemp.get_rect()
-    box_rect.center = (CENTER_X, CENTER_Y)
     ring_rect.center = (CENTER_X, CENTER_Y)
     fadeBG_rect.center = (CENTER_X, CENTER_Y)
-    # background_rect.center = (CENTER_X, CENTER_Y)
+    background_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
     rotation_speed = 2
-#    pygame.transform.set_smoothscale_backend('GENERIC')
+#    circ.size = 100
+#    circ.speed = 1
+    allSprites = pygame.sprite.Group()
+    circSprites = pygame.sprite.Group()
+#    allSprites.add((circ))
+    DISPLAYSURFACE.blit(background, background_rect)
 
-# --Main Game Loop//--
+
+    """BUTTON / SPRITE RENDERING"""
+    r_letter = FONT_LARGE.render('R', True, RED)
+    r_letter.scroll(2, 0)
+    r_letter_rect = r_letter.get_rect()
+    r_letter_rect.center = (CENTER_X - 50, (CENTER_Y * 2) - 25)
+    box_rectR = r_letter_rect
+
+    g_letter = FONT_LARGE.render('G', True, GREEN)
+    g_letter.scroll(1, 0)
+    g_letter_rect = g_letter.get_rect()
+    g_letter_rect.center = (CENTER_X, (CENTER_Y * 2) - 25)
+    box_rectG = g_letter_rect
+
+    b_letter = FONT_LARGE.render('B', True, BLUE)
+    b_letter.scroll(2, 0)
+    b_letter_rect = b_letter.get_rect()
+    b_letter_rect.center = (CENTER_X + 50, (CENTER_Y * 2) - 25)
+    box_rectB = b_letter_rect
+
+    # display the version ID
+    font_renderObj = FONT_SMALL.render(VERSION, False, BLACK, WHITE)
+    versionID_SurfaceObj = font_renderObj
+    versionID_RectObj = versionID_SurfaceObj.get_rect()
+    versionID_RectObj.topleft = (0, 0)
+    # --Main Game Loop//--
     going = True
     while going:
 
         # Paint the background color, which CAN change.
-        DISPLAYSURFACE.blit(background, background_rect)
 
         """RECORD UNCHANGED RGB"""
         # record unchanged r, g, b values.
@@ -264,27 +284,27 @@ def game_loop():
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == K_r:
                 r = 255
-                toggle_color_r = RED
+                toggle_color_r = True
                 total_input += 1
             elif event.type == KEYUP and event.key == K_r:
                 r = 0
-                toggle_color_r = BLACK
+                toggle_color_r = False
                 total_input += -1
             elif event.type == KEYDOWN and event.key == K_g:
                 g = 255
-                toggle_color_g = GREEN
+                toggle_color_g = True
                 total_input += 1
             elif event.type == KEYUP and event.key == K_g:
                 g = 0
-                toggle_color_g = BLACK
+                toggle_color_g = False
                 total_input += -1
             elif event.type == KEYDOWN and event.key == K_b:
                 b = 255
-                toggle_color_b = BLUE
+                toggle_color_b = True
                 total_input += 1
             elif event.type == KEYUP and event.key == K_b:
                 b = 0
-                toggle_color_b = BLACK
+                toggle_color_b = False
                 total_input += -1
             elif event.type == KEYDOWN and event.key == K_o:
                 if inverted == False:
@@ -343,8 +363,8 @@ def game_loop():
             if event.type == KEYDOWN or event.type == KEYUP:
                 debug(DEBUG, event.dict)
 
-    # --function controls//--
-    # if paused is set to true, wait for p to be pressed again.
+        # --function controls//--
+        # if paused is set to true, wait for p to be pressed again.
         """PAUSE WAIT STOP"""
         while paused:
                 x_event = pygame.event.wait()
@@ -366,21 +386,24 @@ def game_loop():
                     pygame.quit()
 
         """SPIN ROTATE"""
-    # --Spin the Ring//--
+        oldAngle = angle
+        # --Spin the Ring//--
         if inverted == True:
             angle += -rotate_by * 2
         else:
             angle += rotate_by * 2
+        if not(oldAngle == angle):
+            DISPLAYSURFACE.blit(background, background_rect)
        # ring_imgNew = pygame.transform.scale(ring_img, (angle, angle))
         ring_imgNew = pygame.transform.rotozoom(ring_img, angle, 1)
         ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
 
         """RECORD CHANGES RGB"""
-    # record the changes to R, G, and B
+        # record the changes to R, G, and B
         new_rgb = [r, g, b]
 
         """ADD NEW CIRCLES LISTS"""
-    # if the color to print has not changed, a new circle will not be made
+        # if the color to print has not changed, a new circle will not be made
         if total_input > 0:
             if not new_rgb == old_rgb:
                     circle_color_list.append(new_rgb)
@@ -388,9 +411,9 @@ def game_loop():
                     current_circle_quantity += 1
 
         """DRAW CIRCLES SCREEN DISPLAYSURFACE"""
-    # for each circle to be drawn
+        # for each circle to be drawn
         for i in range(current_circle_quantity):
-    # increase the circle size
+            # increase the circle size
             circle_size_list[i] += CIRCLE_GROWTH_SPEED
             if display_antialiasing == False:
     # draw circle to the screen, grabbing each color amount: R, G, B
@@ -400,81 +423,41 @@ def game_loop():
                                              circle_color_list[i][0],
                                              circle_color_list[i][1],
                                              circle_color_list[i][2]))
-            if display_antialiasing == True:
-    # an anti-aliasing ring is drawn on top of the circle edge.
-                pygame.gfxdraw.aacircle(DISPLAYSURFACE,
-                                        CENTER_X, CENTER_Y,
-                                        circle_size_list[i] - 1, (
-                                        circle_color_list[i][0],
-                                        circle_color_list[i][1],
-                                        circle_color_list[i][2]))
-                pygame.gfxdraw.filled_circle(DISPLAYSURFACE,
-                                             CENTER_X, CENTER_Y,
-                                             circle_size_list[i], (
-                                             circle_color_list[i][0],
-                                             circle_color_list[i][1],
-                                             circle_color_list[i][2]))
-                pygame.gfxdraw.aacircle(DISPLAYSURFACE,
-                                        CENTER_X, CENTER_Y,
-                                        circle_size_list[i], (
-                                        circle_color_list[i][0],
-                                        circle_color_list[i][1],
-                                        circle_color_list[i][2]))
-                pygame.gfxdraw.aacircle(DISPLAYSURFACE,
-                                        CENTER_X, CENTER_Y,
-                                        circle_size_list[i] + 1, (
-                                        circle_color_list[i][0],
-                                        circle_color_list[i][1],
-                                        circle_color_list[i][2]))
-
-
-
-
         """POP DELETE LARGE CIRCLES"""
     # get rid of big circles
         if len(circle_size_list) >= 1:
             if circle_size_list[0] >= C_LENGTH:
                 circle_size_list.pop(0)
-    # paint the background to the color of the last circle
+                allSprites.empty()
+                DISPLAYSURFACE.blit(background, background_rect)
+# paint the background to the color of the last circle
                 circle_color_list.pop(0)
                 current_circle_quantity += -1
 
-        """BUTTON / SPRITE RENDERING"""
-        r_SurfaceObj = FONT_LARGE.render('R', True, toggle_color_r)
-        r_RectObj = r_SurfaceObj.get_rect()
-        r_RectObj.center = (CENTER_X - 50, (CENTER_Y * 2) - 25)
 
-        g_SurfaceObj = FONT_LARGE.render('G', True, toggle_color_g)
-        g_RectObj = g_SurfaceObj.get_rect()
-        g_RectObj.center = (CENTER_X, (CENTER_Y * 2) - 25)
 
-        b_SurfaceObj = FONT_LARGE.render('B', True, toggle_color_b)
-        b_RectObj = b_SurfaceObj.get_rect()
-        b_RectObj.center = (CENTER_X + 50, (CENTER_Y * 2) - 25)
-
-    # display the version ID
-        font_renderObj = FONT_SMALL.render(VERSION, False, BLACK, WHITE)
-        versionID_SurfaceObj = font_renderObj
-        versionID_RectObj = versionID_SurfaceObj.get_rect()
-        versionID_RectObj.topleft = (0, 0)
 
 
 
 
         """DISPLAY SPRITE TOGGLE"""
         if display_sprites == True:
-            DISPLAYSURFACE.blit(fadeBG, fadeBG_rect)
-            DISPLAYSURFACE.blit(r_SurfaceObj, r_RectObj)
-            DISPLAYSURFACE.blit(g_SurfaceObj, g_RectObj)
-            DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
+            allSprites.update()
+            allSprites.draw(DISPLAYSURFACE)
+            if not(len(circle_size_list) == 0):
+                if circle_size_list[0] > 300:
+                    DISPLAYSURFACE.blit(fadeBG, fadeBG_rect)
             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-            DISPLAYSURFACE.blit(box_img, r_RectObj)
-            DISPLAYSURFACE.blit(box_img, g_RectObj)
-            DISPLAYSURFACE.blit(box_img, b_RectObj)
+            if toggle_color_r:
+                DISPLAYSURFACE.blit(r_letter, r_letter_rect)
+            if toggle_color_g:
+                DISPLAYSURFACE.blit(g_letter, g_letter_rect)
+            if toggle_color_b:
+                DISPLAYSURFACE.blit(b_letter, b_letter_rect)
+            DISPLAYSURFACE.blit(box_img, box_rectR)
+            DISPLAYSURFACE.blit(box_img, box_rectG)
+            DISPLAYSURFACE.blit(box_img, box_rectB)
             DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
-            # pygame.draw.circle(DISPLAYSURFACE, BLACK, ring_imgNew.get_rect().center, 5, 2)
-            # debug(DEBUG, pygame.transform.get_smoothscale_backend())
-
         """LOGGING output information: FPS, event info, AA, etc."""
         num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))
         frame += 1
@@ -497,4 +480,4 @@ def game_loop():
     pygame.quit()
     sys.exit()
 if __name__ == '__main__':
-    game_loop()
+    game_screen()

@@ -1,6 +1,7 @@
 Disclaimer: These are notes to myself, nobody has to read this.
 
-
+Learn:
+	SUBSURFACES FOR BACKGROUND AND DIRTYRECTS FOR EVERYTHING ELSE
 New gameplay element ideas: 
 	up and down rotate a whole ninety degrees, smoothly.
 	possibly accomplishable by using modulus by 90, and easing in to it.
