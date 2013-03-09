@@ -62,7 +62,7 @@ if FULLSCREEN_RES == True:
         screen_error = "Window Error {0}: {1}".format(e.errno, e.strerror)
 else:
     try:
-        options = (DOUBLEBUF | HWSURFACE)
+        options = 0
         std_res = (1000, 700)
         DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
         which_display = "Display 3"
@@ -91,8 +91,10 @@ FPSCLOCK = pygame.time.Clock()
 FONT_LARGE = pygame.font.Font('freesansbold.ttf', 32)
 FONT_SMALL = pygame.font.Font('freesansbold.ttf', 8)
 VERSION = 'v0.2-BETA'
-CENTER_X = (DISPLAYSURFACE.get_width() / 2)
-CENTER_Y = (DISPLAYSURFACE.get_height() / 2)
+DISPLAY_W = DISPLAYSURFACE.get_width()
+CENTER_X = (DISPLAY_W / 2)
+DISPLAY_H = DISPLAYSURFACE.get_height()
+CENTER_Y = (DISPLAY_H / 2)
 CENTER = (CENTER_X, CENTER_Y)
 C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)  # equates screen diagonal.
 DATE = datetime.date.timetuple(datetime.date.today())[0] , \
@@ -199,7 +201,27 @@ def debug(debugBool, info):
 
 def game_screen():
 
-# --Initialize Everything//--
+    '''CREATE IMAGES'''
+    circ_img, __ = load_image('R_small.png')
+    ring_img, ring_rect = load_image('ring.png')
+    ring_rect.center = CENTER
+    box_img, box_rect = load_image('letter_box.png')
+    background, background_rect = load_image('testBG.png')
+    background_rect.center = CENTER
+    print (background_rect.width, background_rect.height)
+    # CUTTING the background to fit the DISPLAYSURFACE
+    # take the center's x value, and move it left to the end of the display's
+    # edge, so from center, minus the half value of width (CENTER_X) is the edge
+    xCut = background_rect.centerx - CENTER_X
+    yCut = background_rect.centery - CENTER_Y
+    background = background.subsurface((xCut, yCut), (DISPLAY_W, DISPLAY_H))
+    background_rect = background.get_rect()
+    background_rect.center = CENTER
+    print (background_rect.width, background_rect.height)
+    print (DISPLAY_W, DISPLAY_H)
+    # CUTTING the same way for the fadeBG.png
+    fadeBG, fadeBG_rect = load_image('fadeBG.png')
+    fadeBG_rect.center = CENTER
     frame = 0
     r = 0
     g = 0
@@ -219,16 +241,6 @@ def game_screen():
     orig_stdout = sys.stdout
     current_circle_quantity = 0
     display_antialiasing = False
-    circ_img, __ = load_image('R_small.png')
-#    circ = Circle((0, 255, 0), circ_img)
-    ring_img, ring_rect = load_image('ring.png')
-    # ring_img, ring_rect = load_image('ring.png', None)
-    box_img, box_rect = load_image('letter_box.png', None)
-    background, background_rect = load_image('starBg.png')
-    fadeBG, fadeBG_rect = load_image('fadeBG.png')
-    ring_rect.center = (CENTER_X, CENTER_Y)
-    fadeBG_rect.center = (CENTER_X, CENTER_Y)
-    background_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
     rotation_speed = 2
 #    circ.size = 100
