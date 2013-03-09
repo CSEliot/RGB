@@ -38,7 +38,7 @@ _______________________________________________________________________________
 
 
 """FULLSCREEN ON STARTUP?"""
-FULLSCREEN_RES = False
+FULLSCREEN_RES = True
 """||||||||||||||||||||||"""
 
 """SCREEN INFORMATION"""
@@ -83,7 +83,7 @@ FPS = 200  # frames per second ceiling setting
 RED = pygame.color.Color('red')
 GREEN = pygame.color.Color('green')
 BLUE = pygame.color.Color('blue')
-NO_MOUSE = pygame.mouse.set_visible(0)
+NO_MOUSE = pygame.mouse.set_visible(1)
 WHITE = (255, 255, 255)
 BLANK = (0, 233, 0, 10)
 BLACK = (0, 0, 0)
@@ -206,9 +206,8 @@ def game_screen():
     ring_img, ring_rect = load_image('ring.png')
     ring_rect.center = CENTER
     box_img, box_rect = load_image('letter_box.png')
-    background, background_rect = load_image('testBG.png')
-    background_rect.center = CENTER
-    print (background_rect.width, background_rect.height)
+    background, background_rect = load_image('starBG.png')
+    fadeBG, _ = load_image('fadeBG.png')
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
@@ -217,10 +216,9 @@ def game_screen():
     background = background.subsurface((xCut, yCut), (DISPLAY_W, DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = CENTER
-    print (background_rect.width, background_rect.height)
-    print (DISPLAY_W, DISPLAY_H)
     # CUTTING the same way for the fadeBG.png
-    fadeBG, fadeBG_rect = load_image('fadeBG.png')
+    fadeBG = fadeBG.subsurface((xCut, yCut), (DISPLAY_W, DISPLAY_H))
+    fadeBG_rect = fadeBG.get_rect()
     fadeBG_rect.center = CENTER
     frame = 0
     r = 0
