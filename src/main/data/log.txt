@@ -16,3 +16,59 @@ DEBUG INFO:  {'scancode': 113, 'key': 276, 'unicode': u'', 'mod': 0}
 DEBUG INFO:  {'scancode': 113, 'key': 276, 'mod': 0}
 
 DEBUG INFO:  {'scancode': 9, 'key': 27, 'unicode': u'\x1b', 'mod': 0}
+
+DEBUG INFO:  LOGGING TO FILE BEGINNING--
+
+DEBUG INFO:  (2013, 3, 10)
+
+DEBUG INFO:  Display Info: Display 3
+
+DEBUG INFO:  (1, 'About the full-screen, there were no errors boss!')
+
+DEBUG INFO:  {'scancode': 24, 'key': 113, 'unicode': u'q', 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 0, 'key': 98, 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 0, 'key': 101, 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 0, 'key': 102, 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 0, 'key': 103, 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 0, 'key': 113, 'mod': 4096}
+
+DEBUG INFO:  (73.177183094024656, '0:0')
+
+DEBUG INFO:  (88.81487728118897, '0:0')
+
+DEBUG INFO:  {'scancode': 56, 'key': 98, 'unicode': u'b', 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 56, 'key': 98, 'mod': 4096}
+
+DEBUG INFO:  (79.731426811218256, '1:1')
+
+DEBUG INFO:  Size: 561
+
+DEBUG INFO:  {'scancode': 56, 'key': 98, 'unicode': u'b', 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 56, 'key': 98, 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 42, 'key': 103, 'unicode': u'g', 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 42, 'key': 103, 'mod': 4096}
+
+DEBUG INFO:  (82.456936454772944, '2:2')
+
+DEBUG INFO:  Size: 396
+
+DEBUG INFO:  {'scancode': 41, 'key': 102, 'unicode': u'f', 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 41, 'key': 102, 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 26, 'key': 101, 'unicode': u'e', 'mod': 4096}
+
+DEBUG INFO:  {'scancode': 26, 'key': 101, 'mod': 4096}
+
+DEBUG INFO:  (79.801890220642093, '0:0')
+
+DEBUG INFO:  LOGGING TO FILE ENDING--

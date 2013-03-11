@@ -13,17 +13,14 @@ import pgext
 from numpy import *
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror
-# from cgi import escape
-# from PIL.Image import ANTIALIAS
-# from IPython.utils.timing import clock
 import math as m
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 if platform.system() == 'Windows':
     os.environ['SDL_VIDEODRIVER'] = 'windib'
 pygame.init()
 
-main_dir = os.path.split(os.path.abspath(__file__))[0]
-data_dir = os.path.join(main_dir, 'data')
+MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
+DATA_DIR = os.path.join(MAIN_DIR, 'data')
 '''
 _______________________________________________________________________________
 KEY:
@@ -38,14 +35,14 @@ _______________________________________________________________________________
 
 
 """FULLSCREEN ON STARTUP?"""
-FULLSCREEN_RES = True
+FULLSCREEN_RES = False
 """||||||||||||||||||||||"""
 
 """SCREEN INFORMATION"""
 user_screen_data = pygame.display.Info()
 window_width = user_screen_data.current_w
 window_height = user_screen_data.current_h
-pygame.display.set_caption('RGB - The Musical Game')
+pygame.display.set_caption('RGB.')
 
 # Making a screen, w/ 4 different possible outcomes.
 if FULLSCREEN_RES == True:
@@ -79,7 +76,7 @@ else:
 # --constants//--
 ##############################################################################
 CIRCLE_GROWTH_SPEED = 3
-FPS = 200  # frames per second ceiling setting
+FPS = 30  # frames per second ceiling setting
 RED = pygame.color.Color('red')
 GREEN = pygame.color.Color('green')
 BLUE = pygame.color.Color('blue')
@@ -100,7 +97,6 @@ C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)  # equates screen diagonal.
 DATE = datetime.date.timetuple(datetime.date.today())[0] , \
        datetime.date.timetuple(datetime.date.today())[1] , \
        datetime.date.timetuple(datetime.date.today())[2]
-DEBUG = True
 
 # class Ring(pygame.sprite.Sprite):
 #
@@ -130,19 +126,20 @@ DEBUG = True
 
 class Circle (pygame.sprite.Sprite):
 
-    def __init__(self, color, image):
+    def __init__(self, speed, color, image):
         pygame.sprite.Sprite.__init__(self)
-        self.size = 0
+        self.size = 1
         self.color = color
         self.image = image
         self.rect = image.get_rect()
+        self.rect.center = CENTER
         self.imageOG = self.image
-        self.speed = None
+        self.speed = speed
         pgext.color.setColor(self.image, self.color)
 
 
     def update(self):
-        self.size += CIRCLE_GROWTH_SPEED * self.speed
+        self.size += int(self.speed)
         self.image = pygame.transform.smoothscale(self.imageOG, (self.size, self.size))
         self.rect = self.image.get_rect()
         self.rect.center = CENTER
@@ -153,7 +150,7 @@ class Circle (pygame.sprite.Sprite):
 
 # --FUNCTIONS to create our resources//--
 def load_image(name, colorkey=None):
-    fullname = os.path.join(data_dir, name)
+    fullname = os.path.join(DATA_DIR, name)
     try:
         image = pygame.image.load(fullname).convert_alpha()
     except pygame.error:
@@ -166,7 +163,29 @@ def load_image(name, colorkey=None):
         image.set_colorkey(colorkey, RLEACCEL)
     return image, image.get_rect()
 
+def commander():
+    # this function opens the commands.txt file and converts it into a list of
+    # commands on how to play the level accompanying the song and put them into
+    # a list. If a commands is unrecognized, the game will close (for now).
+    # It will take the commands and their parameters and organize them into a
+    # 2D list.
+    saveDir = os.path.join(DATA_DIR, 'commands.txt')
+    try:
+        commandsFile = open(saveDir, 'r')
+    except pygame.error:
+        debug(DEBUG, ('Cannot open file: ', saveDir))
+        raise SystemExit(str(geterror()))
+
+    commands = commandsFile.read()
+    commands = commands.split()
+    commandlist = [[]]
+#    for action in commands:
+#        # Option 1: set the BPM
+#        if action[0] == None
+
+
 def log(orig_stdout, rep_log):
+    saveDir = os.path.join(DATA_DIR, 'log.txt')
     # --TESTING the full-screen function//--
     for i in range(2):
         try:
@@ -178,7 +197,7 @@ def log(orig_stdout, rep_log):
             scn_tst = "Full-screen error({0}): {1}".format(e.errno, e.strerror)
     # --LOGGING
     if orig_stdout == sys.stdout:
-        rep_log = open('data/log.txt', 'a')
+        rep_log = open(saveDir, 'a')
         sys.stdout = rep_log
         debug(DEBUG, "LOGGING TO FILE BEGINNING--")
         debug(DEBUG, DATE)
@@ -198,12 +217,12 @@ def debug(debugBool, info):
     return False
 
 
+def main():
 
-def game_screen():
-
+    DEBUG = False
     '''CREATE IMAGES'''
     circ_img, __ = load_image('R_small.png')
-    ring_img, ring_rect = load_image('ring.png')
+    ring_img, ring_rect = load_image('ring_silver.png')
     ring_rect.center = CENTER
     box_img, box_rect = load_image('letter_box.png')
     background, background_rect = load_image('starBG.png')
@@ -213,13 +232,16 @@ def game_screen():
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
     xCut = background_rect.centerx - CENTER_X
     yCut = background_rect.centery - CENTER_Y
-    background = background.subsurface((xCut, yCut), (DISPLAY_W, DISPLAY_H))
+    background = background.subsurface((xCut, yCut), (DISPLAY_W , DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = CENTER
     # CUTTING the same way for the fadeBG.png
     fadeBG = fadeBG.subsurface((xCut, yCut), (DISPLAY_W, DISPLAY_H))
     fadeBG_rect = fadeBG.get_rect()
     fadeBG_rect.center = CENTER
+
+    '''INSTANTIATING OTHER VARIABLES'''
+    # tracks the number of frames passed. Gets reset when == to FPS.
     frame = 0
     r = 0
     g = 0
@@ -235,37 +257,39 @@ def game_screen():
     toggle_color_g = False
     toggle_color_b = False
     display_sprites = True
+    command_list = []
+    cSpeed = 10
+    sSpeed = 10
+    cWait = 1
+    sWait = 1
     rep_log = file.__class__  # logging file
     orig_stdout = sys.stdout
     current_circle_quantity = 0
-    display_antialiasing = False
     inverted = False
-    rotation_speed = 2
-#    circ.size = 100
-#    circ.speed = 1
+    rotation_speed = 3
     allSprites = pygame.sprite.Group()
     circSprites = pygame.sprite.Group()
-#    allSprites.add((circ))
-    DISPLAYSURFACE.blit(background, background_rect)
+    buttonSprites = pygame.sprite.Group()
+    starSprites = pygame.sprite.Group()
 
 
     """BUTTON / SPRITE RENDERING"""
     r_letter = FONT_LARGE.render('R', True, RED)
     r_letter.scroll(2, 0)
     r_letter_rect = r_letter.get_rect()
-    r_letter_rect.center = (CENTER_X - 50, (CENTER_Y * 2) - 25)
+    r_letter_rect.center = (CENTER_X - 50, (CENTER_Y * 2) - 20)
     box_rectR = r_letter_rect
 
     g_letter = FONT_LARGE.render('G', True, GREEN)
     g_letter.scroll(1, 0)
     g_letter_rect = g_letter.get_rect()
-    g_letter_rect.center = (CENTER_X, (CENTER_Y * 2) - 25)
+    g_letter_rect.center = (CENTER_X, (CENTER_Y * 2) - 20)
     box_rectG = g_letter_rect
 
     b_letter = FONT_LARGE.render('B', True, BLUE)
     b_letter.scroll(2, 0)
     b_letter_rect = b_letter.get_rect()
-    b_letter_rect.center = (CENTER_X + 50, (CENTER_Y * 2) - 25)
+    b_letter_rect.center = (CENTER_X + 50, (CENTER_Y * 2) - 20)
     box_rectB = b_letter_rect
 
     # display the version ID
@@ -273,11 +297,13 @@ def game_screen():
     versionID_SurfaceObj = font_renderObj
     versionID_RectObj = versionID_SurfaceObj.get_rect()
     versionID_RectObj.topleft = (0, 0)
+
     # --Main Game Loop//--
     going = True
     while going:
 
-        # Paint the background color, which CAN change.
+        # Paint the background
+        DISPLAYSURFACE.blit(background, background_rect)
 
         """RECORD UNCHANGED RGB"""
         # record unchanged r, g, b values.
@@ -336,12 +362,6 @@ def game_screen():
             #====================================
             # --non-game-play events//--
             #====================================
-            # if U is pressed, toggle AAing.
-            elif event.type == KEYDOWN and event.key == K_u:
-                if display_antialiasing == True:
-                    display_antialiasing = False
-                else:
-                    display_antialiasing = True
             # if I is pressed, toggle context display
             elif event.type == KEYDOWN and event.key == K_i:
                 if display_sprites == True:
@@ -351,6 +371,7 @@ def game_screen():
             # if Q is pressed, print output to file log.txt
             elif event.type == KEYDOWN and event.key == K_q:
                 rep_log = log(orig_stdout, rep_log)
+                DEBUG = True
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
@@ -402,8 +423,6 @@ def game_screen():
             angle += -rotate_by * 2
         else:
             angle += rotate_by * 2
-        if not(oldAngle == angle):
-            DISPLAYSURFACE.blit(background, background_rect)
        # ring_imgNew = pygame.transform.scale(ring_img, (angle, angle))
         ring_imgNew = pygame.transform.rotozoom(ring_img, angle, 1)
         ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
@@ -425,22 +444,21 @@ def game_screen():
         for i in range(current_circle_quantity):
             # increase the circle size
             circle_size_list[i] += CIRCLE_GROWTH_SPEED
-            if display_antialiasing == False:
-    # draw circle to the screen, grabbing each color amount: R, G, B
-                pygame.gfxdraw.filled_circle(DISPLAYSURFACE,
-                                             CENTER_X, CENTER_Y,
-                                             circle_size_list[i], (
-                                             circle_color_list[i][0],
-                                             circle_color_list[i][1],
-                                             circle_color_list[i][2]))
+            # draw circle to the screen, grabbing each color amount: R, G, B
+            pygame.gfxdraw.filled_circle(DISPLAYSURFACE,
+                                         CENTER_X, CENTER_Y,
+                                         circle_size_list[i], (
+                                         circle_color_list[i][0],
+                                         circle_color_list[i][1],
+                                         circle_color_list[i][2]))
         """POP DELETE LARGE CIRCLES"""
-    # get rid of big circles
+        # get rid of big circles
         if len(circle_size_list) >= 1:
-            if circle_size_list[0] >= C_LENGTH:
+            if circle_size_list[0] >= C_LENGTH / 2:
                 circle_size_list.pop(0)
                 allSprites.empty()
-                DISPLAYSURFACE.blit(background, background_rect)
-# paint the background to the color of the last circle
+                # DISPLAYSURFACE.blit(background, background_rect)
+                # paint the background to the color of the last circle
                 circle_color_list.pop(0)
                 current_circle_quantity += -1
 
@@ -453,6 +471,7 @@ def game_screen():
         """DISPLAY SPRITE TOGGLE"""
         if display_sprites == True:
             allSprites.update()
+
             allSprites.draw(DISPLAYSURFACE)
             if not(len(circle_size_list) == 0):
                 if circle_size_list[0] > 300:
@@ -469,19 +488,20 @@ def game_screen():
             DISPLAYSURFACE.blit(box_img, box_rectB)
             DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
         """LOGGING output information: FPS, event info, AA, etc."""
-        num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))
         frame += 1
+        # for every 30 or FPS number of frames, print an average fps.
         fpsList.append(FPSCLOCK.get_fps())
         if frame == FPS:
-            debug(DEBUG, (mean(fpsList), num_compare))
+            debug(DEBUG, (mean(fpsList)))
             frame = 0
+            pygame.display.set_caption('RGB. FPS: {0}'.format(mean(fpsList)))
             fpsList = []
             if len(circle_size_list) > 0:
                 debug(DEBUG, 'Size: ' + str(circle_size_list[0]))
 
         """UPDATE AND DELAY"""
         FPSCLOCK.tick_busy_loop(FPS)
-        pygame.display.flip()
+        pygame.display.update()  # flip()
 
     try:
         rep_log.close()
@@ -490,4 +510,4 @@ def game_screen():
     pygame.quit()
     sys.exit()
 if __name__ == '__main__':
-    game_screen()
+    main()
