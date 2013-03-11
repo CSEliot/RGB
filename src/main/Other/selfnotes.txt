@@ -1,5 +1,74 @@
 Disclaimer: These are notes to myself, nobody has to read this.
 
+How to work the action commands:
+the wait time will be a multiplier.
+For each frame, we will test if == to FPS., times a multiplier.
+Ex: frame*(wait) >= FPS.
+So if the BPM is 60, the wait is one, so we have to wait 30 frames to perform
+an action, and since there are 30 frames per second, the action will be 
+performed in 1 second. If the BPM is 30, then the wait = 0.5. Meaning in order
+for the frame to == FPS, we need 60 frames, meaning the wait is 2 seconds long.
+In order to calculate, lets take an example of BPM300. 300/60 = 5 beats per
+second. So, if (frame)*(5) >= FPS. Every 6th frame will produce an action, in
+total, after 30 frames, the frame variable would've been reset 5 times, and
+5 actions would be produced in under 1 second.
+Equation for wait = BPM/60.
+But what if the user gives us a speed? Ex: CSP2 means if a circle size to hit 
+the ring is 500, then for every frame, if there are 30 frames to get to 500, 
+then the circle should grow at 500/(30*2) units each frame, so in 2 seconds, the 
+circle will be 500 units. 
+Equation for circle growth speed = ring_size/(FPS*x) where x is the user given
+speed.
+Equation for star move speed = ring_size/(FPS*x) where ix is the given speed.
+But how do we get x if we only have BPM? If we have 60 beats per minute, or 1
+beat per second, then the speed of the circle is 1 ring reached per second.
+For wait time, if a user gives us a wait time specific to a star or circle,
+then we have to have each instruction check to see if frame *(wait) >= FPS
+So the for loop to check actions will probably be:
+# the command_list is a list of lists. Each list within the command list begins
+# with the option, then the rest are the corresponding commands.
+location = -1
+for command in command list:
+	#the location is the index of the current command
+	location += 1
+	# option 0 is the create circle command (probably won't be)
+	if command == 0:   
+		if frame*(cwait) >= FPS:
+			if command_list[location][0]:
+				r = 255
+			if command_list[location][1]:
+				g = 255
+			if command_list[location][2]:
+				b = 255
+			if not(command_list[location][3] == None):
+				temp_speed = command_list[location][3]
+			else:
+				temp_speed = cSpeed
+			circ(temp_cSpeed, (r, g, b), image).add(allSprites, circSprites)
+			frame = 0
+	# this will make a star
+	elif command == 1:
+		if frame*(fwait) >= FPS:
+			fAngle = command_list[location][0]
+			if not(command_list[location][1] == None):
+				temp_fSpeed	= command_list[location][1]
+			else:
+			 	temp_fSpeed = fSpeed		
+			star(temp_fSpeed, fAngle).add(allSprites, starSprites)
+			frame = 0
+	# this is the BPM, setting the WG, CSP, and FSP
+	elif command == 2:
+		# wait time is BPM/60, aka wait time per second, setting WG here.
+		cWait, fWait = command_list[location][0]/60
+		# setting the CSP here
+		cSpeed = Ring.collide_size/(FPS/(command_list[location][0]/60))
+		frame = 0
+	###########################
+		
+			
+			
+So the max number of actions per second is 30, but it is not recommended.
+
 Learn:
 	SUBSURFACES FOR BACKGROUND AND DIRTYRECTS FOR EVERYTHING ELSE
 New gameplay element ideas: 
@@ -18,7 +87,7 @@ Visual Feedback:
 	THE STARS' BRIGHTNESS!!!
 
 Backstory:
-	It is the year 00000000000.1 and the Universe is just beginning! 
+	It is the year 00000000000.1 of all time and the Universe is just beginning! 
 	The very fabrics of color are now being spread throughout the universe! 
 	It is your job to catch these colors. In doing so, the 3rd dimension will 
 	slowly be created and EXPLODE from the center of the Universe. 
@@ -28,7 +97,7 @@ Backstory:
 	3D space of colors and things!!
 
 Music:
-	temporary placeholder: FFXI OST- RuLude Gardens
+	temporary placeholder: FFXI OST- RuLude Gardens OR a ratatat piece.
 
 Circle Quality:
 Currently, there ARE ways to draw an antialiased filled circle in pygame,

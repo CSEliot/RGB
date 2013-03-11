@@ -1,33 +1,62 @@
 Ifr you want to make the game play to your own music, you can type out a simple
-string of commands to a .txt file and the game will play along to it.
+string of commands to a commands.txt file and the game will play along to it.
 
 The beta comes with 1 song and 1 file already made for it. The file.txt must
-match the name of the song being played. You'll save both the song and the 
+be named commands.txt and the song must be named . You'll save both the song and the 
 songname.txt into the data folder. Then when the game starts, it'll prompt you
 asking if you want to import a new song. you give the songname and it will do 
 the rest. This won't be the only way to create levels for the music in the final
-version. 
+version. Max actions per second is 30.
 
 Here are the commands:
 (each command must be seperated with a space.)
 
-Beg:      	-The song will begin playing.
-W#			-Wait for # seconds before doing the next action.
-WSP#		-Automatically set a standard wait time for each command.
-Cx#			-Spawn a circle, where x is R,G,B or a combination of the 3.
+Play:      	-The song will begin playing. Note: Give BPM and other parameters
+					before beginning the song, but there is no wait time before 
+					the first song. see example. 
+BPM#		-Will set circle and star speed to match beats per minutes of song.
+					use http://songbpm.com/ to find a song's bpm.
+					BPM will automatically arrange the WSP#, CSP# and FSP#.
+					If called DURING the song, it takes affect after next cmd.
+					
+W#			-Wait for # seconds before doing the next circle/star action.
+WG#		-Automatically set a global wait time for each circle/star action.
+WC#		-Set the wait time before each circle.
+WF#		-Set the wait time before each star
+
+Cx,#			-Spawn a circle, where x is R,G,B or a combination of the 3.
 			*note: a number MAY be placed after each circle spawn command,
 			 	telling it to grow at a certain # speed.
-CSPy		- this will change the standard	speed y at which ALL colors grow. 
+CSP#		- this will change the standard	speed y at which ALL colors grow. 
 			*note: all speed variables work where a speed of 2 means it takes
 				2 seconds to reach the ring's edge. So a speed of 1 means 1 
 				second to reach the edge. Decimal values are allowed.
+				
 Fx			- Spawn a shooting star at angle x.
-Fx,y			- Spawn a shooting star at angle x and speed y. 
-FSPy		- change the standard speed at which all stars move. 
+Fx,#		- Spawn a shooting star at angle x and speed #. 
+FSP#		- change the standard speed at which all stars move. 
 :End		- Stop the song.
 
+Required Commands: BPM, Beg: :End
+
+//Understanding BPM: BPM30 means 1/2 beat per second, or 1 circle per 2 seconds.
+//                   BPM60 means 1 beat per second, or 1 circle/star per second.
+//					 BPM120 means 2 beats per second, or 2 circles/stars per s.
+//     So, a BPM120, in 1 second, 2 circles will reach the ring, with equal 
+// 	   distance between each other. So at 00 seconds, circle 1 is made to reach  
+//     the ring at 0.5 seconds, and the second ring created at 0.5 seconds, to 
+//     reach the ring by 1 second. BPM120 is the same as CSP.5, FSP.5 and WSP.5
 
 
 Example:
 
-WSP.5 FSP1 CSP1 Beg: CR CRG CRB2 F45 F46 F47 F90,2 CSP3 B :End" 
+BPM30 Beg: CR CRG CRB1 BPM60 F45 F46 F47 CRG,.5 F90,2 CSP1 CB :End
+
+So what happened above was that we set BPM to 30, began the song and the 
+first circle played, a red one. 
+- 2 seconds later, a Yellow Circle is made, reaching the ring in 2 seconds.
+- The BPM is changed, doubling the global speeds to 1 per second.
+- 2 seconds later, a Magenta Circle is made to reach the ring in 1 second.
+- BPM takes affect.
+- A star is made at 45 degrees, reaching the ring in 1 second.
+- A star is made at 46 degrees, reaching the ring in 1 second.
