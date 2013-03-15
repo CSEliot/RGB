@@ -1,5 +1,8 @@
 Disclaimer: These are notes to myself, nobody has to read this.
 
+AUTO COLORS: Kinda like a venn diagram, as in, certain tones create certain 
+colors, and in between is a mix.
+
 How to work the action commands:
 the wait time will be a multiplier.
 For each frame, we will test if == to FPS., times a multiplier.

@@ -20,24 +20,22 @@ BPM#		-Will set circle and star speed to match beats per minutes of song.
 					If called DURING the song, it takes affect after next cmd.
 					
 W#			-Wait for # seconds before doing the next circle/star action.
-WG#		-Automatically set a global wait time for each circle/star action.
-WC#		-Set the wait time before each circle.
-WF#		-Set the wait time before each star
-
-Cx,#			-Spawn a circle, where x is R,G,B or a combination of the 3.
+WG#			-Automatically set a global wait time for each circle/star action.
+WC#			-Set the wait time before each circle.
+WF#			-Set the wait time before each star
+Cx,#		-Spawn a circle, where x is R,G,B or a combination of the 3.
 			*note: a number MAY be placed after each circle spawn command,
 			 	telling it to grow at a certain # speed.
 CSP#		- this will change the standard	speed y at which ALL colors grow. 
 			*note: all speed variables work where a speed of 2 means it takes
 				2 seconds to reach the ring's edge. So a speed of 1 means 1 
 				second to reach the edge. Decimal values are allowed.
-				
 Fx			- Spawn a shooting star at angle x.
 Fx,#		- Spawn a shooting star at angle x and speed #. 
 FSP#		- change the standard speed at which all stars move. 
-:End		- Stop the song.
+:Stop		- Stop the song.
 
-Required Commands: BPM, Beg: :End
+Required Commands: BPM, Play: :Stop
 
 //Understanding BPM: BPM30 means 1/2 beat per second, or 1 circle per 2 seconds.
 //                   BPM60 means 1 beat per second, or 1 circle/star per second.
