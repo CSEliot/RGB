@@ -9,9 +9,10 @@
 #===============================================================================
 
 import pygame, sys, os, pygame.gfxdraw, pygame.surface, datetime, platform
-import pgext
+#import pgext
+from commander import commander
 from numpy import *
-from pygame.locals import *  # @UnusedWildImport
+from pygame.locals import *  
 from pygame.compat import geterror
 import math as m
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -19,6 +20,7 @@ if platform.system() == 'Windows':
     os.environ['SDL_VIDEODRIVER'] = 'windib'
 pygame.init()
 
+DEBUG = True
 MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
 DATA_DIR = os.path.join(MAIN_DIR, 'data')
 '''
@@ -72,7 +74,6 @@ else:
         which_display = "Display 4"
         screen_error = "Window Error {0}: {1}".format(e.errno, e.strerror)
 
-
 # --constants//--
 ##############################################################################
 CIRCLE_GROWTH_SPEED = 3
@@ -97,6 +98,8 @@ C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)  # equates screen diagonal.
 DATE = datetime.date.timetuple(datetime.date.today())[0] , \
        datetime.date.timetuple(datetime.date.today())[1] , \
        datetime.date.timetuple(datetime.date.today())[2]
+
+
 
 # class Ring(pygame.sprite.Sprite):
 #
@@ -135,7 +138,7 @@ class Circle (pygame.sprite.Sprite):
         self.rect.center = CENTER
         self.imageOG = self.image
         self.speed = speed
-        pgext.color.setColor(self.image, self.color)
+        #pgext.color.setColor(self.image, self.color)
 
 
     def update(self):
@@ -163,166 +166,6 @@ def load_image(name, colorkey=None):
         image.set_colorkey(colorkey, RLEACCEL)
     return image, image.get_rect()
 
-def commander():
-    # this function opens the commands.txt file and converts it into a list of
-    # commands on how to play the level accompanying the song and put them into
-    # a list. If a command is unrecognized, the game will close (for now).
-    # It will take the commands and their parameters and organize them into a
-    # 2D list
-    # RETURNS: A list of lists
-    ringSize = 400
-    saveDir = os.path.join(DATA_DIR, 'commands.txt')
-    try:
-        commandsFile = open(saveDir, 'r')
-    except pygame.error:
-        debug(DEBUG, ('Cannot open file: ', saveDir))
-        raise SystemExit(str(geterror()))
-
-    # list of commands
-    commands = commandsFile.read()
-    commands = commands.split()
-    commandList = []
-    i = -1
-    for action in commands:
-        # Option 1: set the BPM
-        if action[0] == 'B':
-            try:
-                bpm = action.replace('BPM', '')
-                bpm = int(bpm)
-            except Exception:
-                raise UserWarning, "Invalid BPM possible. See commands.txt"
-                print UserWarning
-                sys.exit(UserWarning)
-            # calculate the global wait time.
-            cWait = (bpm / 60)
-            fWait = cWait
-            # calculate the move speed of circle and star
-            cSpeed = ringSize / (FPS / (bpm / 60))
-            fSpeed = cSpeed
-            # the BPM list is formatted as such:'B', WC, WF, CSP, and FSP
-            commandList.append(['B', cWait, fwait, cSpeed, fSpeed])
-        elif action[0] == 'P':
-            if action == 'Play:':
-                commandList.append(['P'])
-            else:
-                raise UserWarning, "Invalid Play action given. See commands.txt"
-                print UserWarning
-                sys.exit(UserWarning)
-        elif action[0] == 'C':
-            color = ''
-            # we test to see if the action is for changing speed, or making circ
-            if action[1] == 'S':
-                try:
-                    cSpeed = action.replace('CSP', '')
-                    cSpeed = int(cSpeed)
-                except Exception:
-                    raise UserWarning, "Invalid CSP given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                comandList.append(['CS', cSpeed])
-            else:
-                # if it does not begin with CS, that means we make a circle!
-                cSpeed = action.replace('C', '')
-                cSpeed = cSpeed.replace(',', '')
-                # now we iterate through the string, creating a color variable
-                # and remove the letters, leaving speed with only numbers.
-                while cSpeed[0].isalpha():
-                    color = color + cSpeed[0]
-                    cSpeed = cSpeed.replace(cSpeed[0], '')
-                try:
-                    cSpeed = int(cSpeed)
-                except Exception:
-                    raise UserWarning, "Invalid CSpeed given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                # grab the right colors!
-                R, G, B = 0, 0, 0
-                if color.find('R') != -1:
-                    R = 255
-                if color.find('G') != -1:
-                    G = 255
-                if color.find('R') != -1:
-                    B = 255
-                if (R, G, B) == (0, 0, 0):
-                    raise UserWarning, "No colors found. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['C', (R, G, B), cSpeed])
-        elif action[0] == 'F':
-            if action.find(',') != -1:
-                # if both an angle and speed is defined, we must split the
-                # numbers by the comma.
-                starTemp = action.replace('F', '')
-                fAngle, fSpeed = starTemp.split(',')
-                try:
-                    fAngle = int(fAngle)
-                    fSpeed = int(fSpeed)
-                except Exception:
-                    raise UserWarning, "Invalid  Fx/# given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['F', fAngle, fSpeed])
-            else:
-                fAngle = action.replace('F', '')
-                try:
-                    fAngle = int(fAngle)
-                except Exception:
-                    raise UserWarning, "Invalid  Fx given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['F', fAngle])
-        elif action[0] == 'W':
-            if action[1].isdigit():
-                waitTime = action.replace('W', '')
-                # an instance wait, for only that call.
-                try:
-                    waitTime = int(waitTime)
-                except Exception:
-                    raise UserWarning, "Invalid W# given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['W', waitTime])
-            elif action[1] == 'G':
-                # a global constant wait time between each action
-                gWait = action.replace('W', '')
-                gWait = gWait.replace('G', '')
-                try:
-                    gWait = int(gWait)
-                except Exception:
-                    raise UserWarning, "Invalid WG# given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['WG', gWait])
-            elif action[1] == 'C':
-                # a global constant wait time before each circle creation
-                cWait = action.replace('W', '')
-                cWait = cWait.replace('C', '')
-                try:
-                    cWait = int(cWait)
-                except Exception:
-                    raise UserWarning, "Invalid WC# given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['WC', cWait])
-            elif action[1] == 'F':
-                # a global constant wait time before each star creation
-                fWait = action.replace('W', '')
-                fWait = fWait.replace('F', '')
-                try:
-                    fWait = int(fWait)
-                except Exception:
-                    raise UserWarning, "Invalid WF# given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['WG', fWait])
-        elif action[0] == ':':
-            if action == ':Stop':
-                commandList.append(['S'])
-            else:
-                raise UserWarning, "Invalid WF# given. See commands.txt"
-                print UserWarning
-                sys.exit(UserWarning)
-    return commandList
 
 def log(orig_stdout, rep_log):
     saveDir = os.path.join(DATA_DIR, 'log.txt')
@@ -356,10 +199,9 @@ def debug(debugBool, info):
         return True
     return False
 
-
 def main():
 
-    DEBUG = False
+    DEBUG = True
     '''CREATE IMAGES'''
     circ_img, __ = load_image('R_small.png')
     ring_img, ring_rect = load_image('ring_silver.png')
@@ -411,8 +253,9 @@ def main():
     circSprites = pygame.sprite.Group()
     buttonSprites = pygame.sprite.Group()
     starSprites = pygame.sprite.Group()
-
-
+    
+    tempList = commander()
+    print tempList
     """BUTTON / SPRITE RENDERING"""
     r_letter = FONT_LARGE.render('R', True, RED)
     r_letter.scroll(2, 0)
@@ -441,7 +284,6 @@ def main():
     # --Main Game Loop//--
     going = True
     while going:
-
         # Paint the background
         DISPLAYSURFACE.blit(background, background_rect)
 
