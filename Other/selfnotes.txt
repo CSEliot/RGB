@@ -1,4 +1,17 @@
-Disclaimer: These are notes to myself, nobody has to read this.
+Disclaimer: These are notes to myself, nobody has to read this. In fact,
+please don't, possible spoilers ahead.
+
+commanderRunner: So, to ascertain how long we wait till DOING the next command,
+if we get a command that asks for a change in wait time, it'll change it 
+immediately, and bump the list iterator up one, so as to pass the W command.
+Also, we need to make sure that the first action after play is not delayed.
+So, we could have a variable, boolean, that says isFirst, and IF isFirst, 
+set isPlaying to true.
+
+More gameplay aspects. If the player misses the circle, it will continue to 
+expand, then slowly fade away, maybe expand away FAST OR maybe slow?
+, maybe whole circle will fade. . . which means I won't need the fadeBG idea. . .
+if they DONT miss, the circle recedes a little, then stops. 
 
 AUTO COLORS: Kinda like a venn diagram, as in, certain tones create certain 
 colors, and in between is a mix.

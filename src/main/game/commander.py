@@ -1,13 +1,7 @@
 import sys, os, pygame # @UnusedImport
 from pygame.compat import geterror # @UnusedImport
 from debug import debug
-DEBUG = True
 
-# DEFAULT VALUES
-cSpeed = 10
-sSpeed = 10
-cWait = 1
-sWait = 1
 
 
 def commander(c):
@@ -17,13 +11,18 @@ def commander(c):
     # It will take the commands and their parameters and organize them into a
     # 2D list
     # RETURNS: A list of lists
-    ringSize = 400
+    # DEFAULT VALUES
+    ringSize = 265
     bpm = 60
+    cSpeed = 10
+    sSpeed = 10
+    cWait = 1
+    sWait = 1
     saveDir = os.path.join(c.DATA_DIR, 'commands.txt')
     try:
         commandsFile = open(saveDir, 'r')
     except pygame.error:
-        debug(DEBUG, ('Cannot open file: ', saveDir))
+        debug(c.DEBUG, ('Cannot open file: ', saveDir))
         raise SystemExit(str(geterror()))
     
     # list of commands
@@ -41,7 +40,7 @@ def commander(c):
                 print UserWarning
                 sys.exit(UserWarning)
             # calculate the global wait time.
-            cWait = (bpm / 60)
+            cWait = (60 / bpm)
             fWait = cWait
             # calculate the move speed of circle and star
             cSpeed = (ringSize / c.FPS) * (bpm / 60.0)
@@ -75,7 +74,7 @@ def commander(c):
                 # and remove the letters, leaving speed with only numbers.
                 # if no speed was given, then the len will be 0, so we can exit.
                 while len(cSpeed) != 0 and cSpeed[0].isalpha():
-                    debug(DEBUG, ('cSpeed2: ', cSpeed))
+                    debug(c.DEBUG, ('cSpeed2: ', cSpeed))
                     color = color + cSpeed[0]
                     cSpeed = cSpeed.replace(cSpeed[0], '')
                 # if anything is left in the variable cSpeed, then it SHOULD be
@@ -89,7 +88,7 @@ def commander(c):
                         sys.exit(UserWarning)
                 # grab the right colors!
                 R, G, B = 0, 0, 0
-                debug(DEBUG, ("COLOR: ", color))
+                debug(c.DEBUG, ("COLOR: ", color))
                 if color.find('R') != -1:
                     R = 255
                 if color.find('G') != -1:
@@ -175,4 +174,5 @@ def commander(c):
                 raise UserWarning, "Invalid Stop given. See commands.txt"
                 print UserWarning
                 sys.exit(UserWarning)
+    debug(c.DEBUG, commandList)
     return commandList

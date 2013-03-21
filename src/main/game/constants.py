@@ -1,18 +1,28 @@
 import pygame, sys, os, datetime, platform  # @UnusedImport
 import math as m # @UnusedImport
-
+from loader import make_gamescreen
 class Constants(object):
     '''
     holds all "global variables"
     '''
 
-    def __init__(self, DISPLAYSURFACE):
+    def __init__(self):
+        self.FULLSCREEN = True
+        DISPLAYSURFACE, wDisplay, scnError = make_gamescreen(self.FULLSCREEN)
+        self.ORG_STDOUT = sys.stdout
+        self.whichDisplay = wDisplay
+        self.screenError = scnError
         self.DEBUG = True
+        # we have to split MAIN DIR twice in order to get to RGB/src/main
         self.MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
+        self.MAIN_DIR = os.path.split(self.MAIN_DIR)[0]
         self.DATA_DIR = os.path.join(self.MAIN_DIR, 'data')
+        self.GFX_DIR = os.path.join(self.MAIN_DIR, 'graphics')
+        self.SND_DIR = os.path.join(self.MAIN_DIR, 'sound')
+        self.MUSC_DIR = os.path.join(self.MAIN_DIR, 'music')
+        self.GAME_DIR = os.path.join(self.MAIN_DIR, 'game')
         # --constants//--
         self.DISPLAYSURFACE = DISPLAYSURFACE
-        self.CIRCLE_GROWTH_SPEED = 3
         self.FPS = 30  # frames per second ceiling setting
         self.RED = pygame.color.Color('red')
         self.GREEN = pygame.color.Color('green')
