@@ -9,7 +9,7 @@ the rest. This won't be the only way to create levels for the music in the final
 version. Max actions per second is 30.
 
 Here are the commands:
-(each command must be seperated with a space.)
+(each command must be separated with a space.)
 
 Play:      	-The song will begin playing. Note: Give BPM and other parameters
 					before beginning the song, but there is no wait time before 
@@ -26,7 +26,7 @@ WF#			-Set the wait time before each star
 Cx,#		-Spawn a circle, where x is R,G,B or a combination of the 3.
 			*note: a number MAY be placed after each circle spawn command,
 			 	telling it to grow at a certain # speed.
-CSP#		- this will change the standard	speed y at which ALL colors grow. 
+CSP#		- this will change the standard	speed # at which ALL colors grow. 
 			*note: all speed variables work where a speed of 2 means it takes
 				2 seconds to reach the ring's edge. So a speed of 1 means 1 
 				second to reach the edge. Decimal values are allowed.

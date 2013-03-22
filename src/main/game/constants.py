@@ -7,7 +7,7 @@ class Constants(object):
     '''
 
     def __init__(self):
-        self.FULLSCREEN = True
+        self.FULLSCREEN = False
         DISPLAYSURFACE, wDisplay, scnError = make_gamescreen(self.FULLSCREEN)
         self.ORG_STDOUT = sys.stdout
         self.whichDisplay = wDisplay

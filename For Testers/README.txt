@@ -1,3 +1,10 @@
+Song Loading:
+For this current version, your song will most likely work if it's .ogg. 
+Make sure to rename it to song.ogg .
+
+
+
+--Everything Underneath here is mostly dated, please disregard---
 INSTALLATION Instructions:
 STEP 1: Extract everything into a new folder
 note: RGB.py is your file executable, python and pygame need to be installed for it to run
