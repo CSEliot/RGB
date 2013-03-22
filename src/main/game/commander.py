@@ -15,9 +15,9 @@ def commander(c):
     ringSize = 265
     bpm = 60
     cSpeed = 10
-    sSpeed = 10
+    fSpeed = 10
     cWait = 1
-    sWait = 1
+    fWait = 1
     saveDir = os.path.join(c.DATA_DIR, 'commands.txt')
     try:
         commandsFile = open(saveDir, 'r')
@@ -101,28 +101,39 @@ def commander(c):
                     sys.exit(UserWarning)
                 commandList.append(['C', (R, G, B), cSpeed])
         elif action[0] == 'F':
-            if action.find(',') != -1:
-                # if both an angle and speed is defined, we must split the
-                # numbers by the comma.
-                starTemp = action.replace('F', '')
-                fAngle, fSpeed = starTemp.split(',')
+            # we test to see if the action is for changing speed, or making circ
+            if action[1] == 'S':
                 try:
-                    fAngle = float(fAngle)
-                    fSpeed = float(fSpeed)
+                    fSpeed = action.replace('FSP', '')
+                    fSpeed = float(cSpeed)
                 except Exception:
-                    raise UserWarning, "Invalid  Fx/# given. See commands.txt"
+                    raise UserWarning, "Invalid FSP given. See commands.txt"
                     print UserWarning
                     sys.exit(UserWarning)
-                commandList.append(['F', fAngle, fSpeed])
+                commandList.append(['FS', fSpeed])
             else:
-                fAngle = action.replace('F', '')
-                try:
-                    fAngle = float(fAngle)
-                except Exception:
-                    raise UserWarning, "Invalid  Fx given. See commands.txt"
-                    print UserWarning
-                    sys.exit(UserWarning)
-                commandList.append(['F', fAngle])
+                if action.find(',') != -1:
+                    # if both an angle and speed is defined, we must split the
+                    # numbers by the comma.
+                    starTemp = action.replace('F', '')
+                    fAngle, fSpeed = starTemp.split(',')
+                    try:
+                        fAngle = float(fAngle)
+                        fSpeed = float(fSpeed)
+                    except Exception:
+                        raise UserWarning, "Invalid  Fx/# given. See commands.txt"
+                        print UserWarning
+                        sys.exit(UserWarning)
+                    commandList.append(['F', fAngle, fSpeed])
+                else:
+                    fAngle = action.replace('F', '')
+                    try:
+                        fAngle = float(fAngle)
+                    except Exception:
+                        raise UserWarning, "Invalid  Fx given. See commands.txt"
+                        print UserWarning
+                        sys.exit(UserWarning)
+                    commandList.append(['F', fAngle, ''])
         elif action[0] == 'W':
             if action[1].isdigit():
                 waitTime = action.replace('W', '')
@@ -166,7 +177,7 @@ def commander(c):
                     raise UserWarning, "Invalid WF# given. See commands.txt"
                     print UserWarning
                     sys.exit(UserWarning)
-                commandList.append(['WG', fWait])
+                commandList.append(['WF', fWait])
         elif action[0] == ':':
             if action == ':Stop':
                 commandList.append(['S'])

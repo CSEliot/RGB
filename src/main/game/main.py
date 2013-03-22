@@ -20,6 +20,7 @@ from debug import debug
 from log import log
 from circle import Circle
 import circle
+from loader import load_image, load_song
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 if platform.system() == 'Windows':
     os.environ['SDL_VIDEODRIVER'] = 'windib'
@@ -29,37 +30,34 @@ c = Constants()
 
 
 
-# --FUNCTIONS to create our resources//--
-def load_image(name, colorkey=None):
-    fullname = os.path.join(c.GFX_DIR, name)
-    try:
-        image = pygame.image.load(fullname)
-    except pygame.error:
-        debug(c.DEBUG, ('Cannot load image:', fullname))
-        raise SystemExit(str(geterror()))
-    # image = image.convert()
-    if colorkey is not None:
-        if colorkey is -1:
-            colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey, RLEACCEL)
-        return image, image.get_rect()
-    return image.convert_alpha(), image.get_rect()
 
 
 
+class playBox():
+    #This class holds all our variables to access while playing.
+    def __init__(self):
+        self.cSpeed = 0
+        self.fSpeed = 0
+        self.cWait = 0
+        self.fWait = 0
+        self.isPlaying = False
+        self.isFirst = True
+        self.layer = 0
 
 
 def main():
     
+    pBox = playBox()
     playList = commander(c)
+    playIt = iter(playList)
     '''CREATE IMAGES'''
-    circ_img, __ = load_image('R_small.png')
-    ring_img, ring_rect = load_image('ring_silver.png')
+    circ_img, __ = load_image(c, 'R_small.png')
+    ring_img, ring_rect = load_image(c, 'ringNew.png')
     ring_rect.center = c.CENTER
-    box_img, box_rect = load_image('letter_box.png')
-    background, background_rect = load_image('starBG.png')
-    fadeBG, _ = load_image('fadeBG.png')
-    # circle = Circle()
+    box_img, box_rect = load_image(c, 'letter_box.png')
+    background, background_rect = load_image(c, 'starBG.png')
+    fadeBG, _ = load_image(c, 'fadeBG.png')
+    mySong = load_song(c, 'song.ogg')
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
@@ -75,7 +73,10 @@ def main():
 
     '''INSTANTIATING OTHER VARIABLES'''
     # tracks the number of frames passed. Gets reset when == to FPS.
-    frame = 0
+    mainFrame = 0
+    testFrame = 0
+    waiting = False
+    firstAction = True
     r = 0
     g = 0
     b = 0
@@ -93,11 +94,11 @@ def main():
     current_circle_quantity = 0
     inverted = False
     rotation_speed = 3
-    cSpeed = 3
     allSprites = pygame.sprite.Group()
-    circSprites = pygame.sprite.Group()
+    circSprites = pygame.sprite.LayeredUpdates()
     buttonSprites = pygame.sprite.Group()
-    starSprites = pygame.sprite.Group()
+    starSprites = pygame.sprite.LayeredUpdates()
+    
     
     
     """BUTTON / SPRITE RENDERING"""
@@ -128,6 +129,8 @@ def main():
     # --Main Game Loop//--
     going = True
     while going:
+        testFrame += 1
+        mainFrame += 1
         # Paint the background
         c.DISPLAYSURFACE.blit(background, background_rect)
 
@@ -136,18 +139,69 @@ def main():
         old_rgb = [r, g, b]
 
         """LOGGING output information: FPS, event info, AA, etc."""
-        frame += 1
         # for every 30 or FPS number of frames, print an average fps.
         fpsList.append(c.FPSCLOCK.get_fps())
-        if frame == c.FPS:
+        if testFrame == c.FPS:
             debug(c.DEBUG, (mean(fpsList)))
-            frame = 0
+            testFrame = 0
             pygame.display.set_caption('RGB. FPS: {0}'.format(mean(fpsList)))
             fpsList = []
             if len(circle_size_list) > 0:
                 debug(c.DEBUG, 'Size: ' + str(circle_size_list[0]))
             
-
+        
+        """TAKE ACTION COMMAND LIST"""
+        # for every new action, if the wait was long enough, perform the action
+        if not waiting:
+            action = playIt.next()
+            if action[0] == 'B':
+                # if the command is BPM, set the proper variables. 
+                pBox.cWait = action[1]
+                pBox.fWait = action[2]
+                pBox.cSpeed = action[3]
+                pBox.fSpeed = action[4]
+            elif action[0] == 'P':
+                pygame.mixer.music.play()
+            # if the action is to spawn a circle/star, gotta que it up.
+            elif action[0] == 'C' or action[0] == 'F':
+                waiting = True
+            # change the general speed for circles/stars
+            elif action[0] == 'CS'or action[0] == 'FS':
+                if action[0] == 'CS':
+                    pBox.cSpeed = action[1]
+                else:
+                    pBox.fSpeed = action[1]
+            elif action[0][0] == 'W':
+                if action[0] == 'W':
+                    waiting = True
+                elif action[0] == 'WG':
+                    pBox.cWait = action[1]
+                    pBox.fWait = action[1]
+                elif action[0] == 'WC':
+                    pBox.cWait = action[1]
+                else:
+                    pBox.fWait = action[1]
+            elif action[0] == 'S':
+                pygame.mixer.music.stop()
+        if waiting:
+            if action[0] == 'C':
+                if mainFrame >= c.FPS*pBox.cWait or firstAction:
+                    if action[2] == '':
+                        # if there is no given speed, then it's the general
+                        # speed. . .
+                        tempSpeed = pBox.cSpeed
+                    else:
+                        tempSpeed = action[2]
+                    tempColor = action[1]
+                    tempCirc = Circle(c.CENTER, tempSpeed, tempColor, circ_img,\
+                                       pBox.layer)
+                    circSprites.add(tempCirc)
+                    #allSprites.add(tempCirc)
+                    pBox.layer += 1
+                    waiting = False
+                    mainFrame = 0
+            firstAction = False
+                    
         """EVENT HANDLING INPUT"""
         # grab all the latest input
         latest_events = pygame.event.get()
@@ -218,14 +272,13 @@ def main():
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
-                for p in pygame.key.get_pressed():
-                        if p == True:
-                            debug(c.DEBUG, "A KEY IS PRESSED, CAN NOT PAUSE")
-                            paused = False
-                            # break
-                        else:
-                            paused = True
-                            debug(c.DEBUG, "INTO PAUSE!!")
+                keyPressed = pygame.key.get_pressed()
+                if keyPressed:
+                    debug(c.DEBUG, "A KEY IS PRESSED, CAN NOT PAUSE")
+                    paused = False
+                else:
+                    paused = True
+                    debug(c.DEBUG, "INTO PAUSE!!")
             # if L is pressed, toggle black auto-black circle.
             elif event.type == KEYDOWN and event.key == K_l:
                 if total_input == 0:
@@ -258,6 +311,7 @@ def main():
                     sys.exit()
                     pygame.quit()
 
+        
         """SPIN ROTATE"""
         oldAngle = angle
         # --Spin the Ring//--
@@ -281,40 +335,27 @@ def main():
                     circle_size_list.append(0)
                     current_circle_quantity += 1
 
-        """DRAW CIRCLES SCREEN DISPLAYSURFACE"""
-        # for each circle to be drawn
-        for i in range(current_circle_quantity):
-            # increase the circle size
-            circle_size_list[i] += cSpeed
-            # draw circle to the screen, grabbing each color amount: R, G, B
-            pygame.gfxdraw.filled_circle(c.DISPLAYSURFACE,
-                                         c.CENTER_X, c.CENTER_Y,
-                                         circle_size_list[i], (
-                                         circle_color_list[i][0],
-                                         circle_color_list[i][1],
-                                         circle_color_list[i][2]))
         """POP DELETE LARGE CIRCLES"""
         # get rid of big circles
-        if len(circle_size_list) >= 1:
-            if circle_size_list[0] >= 265:
-                circle_size_list.pop(0)
-                allSprites.empty()
-                # DISPLAYSURFACE.blit(background, background_rect)
-                # paint the background to the color of the last circle
-                circle_color_list.pop(0)
-                current_circle_quantity += -1
-
-
-
-
-
-
+        if len(circSprites.sprites()) > 0:
+            if len(circSprites.sprites()) >= 4:
+                print circSprites.get_sprite(0).size
+                print circSprites.get_sprite(0).color
+                print circSprites.get_sprite(1).size
+                print circSprites.get_sprite(1).color
+            tempSize = circSprites.get_top_sprite().size
+            tempLen = len(circSprites.sprites())
+            debug(c.DEBUG, ('Sprite Size: ', tempSize))
+            debug(c.DEBUG, ('# Sprites: ', len(circSprites.sprites())) )
+            if circSprites.get_top_sprite().size >= 265:
+                debug(c.DEBUG, ('# Sprites: ', len(circSprites.sprites())) )
+                circSprites.get_top_sprite().kill()
 
         """DISPLAY SPRITE TOGGLE"""
         if display_sprites == True:
-            allSprites.update()
+            circSprites.update()
 
-            allSprites.draw(c.DISPLAYSURFACE)
+            circSprites.draw(c.DISPLAYSURFACE)
 #             if not(len(circle_size_list) == 0):
 #                 if circle_size_list[0] > 265:
 #                     c.DISPLAYSURFACE.blit(fadeBG, fadeBG_rect)
