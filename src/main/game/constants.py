@@ -7,12 +7,18 @@ class Constants(object):
     '''
 
     def __init__(self):
-        self.FULLSCREEN = False
+        self.FULLSCREEN = True
         DISPLAYSURFACE, wDisplay, scnError = make_gamescreen(self.FULLSCREEN)
         self.ORG_STDOUT = sys.stdout
         self.whichDisplay = wDisplay
         self.screenError = scnError
+        # default game values
         self.DEBUG = True
+        self.RING_SIZE = 540
+        self.BPM = 60
+        self.C_SPEED = 10
+        self.F_SPEED = 10
+        self.WAIT = 1
         # we have to split MAIN DIR twice in order to get to RGB/src/main
         self.MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
         self.MAIN_DIR = os.path.split(self.MAIN_DIR)[0]

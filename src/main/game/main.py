@@ -19,7 +19,8 @@ from commander import commander
 from debug import debug
 from log import log
 from circle import Circle
-import circle
+from star import Star
+from ring import Ring
 from loader import load_image, load_song
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 if platform.system() == 'Windows':
@@ -47,16 +48,19 @@ class playBox():
 
 def main():
     
+    allSprites = pygame.sprite.Group()
+    ringSprite = pygame.sprite.GroupSingle()
+    circSprites = pygame.sprite.LayeredUpdates()
+    buttonSprites = pygame.sprite.Group()
+    starSprites = pygame.sprite.LayeredUpdates()
     pBox = playBox()
     playList = commander(c)
     playIt = iter(playList)
     '''CREATE IMAGES'''
-    circ_img, __ = load_image(c, 'R_small.png')
-    ring_img, ring_rect = load_image(c, 'ringNew.png')
-    ring_rect.center = c.CENTER
+    ring = Ring(c, c.CENTER)
+    ring.add(ringSprite, allSprites)
     box_img, box_rect = load_image(c, 'letter_box.png')
     background, background_rect = load_image(c, 'starBG.png')
-    fadeBG, _ = load_image(c, 'fadeBG.png')
     mySong = load_song(c, 'song.ogg')
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
@@ -66,10 +70,6 @@ def main():
     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
-    # CUTTING the same way for the fadeBG.png
-    fadeBG = fadeBG.subsurface((xCut, yCut), (c.DISPLAY_W, c.DISPLAY_H))
-    fadeBG_rect = fadeBG.get_rect()
-    fadeBG_rect.center = c.CENTER
 
     '''INSTANTIATING OTHER VARIABLES'''
     # tracks the number of frames passed. Gets reset when == to FPS.
@@ -80,13 +80,9 @@ def main():
     r = 0
     g = 0
     b = 0
-    angle = 0
-    rotate_by = 0
     paused = False
     total_input = 0
     fpsList = []
-    circle_size_list = []
-    circle_color_list = []
     toggle_color_r = False
     toggle_color_g = False
     toggle_color_b = False
@@ -94,10 +90,6 @@ def main():
     current_circle_quantity = 0
     inverted = False
     rotation_speed = 3
-    allSprites = pygame.sprite.Group()
-    circSprites = pygame.sprite.LayeredUpdates()
-    buttonSprites = pygame.sprite.Group()
-    starSprites = pygame.sprite.LayeredUpdates()
     
     
     
@@ -134,9 +126,6 @@ def main():
         # Paint the background
         c.DISPLAYSURFACE.blit(background, background_rect)
 
-        """RECORD UNCHANGED RGB"""
-        # record unchanged r, g, b values.
-        old_rgb = [r, g, b]
 
         """LOGGING output information: FPS, event info, AA, etc."""
         # for every 30 or FPS number of frames, print an average fps.
@@ -146,8 +135,6 @@ def main():
             testFrame = 0
             pygame.display.set_caption('RGB. FPS: {0}'.format(mean(fpsList)))
             fpsList = []
-            if len(circle_size_list) > 0:
-                debug(c.DEBUG, 'Size: ' + str(circle_size_list[0]))
             
         
         """TAKE ACTION COMMAND LIST"""
@@ -191,16 +178,36 @@ def main():
                         # speed. . .
                         tempSpeed = pBox.cSpeed
                     else:
-                        tempSpeed = action[2]
+                        tempSpeed = (c.RING_SIZE / c.FPS) * ((c.BPM / 60.0)/action[2])
                     tempColor = action[1]
-                    tempCirc = Circle(c.CENTER, tempSpeed, tempColor, circ_img,\
-                                       pBox.layer)
-                    circSprites.add(tempCirc)
+                    tempCirc = Circle(c, c.CENTER, tempSpeed, tempColor,\
+                                      pBox.layer)
+                    tempCirc.add(circSprites, allSprites)
+                    #circSprites.add(tempCirc)
                     #allSprites.add(tempCirc)
                     pBox.layer += 1
                     waiting = False
                     mainFrame = 0
-            firstAction = False
+            elif action[0] == 'F':
+                if mainFrame >= c.FPS*pBox.fWait or firstAction:
+                    if action[2] == '':
+                        tempSpeed = pBox.fSpeed
+                    else:
+                        tempSpeed = (c.RING_SIZE / c.FPS) * ((c.BPM / 60.0)/action[2])
+                    tempAngle = action[1]
+                    tempStar = Star(c, c.CENTER, tempSpeed, tempAngle)
+                    tempStar.add(starSprites, allSprites)
+                    # no longer waiting, bring on the next action!
+                    waiting = False
+                    mainFrame = 0
+            elif action[0] == 'W':
+                # if the action is to JUST wait x amount of time
+                if mainFrame >= c.FPS*action[1]:
+                    waiting = False
+                    mainFrame = 0
+                    # since the first action has just occurred, we must wait now.
+            if firstAction:
+                firstAction = False
                     
         """EVENT HANDLING INPUT"""
         # grab all the latest input
@@ -235,23 +242,15 @@ def main():
                 b = 0
                 toggle_color_b = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key == K_o:
-                if inverted == False:
-                    inverted = True
-                else:
-                    inverted = False
             # Ring Spinning
             elif event.type == KEYDOWN and event.key == K_LEFT:
-                rotate_by += -rotation_speed
-                # ring.set_direction(1)
+                ring.spin(1)
             elif event.type == KEYDOWN and event.key == K_RIGHT:
-                rotate_by += rotation_speed
-                # ring.set_direction(-1)
+                ring.spin(-1)
             elif event.type == KEYUP and event.key == K_LEFT:
-                rotate_by += rotation_speed
-                # ring.set_direction
+                ring.spin(-1)
             elif event.type == KEYUP and event.key == K_RIGHT:
-                rotate_by += -rotation_speed
+                ring.spin(1)
             #====================================
             # --non-game-play events//--
             #====================================
@@ -273,6 +272,7 @@ def main():
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
                 keyPressed = pygame.key.get_pressed()
+                debug(c.DEBUG, keyPressed())
                 if keyPressed:
                     debug(c.DEBUG, "A KEY IS PRESSED, CAN NOT PAUSE")
                     paused = False
@@ -311,55 +311,13 @@ def main():
                     sys.exit()
                     pygame.quit()
 
-        
-        """SPIN ROTATE"""
-        oldAngle = angle
-        # --Spin the Ring//--
-        if inverted == True:
-            angle += -rotate_by * 2
-        else:
-            angle += rotate_by * 2
-        # ring_imgNew = pygame.transform.scale(ring_img, (angle, angle))
-        ring_imgNew = pygame.transform.rotozoom(ring_img, angle, 1)
-        ring_rectNew = ring_imgNew.get_rect(center=(c.CENTER_X, c.CENTER_Y))
-
-        """RECORD CHANGES RGB"""
-        # record the changes to R, G, and B
-        new_rgb = [r, g, b]
-
-        """ADD NEW CIRCLES LISTS"""
-        # if the color to print has not changed, a new circle will not be made
-        if total_input > 0:
-            if not new_rgb == old_rgb:
-                    circle_color_list.append(new_rgb)
-                    circle_size_list.append(0)
-                    current_circle_quantity += 1
-
-        """POP DELETE LARGE CIRCLES"""
-        # get rid of big circles
-        if len(circSprites.sprites()) > 0:
-            if len(circSprites.sprites()) >= 4:
-                print circSprites.get_sprite(0).size
-                print circSprites.get_sprite(0).color
-                print circSprites.get_sprite(1).size
-                print circSprites.get_sprite(1).color
-            tempSize = circSprites.get_top_sprite().size
-            tempLen = len(circSprites.sprites())
-            debug(c.DEBUG, ('Sprite Size: ', tempSize))
-            debug(c.DEBUG, ('# Sprites: ', len(circSprites.sprites())) )
-            if circSprites.get_top_sprite().size >= 265:
-                debug(c.DEBUG, ('# Sprites: ', len(circSprites.sprites())) )
-                circSprites.get_top_sprite().kill()
-
         """DISPLAY SPRITE TOGGLE"""
+        allSprites.update()
         if display_sprites == True:
-            circSprites.update()
-
+            pygame.sprite.spritecollide(ring, starSprites, True, pygame.sprite.collide_mask)
             circSprites.draw(c.DISPLAYSURFACE)
-#             if not(len(circle_size_list) == 0):
-#                 if circle_size_list[0] > 265:
-#                     c.DISPLAYSURFACE.blit(fadeBG, fadeBG_rect)
-            c.DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
+            starSprites.draw(c.DISPLAYSURFACE)
+            ringSprite.draw(c.DISPLAYSURFACE)
             if toggle_color_r:
                 c.DISPLAYSURFACE.blit(r_letter, r_letter_rect)
             if toggle_color_g:

@@ -12,12 +12,6 @@ def commander(c):
     # 2D list
     # RETURNS: A list of lists
     # DEFAULT VALUES
-    ringSize = 265
-    bpm = 60
-    cSpeed = 10
-    fSpeed = 10
-    cWait = 1
-    fWait = 1
     saveDir = os.path.join(c.DATA_DIR, 'commands.txt')
     try:
         commandsFile = open(saveDir, 'r')
@@ -43,7 +37,7 @@ def commander(c):
             cWait = (60 / bpm)
             fWait = cWait
             # calculate the move speed of circle and star
-            cSpeed = (ringSize / c.FPS) * (bpm / 60.0)
+            cSpeed = (c.RING_SIZE / c.FPS) * (bpm / 60.0)
             fSpeed = cSpeed
             # the BPM list is formatted as such:'B', WC, WF, CSP, and FSP
             commandList.append(['B', cWait, fWait, cSpeed, fSpeed])
