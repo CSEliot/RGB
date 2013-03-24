@@ -1,6 +1,8 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+SPRITEMASKS FOR COLLISION
+
 commanderRunner: So, to ascertain how long we wait till DOING the next command,
 if we get a command that asks for a change in wait time, it'll change it 
 immediately, and bump the list iterator up one, so as to pass over the W command.
