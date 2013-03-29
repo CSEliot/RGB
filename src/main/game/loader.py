@@ -1,9 +1,9 @@
-import pygame, debug, os # @UnusedImport
+import pygame, debug, os  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
-from pygame.compat import geterror # @UnusedImport
-from debug import debug
+from pygame.compat import geterror  # @UnusedImport
+from debug import debug  # @Reimport
 
-pygame.mixer.pre_init(44100, -16, 2, 2048) # setup mixer to avoid sound lag
+pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
 pygame.init()
 
 
