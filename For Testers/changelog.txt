@@ -1,5 +1,46 @@
 Changelog
 
+
+beta v1 // xx.xx.2013		
+							*NOTE: Everything Star related will be forgotten for
+								   now. The focus is on getting circles feel 
+								   right. 
+							Added:
+							Changed:
+								- ASD now controls RGB.
+							Removed:
+							Fixed:
+								- Algorhythm for commands updated.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------OLD-----------------------------------------
 beta v0.2 // 03.26.2013		Added:
 								- Pressing 'I' will invert the controls.
 								- RATATAT
@@ -13,20 +54,6 @@ beta v0.2 // 03.26.2013		Added:
 									but the algorhythm works now.!!
 							Code:
 								- Fixed the beat algorithm.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 beta V0 // 03.25.2013		Added:
 								- Actual gameplay elements!
@@ -51,12 +78,6 @@ beta V0 // 03.25.2013		Added:
 							Code:
 								- Ring and circles are their own class, everything handled inside there.
 								- OBJECT ORIENTATION YAY!
-							
-							
-							
-							
-							
-							
 							
 							
 ---------------------------ALPHA-----------------------------------------

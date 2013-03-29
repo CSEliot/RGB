@@ -17,7 +17,7 @@ import math as m  # @UnusedImport
 from constants import Constants
 from commander import commander
 from debug import debug
-from log import log  # @UnusedWildImport
+from log import log  # @UnusedImport @Reimport
 from circle import Circle
 from star import Star
 from ring import Ring
@@ -49,6 +49,7 @@ class playBox():
 
 def main():
 
+
     allSprites = pygame.sprite.Group()
     ringSprite = pygame.sprite.GroupSingle()
     circSprites = pygame.sprite.LayeredUpdates()
@@ -64,9 +65,9 @@ def main():
     ring.add(ringSprite, allSprites)
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
     scoreboard.add(scoreSprite, allSprites)
-    box_img, box_rect = load_image(c, 'letter_box.png')
+    box_img, box_rect = load_image(c, 'letter_box.png')  # @UnusedVariable (lie)
     background, background_rect = load_image(c, 'starBG.png')
-    mySong = load_song(c, 'song.ogg')
+    mySong = load_song(c, 'song.ogg')  # @UnusedVariable (except it it)
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
@@ -95,6 +96,8 @@ def main():
     toggle_color_g = False
     toggle_color_b = False
     display_sprites = True
+    controlSwitch = 1  # @UnusedVariable
+    controls = [[K_r, K_g, K_b], [K_a, K_s, K_r]]  # @UnusedVariable
 
 
 
@@ -225,27 +228,27 @@ def main():
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 going = False
             # --game-play events//--
-            elif event.type == KEYDOWN and event.key == K_r:
+            elif event.type == KEYDOWN and event.key == K_a:
                 r = 255
                 toggle_color_r = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == K_r:
+            elif event.type == KEYUP and event.key == K_a:
                 r = 0
                 toggle_color_r = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key == K_g:
+            elif event.type == KEYDOWN and event.key == K_s:
                 g = 255
                 toggle_color_g = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == K_g:
+            elif event.type == KEYUP and event.key == K_s:
                 g = 0
                 toggle_color_g = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key == K_b:
+            elif event.type == KEYDOWN and event.key == K_d:
                 b = 255
                 toggle_color_b = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == K_b:
+            elif event.type == KEYUP and event.key == K_d:
                 b = 0
                 toggle_color_b = False
                 total_input += -1

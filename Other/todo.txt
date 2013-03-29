@@ -1,26 +1,19 @@
 --Planned--
 *Beta*
-v1// 03.xx.2013.xx:xx - 
+v1// 04.xx.2013.xx:xx - 
 						Added:
-							-Music, but temporary*
-							-hitboxes, classes, detection, fun stuff*
-							-game is installed and launched via .exe
+							- game is installed and launched via .exe
 							- Music can now begin and end at user given time
 							- New command functions: make nth circle 
 										recede, control growing speeds.
-							- Pressing 'I' will invert the controls.
-							- A difficulty setting, a BPM multiplier 
-										ex: Diff:E, Diff:M, Diff:H
+							- ASD are now used, instead of RGB
+							- Changelog popup before game starts
 						Changed:
 							-Input feedback from RGB letters to ring
 							-Improved Image Quality
-							-controls from toggle to choosing your own
-							-Circles generated as images*
-							-Code reporting to file done instantly and automatically
-							-errors also printed to the file
-							
 
-v2// 03.xx.2013.xx:xx - 	
+
+v2+// 03.xx.2013.xx:xx - 	
 						Added:
 							-Menu Screen / Game States
 							-An AI to Control Circle generation.
@@ -30,6 +23,9 @@ v2// 03.xx.2013.xx:xx -
 							-Title Splash Screen*
 							-A way to end songs early and begin at X time.
 							-ring sticking
+							- A difficulty setting, a BPM multiplier 
+										ex: Diff:E, Diff:M, Diff:H
+							-controls from toggle to choosing your own
 						Changed:
 							-More improved image quality
 							-More organization and speed improvements to code.*
