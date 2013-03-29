@@ -1,23 +1,56 @@
 Changelog
 
-0.2.0a // xx.xx.2013.xx:xx	Added:
-								- Actual gameplay elements!
-								- A scoreboard.
-								- Music! (this is temporary, I do not technically own this music)
-								- An Instructions page!
-								- Game States!
-								- A sexy background ;)
-								- Up and down arrows stick the ring to NEWS
+beta v0.2 // 03.26.2013		Added:
+								- Pressing 'I' will invert the controls.
+								- RATATAT
+								- The chance to go negative in points
 							Changed:
-								- Fullscreen is temporarily unavailable.
-								- How log files log. With more accuracy and verbosity.
-								- Circle speed is slower, this will probably be the default easy mode speed.
-								- Debugging occurs automatically, AND exports to log.txt automatically.
-								- Each FPS is an average of the framerate of about every second
+								- Logging file now with your score!
 							Removed:
 							Fixed:
+								- Logging function would crash game.
+								- The game wasn't in beat with the rhythm
+									but the algorhythm works now.!!
+							Code:
+								- Fixed the beat algorithm.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+beta V0 // 03.25.2013		Added:
+								- Actual gameplay elements!
+								- A scoreboard.
+								- Music! (this is temporary, I do not 
+									technically own this music, it's freeware
+									off of newgrounds . . .)
+								- A sexy background ;)
+								- Up and down arrow actions
+							Changed:
+								- Pausing is temporarily unavailable.
+								- Fullscreen toggle is temporarily unavailable.
+								- How log files log. With more accuracy and verbosity.
+								- All circles and stars are created by the commands.txt file
+								- Each FPS is an average of the framerate of about every second
+							Removed:
+								- Pausing is currently unavailable
+								- Ugly circles
+								- fullscreen toggle
+							Fixed:
+								-Nothing, beta 1
 							Code:
 								- Ring and circles are their own class, everything handled inside there.
+								- OBJECT ORIENTATION YAY!
 							
 							
 							

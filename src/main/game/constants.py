@@ -1,5 +1,5 @@
 import pygame, sys, os, datetime, platform  # @UnusedImport
-import math as m # @UnusedImport
+import math as m  # @UnusedImport
 from loader import make_gamescreen
 class Constants(object):
     '''
@@ -9,13 +9,14 @@ class Constants(object):
     def __init__(self):
         self.FULLSCREEN = True
         DISPLAYSURFACE, wDisplay, scnError = make_gamescreen(self.FULLSCREEN)
-        self.ORG_STDOUT = sys.stdout
+        self.OG_STDOUT = sys.stdout
         self.whichDisplay = wDisplay
         self.screenError = scnError
         # default game values
-        self.DEBUG = True
-        self.RING_SIZE = 540
-        self.BPM = 60
+        self.DEBUG = False
+        self.RING_SIZE = 620.0  # for circles only!
+        self.RING_RADIUS = 265.0  # for stars / speed
+        self.BPM = 60.0
         self.C_SPEED = 10
         self.F_SPEED = 10
         self.WAIT = 1
@@ -47,8 +48,7 @@ class Constants(object):
         self.CENTER_Y = (self.DISPLAY_H / 2)
         self.CENTER = (self.CENTER_X, self.CENTER_Y)
         # equates screen diagonal.
-        self.C_LENGTH = m.sqrt((self.CENTER_X) ** 2 + (self.CENTER_Y) ** 2)  
+        self.C_LENGTH = m.sqrt((self.CENTER_X) ** 2 + (self.CENTER_Y) ** 2)
         self.DATE = datetime.date.timetuple(datetime.date.today())[0] , \
                     datetime.date.timetuple(datetime.date.today())[1] , \
                     datetime.date.timetuple(datetime.date.today())[2]
-                

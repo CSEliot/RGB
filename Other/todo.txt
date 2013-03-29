@@ -1,30 +1,35 @@
 --Planned--
 *Beta*
-0.2.0+// 03.xx.2013.xx:xx - 
+v1// 03.xx.2013.xx:xx - 
 						Added:
-							-Menu Screen / Game States
-							-An AI to Control Circle generation.
-							-pre-window launch settings window
 							-Music, but temporary*
 							-hitboxes, classes, detection, fun stuff*
 							-game is installed and launched via .exe
-							-arrow sticking is smooth
+							- Music can now begin and end at user given time
+							- New command functions: make nth circle 
+										recede, control growing speeds.
+							- Pressing 'I' will invert the controls.
+							- A difficulty setting, a BPM multiplier 
+										ex: Diff:E, Diff:M, Diff:H
 						Changed:
-							-Input feedback from RGB letters to arrow
+							-Input feedback from RGB letters to ring
 							-Improved Image Quality
 							-controls from toggle to choosing your own
 							-Circles generated as images*
 							-Code reporting to file done instantly and automatically
 							-errors also printed to the file
-							-Ring Changes including seperate images per color, and a darker ring*
 							
 
-0.2.1+// 03.xx.2013.xx:xx - 	
+v2// 03.xx.2013.xx:xx - 	
 						Added:
-							-Hitboxes for the Ring-Arrow!
+							-Menu Screen / Game States
+							-An AI to Control Circle generation.
+							-pre-window launch settings window
 							-Choice between Free-Mode (make your own circles) and Arcade Mode (actual game)
 							-Sound Effects
 							-Title Splash Screen*
+							-A way to end songs early and begin at X time.
+							-ring sticking
 						Changed:
 							-More improved image quality
 							-More organization and speed improvements to code.*
