@@ -1,14 +1,25 @@
-import pygame # @UnusedImport
+import pygame  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
 
-class MyClass(object):
-    '''
-    classdocs
-    '''
+class Scoreboard(pygame.sprite.Sprite):
 
+    def __init__(self, DISPLAY_W, DISPLAY_H):
+        pygame.sprite.Sprite.__init__(self)
+        self.score = 0
+        self.FONT_LARGE = pygame.font.Font('freesansbold.ttf', 32)
+        self.scoreString = ''
+        self.WHITE = (255, 255, 255)
+        self.image = self.FONT_LARGE.render(self.scoreString, True, self.WHITE)
+        self.rect = self.image.get_rect()
+        self.DISPLAY_W = DISPLAY_W
+        self.DISPLAY_H = DISPLAY_H
+        self.rect.topright = (self.DISPLAY_W - 50, 50)
 
-    def __init__(selfparams):
-        '''
-        Constructor
-        '''
-        
+    def addScore(self, score):
+        self.score += score
+        self.scoreString = str(self.score)
+
+    def update(self):
+        self.image = self.FONT_LARGE.render(self.scoreString, True, self.WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.topright = (self.DISPLAY_W - 50, 50)

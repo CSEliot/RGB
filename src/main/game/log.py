@@ -3,8 +3,8 @@ from debug import debug
 
 def log(c):
     #===========================================================================
-    # DEF: changes print output to be directed to a log file and test  
-    # if full-screen works. 
+    # DEF: changes print output to be directed to a log file and test
+    # if full-screen works.
     # OUT: original sys.stdout or new sys.stdout
     #         rep
     # Input: the original stdout, log file
@@ -23,7 +23,7 @@ def log(c):
     # --LOGGING
     # if the original location to print out to is the same as current.
     # meaning, if it is still printing to the screen.
-    if c.ORG_STDOUT == sys.stdout:
+    if c.OG_STDOUT == sys.stdout:
         # create a file to print to.
         logFile = open(saveDir, 'a')
         # set the sys.stdout equal to the file we're writing to.
@@ -35,7 +35,6 @@ def log(c):
         return logFile
     else:
         debug(c.DEBUG, "LOGGING TO FILE ENDING--")
-        sys.stdout = c.ORG_STDOUT
+        sys.stdout = c.OG_STDOUT
         return
 
-        

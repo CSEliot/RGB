@@ -1,5 +1,8 @@
-Ifr you want to make the game play to your own music, you can type out a simple
+If you want to make the game play to your own music, you can type out a simple
 string of commands to a commands.txt file and the game will play along to it.
+
+YOU CAN FIND THIS FILE IN THE src/Main/Data/ folder. It must be there when being 
+read.
 
 The beta comes with 1 song and 1 file already made for it. The file.txt must
 be named commands.txt and the song must be named . You'll save both the song and the 
@@ -18,7 +21,7 @@ BPM#		-Will set circle and star speed to match beats per minutes of song.
 					use http://songbpm.com/ to find a song's bpm.
 					BPM will automatically arrange the WSP#, CSP# and FSP#.
 					If called DURING the song, it takes affect after next cmd.
-					
+					Getting a song's bpm: http://www.all8.com/tools/bpm.htm	
 W#			-Wait for # seconds before doing the next circle/star action.
 WG#			-Automatically set a global wait time for each circle/star action.
 WC#			-Set the wait time before each circle.

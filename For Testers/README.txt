@@ -1,40 +1,31 @@
-Song Loading:
-For this current version, your song will most likely work if it's .ogg. 
-Make sure to rename it to song.ogg .
 
+Just run the installers in INSTALL ME (click yes, or repair for everything), 
+double click RGB.py and enjoy!
 
-
---Everything Underneath here is mostly dated, please disregard---
-INSTALLATION Instructions:
-STEP 1: Extract everything into a new folder
-note: RGB.py is your file executable, python and pygame need to be installed for it to run
-
-
-		STOP: Double check if you're running windows 32bit or 64bit, ignore if you're running a mac.
-
-
-STEP 2:
-http://www.python.org/getit/                  <find, Download, and Install the appropriate python 2.7.3 version (Windows: 64bit/32bit)
-
-
-STEP 2.1 for 32bit users/mac:
-http://www.pygame.org/download.shtml   <Find(pygame-1.9.1.win32-py2.7.msi/Mac version) - Download and Install
-
-STEP 2.1 alternative (for 64bit users)
-http://www.lfd.uci.edu/~gohlke/pythonlibs/#pygame         <Find(pygame-1.9.2pre.win-amd64-py2.7.‌exe) - Download and Install
-
-STEP 3:
-Double Click RGB.py and have fun!!
-
-(PLEASE read the changelog for every version update, it also contains future plans)
 
 Controls:
 
 Press R, G, or B to create circles, then combine them for new results.
-Press P to Pause.
-Press O to alternate between which arrow turns which direction.
-Press I to toggle Context Display
-Press U to toggle Antialiasing
+Press O to toggle Context Display.
+Press I to invert controls.
 Press Q to toggle file logging.
-Press L to toggle automatic black circle generation
 Press left arrow to rotate clockwise, right arrow for counter-clockwise.
+Press up to move 90 degrees, down in the opposite 90 degrees
+Press Esc to quit
+
+HOW TO PLAY:
+Match R, G, and B to the colored circles by the time they hit the ring.
+Don't let stars hit the ring! Let them escape for points!
+
+Also, pressing Q will lag the system, but PLEASE use it at least once, and send
+me the log file data (also found in the /src/Main/Data/ folder.
+
+The commands this version comes with was made hastily, as an example, make your
+own and improve on it!! You can find the commands.txt in the src/main/data 
+folder
+
+Song Loading:
+For this current version, your song will most likely work if it's .ogg. 
+Make sure to rename it to song.ogg. (audacity is creating for converting)
+
+Getting a song's bpm: http://www.all8.com/tools/bpm.htm

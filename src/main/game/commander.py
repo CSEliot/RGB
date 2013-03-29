@@ -1,5 +1,5 @@
-import sys, os, pygame # @UnusedImport
-from pygame.compat import geterror # @UnusedImport
+import sys, os, pygame  # @UnusedImport
+from pygame.compat import geterror  # @UnusedImport
 from debug import debug
 
 
@@ -18,7 +18,7 @@ def commander(c):
     except pygame.error:
         debug(c.DEBUG, ('Cannot open file: ', saveDir))
         raise SystemExit(str(geterror()))
-    
+
     # list of commands
     commands = commandsFile.read()
     commands = commands.split()
@@ -33,12 +33,15 @@ def commander(c):
                 raise UserWarning, "Invalid BPM possible. See commands.txt"
                 print UserWarning
                 sys.exit(UserWarning)
-            # calculate the global wait time.
-            cWait = (60 / bpm)
+            # calculate the global wait times.
+            cWait = c.FPS * (bpm / 60.0)
             fWait = cWait
             # calculate the move speed of circle and star
-            cSpeed = (c.RING_SIZE / c.FPS) * (bpm / 60.0)
-            fSpeed = cSpeed
+            # this equation sets the speed as a fraction of the radius of the
+            # ring, so that it takes X seconds to reach the ring.
+            # the X seconds will either be user defined, or bpm/60
+            cSpeed = c.RING_SIZE / (c.FPS / (bpm / 60.0))
+            fSpeed = c.RING_RADIUS / (c.FPS / (bpm / 60.0))
             # the BPM list is formatted as such:'B', WC, WF, CSP, and FSP
             commandList.append(['B', cWait, fWait, cSpeed, fSpeed])
         elif action[0] == 'P':
@@ -55,6 +58,8 @@ def commander(c):
                 try:
                     cSpeed = action.replace('CSP', '')
                     cSpeed = float(cSpeed)
+                    cSpeed = (c.RING_SIZE / (c.FPS / cSpeed))
+                    debug(c.DEBUG, cSpeed)
                 except Exception:
                     raise UserWarning, "Invalid CSP given. See commands.txt"
                     print UserWarning
@@ -76,6 +81,7 @@ def commander(c):
                 if len(cSpeed) != 0:
                     try:
                         cSpeed = float(cSpeed)
+                        cSpeed = (c.RING_SIZE / (c.FPS / cSpeed))
                     except Exception:
                         raise UserWarning, "Invalid CSpeed given. See commands.txt"
                         print UserWarning
@@ -95,11 +101,12 @@ def commander(c):
                     sys.exit(UserWarning)
                 commandList.append(['C', (R, G, B), cSpeed])
         elif action[0] == 'F':
-            # we test to see if the action is for changing speed, or making circ
+            # we test to see if the action is for changing speed, or making star
             if action[1] == 'S':
                 try:
                     fSpeed = action.replace('FSP', '')
-                    fSpeed = float(cSpeed)
+                    fSpeed = float(fSpeed)
+                    fSpeed = (c.RING_RADIUS / (c.FPS / fSpeed))
                 except Exception:
                     raise UserWarning, "Invalid FSP given. See commands.txt"
                     print UserWarning
@@ -114,6 +121,7 @@ def commander(c):
                     try:
                         fAngle = float(fAngle)
                         fSpeed = float(fSpeed)
+                        fSpeed = (c.RING_RADIUS / (c.FPS / fSpeed))
                     except Exception:
                         raise UserWarning, "Invalid  Fx/# given. See commands.txt"
                         print UserWarning
@@ -133,7 +141,7 @@ def commander(c):
                 waitTime = action.replace('W', '')
                 # an instance wait, for only that call.
                 try:
-                    waitTime = float(waitTime)
+                    waitTime = c.FPS * float(waitTime)
                 except Exception:
                     raise UserWarning, "Invalid W# given. See commands.txt"
                     print UserWarning
@@ -144,7 +152,7 @@ def commander(c):
                 gWait = action.replace('W', '')
                 gWait = gWait.replace('G', '')
                 try:
-                    gWait = float(gWait)
+                    gWait = c.FPS * float(gWait)
                 except Exception:
                     raise UserWarning, "Invalid WG# given. See commands.txt"
                     print UserWarning
@@ -155,7 +163,7 @@ def commander(c):
                 cWait = action.replace('W', '')
                 cWait = cWait.replace('C', '')
                 try:
-                    cWait = float(cWait)
+                    cWait = c.FPS * float(cWait)
                 except Exception:
                     raise UserWarning, "Invalid WC# given. See commands.txt"
                     print UserWarning
@@ -166,7 +174,7 @@ def commander(c):
                 fWait = action.replace('W', '')
                 fWait = fWait.replace('F', '')
                 try:
-                    fWait = float(fWait)
+                    fWait = c.FPS * float(fWait)
                 except Exception:
                     raise UserWarning, "Invalid WF# given. See commands.txt"
                     print UserWarning
