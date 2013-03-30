@@ -30,11 +30,6 @@ if platform.system() == 'Windows':
 
 c = Constants()
 
-
-
-
-
-
 class playBox():
     # This class holds all our variables to access while playing.
     def __init__(self):
@@ -96,8 +91,8 @@ def main():
     toggle_color_g = False
     toggle_color_b = False
     display_sprites = True
-    controlSwitch = 1  # @UnusedVariable
-    controls = [[K_r, K_g, K_b], [K_a, K_s, K_r]]  # @UnusedVariable
+    controlSwitch = 0  # @UnusedVariable
+    controls = [[K_r, K_g, K_b], [K_a, K_s, K_d]]  # @UnusedVariable
 
 
 
@@ -228,27 +223,33 @@ def main():
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 going = False
             # --game-play events//--
-            elif event.type == KEYDOWN and event.key == K_a:
+            elif event.type == KEYDOWN and event.key == (
+                                           controls[controlSwitch][0]):
                 r = 255
                 toggle_color_r = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == K_a:
+            elif event.type == KEYUP and event.key ==  (
+                                           controls[controlSwitch][0]):
                 r = 0
                 toggle_color_r = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key == K_s:
+            elif event.type == KEYDOWN and event.key ==  (
+                                           controls[controlSwitch][1]):
                 g = 255
                 toggle_color_g = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == K_s:
+            elif event.type == KEYUP and event.key ==  (
+                                           controls[controlSwitch][1]):
                 g = 0
                 toggle_color_g = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key == K_d:
+            elif event.type == KEYDOWN and event.key ==  (
+                                           controls[controlSwitch][2]):
                 b = 255
                 toggle_color_b = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == K_d:
+            elif event.type == KEYUP and event.key ==  (
+                                           controls[controlSwitch][2]):
                 b = 0
                 toggle_color_b = False
                 total_input += -1
@@ -312,6 +313,12 @@ def main():
                     total_input = 100
                 else:
                     total_input = 0
+            # if K is pressed, swap ASD/RGB controls
+            elif event.type == KEYUP and event.key == K_k:
+                if controlSwitch == 0:
+                    controlSwitch = 1
+                else:
+                    controlSwitch = 0
 
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
