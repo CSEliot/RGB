@@ -6,8 +6,8 @@ beta v1 // xx.xx.2013
 								   now. The focus is on getting circles feel 
 								   right. 
 							Added:
+								- Toggle controls by pressing L to ASD/RGB
 							Changed:
-								- ASD now controls RGB.
 							Removed:
 							Fixed:
 								- Algorhythm for commands updated.
