@@ -1,6 +1,10 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+
+stars are used only for long and legatio music, represented by the movement of 
+the ring. also, stars rotate slower when moving slower.
+
 SPRITEMASKS FOR COLLISION
 
 commanderRunner: So, to ascertain how long we wait till DOING the next command,

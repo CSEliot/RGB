@@ -34,14 +34,16 @@ def commander(c):
                 print UserWarning
                 sys.exit(UserWarning)
             # calculate the global wait times.
-            cWait = c.FPS * (bpm / 60.0)
+            # (how many frames until the next action is committed.
+            cWait = c.FPS / (bpm / 60.0)
             fWait = cWait
             # calculate the move speed of circle and star
             # this equation sets the speed as a fraction of the radius of the
             # ring, so that it takes X seconds to reach the ring.
             # the X seconds will either be user defined, or bpm/60
-            cSpeed = c.RING_SIZE / (c.FPS / (bpm / 60.0))
-            fSpeed = c.RING_RADIUS / (c.FPS / (bpm / 60.0))
+            # (how quickly an action is completed)
+            cSpeed = (c.RING_SIZE / c.FPS) * (bpm / 60.0)
+            fSpeed = (c.RING_RADIUS / c.FPS) * (bpm / 60.0)
             # the BPM list is formatted as such:'B', WC, WF, CSP, and FSP
             commandList.append(['B', cWait, fWait, cSpeed, fSpeed])
         elif action[0] == 'P':
@@ -58,7 +60,7 @@ def commander(c):
                 try:
                     cSpeed = action.replace('CSP', '')
                     cSpeed = float(cSpeed)
-                    cSpeed = (c.RING_SIZE / (c.FPS / cSpeed))
+                    cSpeed = (c.RING_SIZE / c.FPS) / cSpeed
                     debug(c.DEBUG, cSpeed)
                 except Exception:
                     raise UserWarning, "Invalid CSP given. See commands.txt"
@@ -81,7 +83,7 @@ def commander(c):
                 if len(cSpeed) != 0:
                     try:
                         cSpeed = float(cSpeed)
-                        cSpeed = (c.RING_SIZE / (c.FPS / cSpeed))
+                        cSpeed = (c.RING_SIZE / c.FPS) / cSpeed
                     except Exception:
                         raise UserWarning, "Invalid CSpeed given. See commands.txt"
                         print UserWarning
@@ -106,7 +108,7 @@ def commander(c):
                 try:
                     fSpeed = action.replace('FSP', '')
                     fSpeed = float(fSpeed)
-                    fSpeed = (c.RING_RADIUS / (c.FPS / fSpeed))
+                    fSpeed = (c.RING_RADIUS / c.FPS) / fSpeed
                 except Exception:
                     raise UserWarning, "Invalid FSP given. See commands.txt"
                     print UserWarning
@@ -121,7 +123,7 @@ def commander(c):
                     try:
                         fAngle = float(fAngle)
                         fSpeed = float(fSpeed)
-                        fSpeed = (c.RING_RADIUS / (c.FPS / fSpeed))
+                        fSpeed = (c.RING_RADIUS / c.FPS) / fSpeed
                     except Exception:
                         raise UserWarning, "Invalid  Fx/# given. See commands.txt"
                         print UserWarning
@@ -141,6 +143,7 @@ def commander(c):
                 waitTime = action.replace('W', '')
                 # an instance wait, for only that call.
                 try:
+                    # how many frames before the next action occurs
                     waitTime = c.FPS * float(waitTime)
                 except Exception:
                     raise UserWarning, "Invalid W# given. See commands.txt"

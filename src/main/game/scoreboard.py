@@ -13,7 +13,8 @@ class Scoreboard(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.DISPLAY_W = DISPLAY_W
         self.DISPLAY_H = DISPLAY_H
-        self.rect.topright = (self.DISPLAY_W - 50, 50)
+        self.rect.center = (self.DISPLAY_W / 2, self.DISPLAY_H / 2)
+       # self.rect.topright = (self.DISPLAY_W - 50, 50)
 
     def addScore(self, score):
         self.score += score
@@ -22,4 +23,5 @@ class Scoreboard(pygame.sprite.Sprite):
     def update(self):
         self.image = self.FONT_LARGE.render(self.scoreString, True, self.WHITE)
         self.rect = self.image.get_rect()
-        self.rect.topright = (self.DISPLAY_W - 50, 50)
+        self.rect.center = (self.DISPLAY_W / 2, self.DISPLAY_H / 2)
+        # self.rect.topright = (self.DISPLAY_W - 50, 50)

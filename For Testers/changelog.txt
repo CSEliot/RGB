@@ -10,7 +10,7 @@ beta v1 // xx.xx.2013
 							Changed:
 							Removed:
 							Fixed:
-								- Algorhythm for commands updated.
+								- Algorhythm for commands updated, WORKING!.
 
 
 
