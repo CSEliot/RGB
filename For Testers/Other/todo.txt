@@ -6,11 +6,13 @@ v1// 04.xx.2013.xx:xx -
 							- Music can now begin and end at user given time
 							- New command functions: make nth circle 
 										recede, control growing speeds.
-							- ASD are now used, instead of RGB
 							- Changelog popup before game starts
+							- Volume control
 						Changed:
-							-Input feedback from RGB letters to ring
-							-Improved Image Quality
+							- Input feedback from RGB letters to ring
+							- Improved Image Quality
+						Removed:
+							- Herobrine
 
 
 v2+// 03.xx.2013.xx:xx - 	

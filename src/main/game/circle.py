@@ -8,7 +8,7 @@ class Circle (pygame.sprite.Sprite):
     def __init__(self, c, CENTER, speed, color, layer):
         pygame.sprite.Sprite.__init__(self)
         self.size = 1
-        self.radius = 300  # for collision detection w/ stars
+        self.radius = 300  # for collision detection w/ stars . . . wtf?
         self.color = color
         self.image, self.rect = load_image(c, 'R_small.png')
         self.OGCenter = CENTER
@@ -18,7 +18,7 @@ class Circle (pygame.sprite.Sprite):
         debug(c.DEBUG, "IN THE CIRCLE CLASS")
         pgext.color.setColor(self.image, color)
         self.imageOG = self.image
-        self.MAX_SIZE = 550
+        self.MAX_SIZE = c.RING_SIZE
         self.fadeBy = 2
         self.captured = False
         self.catchable = False
@@ -28,7 +28,7 @@ class Circle (pygame.sprite.Sprite):
             self.size += int(round(self.speed))
             self.image = pygame.transform.smoothscale(self.imageOG, (self.size, self.size))
             self.rect = self.rect = self.image.get_rect(center=(self.OGCenter))
-        if self.size >= self.MAX_SIZE - 9:
+        if self.size >= self.MAX_SIZE:
             self.catchable = True
         if self.size >= self.MAX_SIZE + 30:
             self.death()

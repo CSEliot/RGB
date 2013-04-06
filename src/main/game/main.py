@@ -228,27 +228,27 @@ def main():
                 r = 255
                 toggle_color_r = True
                 total_input += 1
-            elif event.type == KEYUP and event.key ==  (
+            elif event.type == KEYUP and event.key == (
                                            controls[controlSwitch][0]):
                 r = 0
                 toggle_color_r = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key ==  (
+            elif event.type == KEYDOWN and event.key == (
                                            controls[controlSwitch][1]):
                 g = 255
                 toggle_color_g = True
                 total_input += 1
-            elif event.type == KEYUP and event.key ==  (
+            elif event.type == KEYUP and event.key == (
                                            controls[controlSwitch][1]):
                 g = 0
                 toggle_color_g = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key ==  (
+            elif event.type == KEYDOWN and event.key == (
                                            controls[controlSwitch][2]):
                 b = 255
                 toggle_color_b = True
                 total_input += 1
-            elif event.type == KEYUP and event.key ==  (
+            elif event.type == KEYUP and event.key == (
                                            controls[controlSwitch][2]):
                 b = 0
                 toggle_color_b = False
