@@ -152,6 +152,7 @@ def main():
                 pBox.cSpeed = action[3]
                 pBox.fSpeed = action[4]
             elif action[0] == 'P':
+                now = datetime.datetime.now()
                 pygame.mixer.music.play()
             # if the action is to spawn a circle/star, gotta que it up.
             elif action[0] == 'C' or action[0] == 'F':
@@ -176,6 +177,8 @@ def main():
             elif action[0] == 'S':
                 pygame.mixer.music.stop()
         if waiting:
+            change = datetime.datetime.now() - now
+
             if action[0] == 'C':
                 if mainFrame >= pBox.cWait or firstAction:
                     if action[2] == '':
@@ -207,10 +210,14 @@ def main():
                     mainFrame = 0
             elif action[0] == 'W':
                 # if the action is to JUST wait x amount of time
-                if mainFrame >= action[1]:
+                print "LINE 213: ", change.total_seconds(), action[1] / 30.0
+                if change.total_seconds() >= action[1] / 30.0:
                     waiting = False
                     mainFrame = 0
-                    # since the first action has just occurred, we must wait now.
+                    # we must also set the wait for the next action to 0,
+                    # or else the wait would be Wx + Wcircle/star.
+                    firstAction = True
+            # since the first action has just occurred, we must wait now.
             if firstAction:
                 firstAction = False
 
@@ -335,6 +342,9 @@ def main():
                     circle.add(caughtSprite)
                     scoreboard.addScore(1000)
                 else:
+                    circle.catch()
+                    circle.remove(circSprites)
+                    circle.add(caughtSprite)
                     scoreboard.addScore(-100)
 
         """DELETE FREE STARS SHOOTING"""
