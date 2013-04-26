@@ -6,11 +6,14 @@ beta v1 // xx.xx.2013
 								   now. The focus is on getting circles feel 
 								   right. 
 							Added:
-								- Toggle controls by pressing L to ASD/RGB
+								- Toggle controls by pressing K to ASD/RGB
 							Changed:
+								- game is installed and launched via .exe!!
+								- Font is Arial :O
 							Removed:
+								- Herobrine
 							Fixed:
-								- Algorhythm for commands updated, WORKING!.
+								- Algorhythm for commands updated, not*WORKING!.
 
 
 

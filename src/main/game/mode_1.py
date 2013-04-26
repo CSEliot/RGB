@@ -23,13 +23,10 @@ from star import Star
 from ring import Ring
 from scoreboard import Scoreboard
 from loader import load_image, load_song
-from menu import *
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 if platform.system() == 'Windows':
     os.environ['SDL_VIDEODRIVER'] = 'windib'
 
-
-c = Constants()
 
 class playBox():
     # This class holds all our variables to access while playing.
@@ -43,32 +40,7 @@ class playBox():
         self.layer = 0
 
 
-def main():
-    background, background_rect = load_image(c, 'starBG.png')
-    # CUTTING the background to fit the DISPLAYSURFACE
-    # take the center's x value, and move it left to the end of the display's
-    # edge, so from center, minus the half value of width (CENTER_X) is the edge
-    xCut = background_rect.centerx - c.CENTER_X
-    yCut = background_rect.centery - c.CENTER_Y
-    background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
-    background_rect = background.get_rect()
-    background_rect.center = c.CENTER
-    c.DISPLAYSURFACE.blit(background, background_rect)
-
-    # LETS TEST THE MENU!!
-
-#    option = menu(c)
-#    print option
-
-    # parent loop, for the whole game. Keep looping till proper option given
-        # call the menu function, an option is what it will return.
-        # if option is not quit, do one of the following:
-            # run game mode 1: campaign
-            # run game mode 2: creative
-            # run game mode 3: classic
-            # run credits
-            # run options
-
+def game(c):
 
 
     allSprites = pygame.sprite.Group()
@@ -87,9 +59,16 @@ def main():
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
     scoreboard.add(scoreSprite, allSprites)
     box_img, box_rect = load_image(c, 'letter_box.png')  # @UnusedVariable (lie)
-
+    background, background_rect = load_image(c, 'starBG.png')
     mySong = load_song(c, 'song.ogg')  # @UnusedVariable (except it it)
-
+    # CUTTING the background to fit the DISPLAYSURFACE
+    # take the center's x value, and move it left to the end of the display's
+    # edge, so from center, minus the half value of width (CENTER_X) is the edge
+    xCut = background_rect.centerx - c.CENTER_X
+    yCut = background_rect.centery - c.CENTER_Y
+    background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
+    background_rect = background.get_rect()
+    background_rect.center = c.CENTER
     logging = False
 
     '''INSTANTIATING OTHER VARIABLES'''
@@ -443,5 +422,4 @@ def main():
         debug(c.DEBUG, "File never opened")
     pygame.quit()
     sys.exit()
-if __name__ == '__main__':
-    main()
+game()

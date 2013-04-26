@@ -11,7 +11,7 @@ pygame.init()
 user_screen_data = pygame.display.Info()
 window_width = user_screen_data.current_w
 window_height = user_screen_data.current_h
-pygame.display.set_caption('RGB - Beta v1.00')
+pygame.display.set_caption('RGB - Beta v4')
 
 def make_gamescreen(fullBool):
     # Making a screen, w/ 4 different possible outcomes.

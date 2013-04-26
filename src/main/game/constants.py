@@ -7,13 +7,13 @@ class Constants(object):
     '''
 
     def __init__(self):
-        self.FULLSCREEN = False
+        self.FULLSCREEN = True
         DISPLAYSURFACE, wDisplay, scnError = make_gamescreen(self.FULLSCREEN)
         self.OG_STDOUT = sys.stdout
         self.whichDisplay = wDisplay
         self.screenError = scnError
         # default game values
-        self.DEBUG = False
+        self.DEBUG = True
         self.RING_SIZE = 540.0  # for circles  reference only!
         self.RING_RADIUS = 265.0  # for stars / speed
         self.BPM = 60.0
@@ -39,9 +39,9 @@ class Constants(object):
         self.BLANK = (0, 233, 0, 10)
         self.BLACK = (0, 0, 0)
         self.FPSCLOCK = pygame.time.Clock()
-        self.FONT_LARGE = pygame.font.Font('freesansbold.ttf', 32)
-        self.FONT_SMALL = pygame.font.Font('freesansbold.ttf', 8)
-        self.VERSION = 'v0.3-BETA'
+        self.FONT_LARGE = pygame.font.SysFont('arial', 32, True)
+        self.FONT_SMALL = pygame.font.SysFont('arial', 8)
+        self.VERSION = 'v4-BETA'
         self.DISPLAY_W = self.DISPLAYSURFACE.get_width()
         self.CENTER_X = (self.DISPLAY_W / 2)
         self.DISPLAY_H = self.DISPLAYSURFACE.get_height()
