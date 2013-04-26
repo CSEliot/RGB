@@ -1,6 +1,9 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+Previewing circles: much like in other rhythm games, I want to give the player
+time to react to incoming circles, so I think it'd be best to have them spawn
+and then grow slowly, exponentially, and achieve the same time.
 
 stars are used only for long and legatio music, represented by the movement of 
 the ring. also, stars rotate slower when moving slower.

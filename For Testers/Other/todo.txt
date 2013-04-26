@@ -2,12 +2,12 @@
 *Beta*
 v1// 04.xx.2013.xx:xx - 
 						Added:
-							- game is installed and launched via .exe
+							- Menu Screen / Game States
 							- Music can now begin and end at user given time
 							- New command functions: make nth circle 
 										recede, control growing speeds.
 							- Changelog popup before game starts
-							- Volume control
+							- Volume control (options)
 						Changed:
 							- Input feedback from RGB letters to ring
 							- Improved Image Quality
@@ -17,14 +17,12 @@ v1// 04.xx.2013.xx:xx -
 
 v2+// 03.xx.2013.xx:xx - 	
 						Added:
-							-Menu Screen / Game States
-							-An AI to Control Circle generation.
-							-pre-window launch settings window
-							-Choice between Free-Mode (make your own circles) and Arcade Mode (actual game)
-							-Sound Effects
-							-Title Splash Screen*
-							-A way to end songs early and begin at X time.
-							-ring sticking
+							- An AI to Control Circle generation.
+							- **pre-window launch settings window
+							- Choice between classic, creative, and campaign
+							- Sound Effects
+							- Title Splash Screen*
+							- ring sticking/smoothing
 							- A difficulty setting, a BPM multiplier 
 										ex: Diff:E, Diff:M, Diff:H
 							-controls from toggle to choosing your own
