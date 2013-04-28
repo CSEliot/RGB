@@ -43,11 +43,9 @@ def commander(c):
             # the X seconds will either be user defined, or bpm/60
             # (how quickly an action is completed)
             cSpeed = (c.RING_SIZE / c.FPS) * (bpm / 60.0)
-            #            fSpeed = (c.RING_RADIUS / c.FPS) * (bpm / 60.0)
-            cAccel = c.RING_SIZE / (.5 * ((bpm / 60.0) ** 2))
-            fAccel = c.RING_RADIUS / (.5 * ((bpm / 60.0) ** 2))
+            fSpeed = (c.RING_RADIUS / c.FPS) * (bpm / 60.0)
             # the BPM list is formatted as such:'B', WC, WF, CSP, and FSP
-            commandList.append(['B', cWait, fWait, cAccel, fAccel])
+            commandList.append(['B', cWait, fWait, cSpeed, fSpeed])
         elif action[0] == 'P':
             if action == 'Play:':
                 commandList.append(['P'])
