@@ -6,16 +6,15 @@ import math as m
 
 class Circle (pygame.sprite.Sprite):
 
-    def __init__(self, c, CENTER, acceleration, color, layer):
+    def __init__(self, c, CENTER, speed, color, layer):
         pygame.sprite.Sprite.__init__(self)
         self.size = 1
-        self.speed = 0
+        self.speed = speed
         self.radius = 300  # for collision detection w/ stars . . . wtf?
         self.color = color
         self.image, self.rect = load_image(c, 'R_small.png')
         self.OGCenter = CENTER
         self.rect.center = self.OGCenter
-        self.accel = acceleration
         self._layer = layer
         debug(c.DEBUG, "IN THE CIRCLE CLASS")
         pgext.color.setColor(self.image, color)

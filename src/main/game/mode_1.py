@@ -23,13 +23,14 @@ from star import Star
 from ring import Ring
 from scoreboard import Scoreboard
 from loader import load_image, load_song
+from time import sleep
 
 
 class playBox():
     # This class holds all our variables to access while playing.
     def __init__(self):
-        self.cAccel = 0
-        self.fAccel = 0
+        self.cSpeed = 0
+        self.fSpeed = 0
         self.cWait = 0
         self.fWait = 0
         self.isPlaying = False
@@ -116,6 +117,19 @@ def game(c):
     versionID_RectObj = versionID_SurfaceObj.get_rect()
     versionID_RectObj.topleft = (0, 0)
 
+
+    # throw down splash screen before beginning
+    fade = 0
+    splashInfo, splashInfo_rect = load_image(c, 'splashInfo.png')
+    pgext.color.setAlpha(splashInfo, fade, 1)
+    # fade in
+    for fade in range(255):
+        c.DISPLAYSURFACE.fill((0, 0, 0))
+        c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
+        pgext.color.setAlpha(splashInfo, fade, 1)
+        pygame.display.flip()
+    sleep(2)
+
     # --Main Game Loop//--
     going = True
     while going:
@@ -144,9 +158,8 @@ def game(c):
                 # if the command is BPM, set the proper variables.
                 pBox.cWait = action[1]
                 pBox.fWait = action[2]
-                pBox.cAccel = action[3]
-                pBox.fAccel = action[4]
-                debug(c.DEBUG, ('LINE 154: PBOX ACCEL: ', pBox.cAccel))
+                pBox.cSpeed = action[3]
+                pBox.fSpeed = action[4]
             elif action[0] == 'P':
                 now = datetime.datetime.now()
                 pygame.mixer.music.play()
@@ -180,12 +193,11 @@ def game(c):
                     if action[2] == '':
                         # if there is no given speed, then it's the general
                         # speed. . .
-                        tempAccel = pBox.cAccel
-                        debug(c.DEBUG, ('LINE 189 TEMP ACCEL: ', tempAccel))
+                        tempSpeed = pBox.cSpeed
                     else:
-                        tempAccel = action[2]
+                        tempSpeed = action[2]
                     tempColor = action[1]
-                    tempCirc = Circle(c, c.CENTER, tempAccel, tempColor, \
+                    tempCirc = Circle(c, c.CENTER, tempSpeed, tempColor, \
                                       pBox.layer)
                     tempCirc.add(circSprites, allSprites)
                     # circSprites.add(tempCirc)
@@ -207,7 +219,7 @@ def game(c):
                     mainFrame = 0
             elif action[0] == 'W':
                 # if the action is to JUST wait x amount of time
-                debug(c.DEBUG, ("LINE 213: ", change.total_seconds(), action[1] / 30.0))
+                print "LINE 213: ", change.total_seconds(), action[1] / 30.0
                 if change.total_seconds() >= action[1] / 30.0:
                     waiting = False
                     mainFrame = 0
@@ -217,6 +229,7 @@ def game(c):
             # since the first action has just occurred, we must wait now.
             if firstAction:
                 firstAction = False
+
 
         """EVENT HANDLING INPUT"""
         # grab all the latest input
@@ -421,7 +434,7 @@ def game(c):
         debug(c.DEBUG, "File never opened")
     return
 
-def test():
-    c = Constants()
-    game(c)
-test()
+# def test():
+#    c = Constants()
+#    game(c)
+# test()
