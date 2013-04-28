@@ -28,7 +28,6 @@ class Circle (pygame.sprite.Sprite):
 
     def update(self):
         if not(self.captured):
-            self.speed += m.sqrt(2 * self.accel * (self.size / self.MAX_SIZE))
             self.size += int(round(self.speed))
             self.image = pygame.transform.smoothscale(self.imageOG, (self.size, self.size))
             self.rect = self.rect = self.image.get_rect(center=(self.OGCenter))

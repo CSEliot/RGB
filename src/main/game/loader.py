@@ -48,6 +48,7 @@ def make_gamescreen(fullBool):
 # --FUNCTIONS to create our resources//--
 def load_image(c, name, colorkey=None):
     fullname = os.path.join(c.GFX_DIR, name)
+    debug(c.DEBUG, fullname)
     try:
         image = pygame.image.load(fullname)
     except pygame.error:
@@ -64,8 +65,8 @@ def load_image(c, name, colorkey=None):
 def load_song(c, name):
     fullname = os.path.join(c.MUSC_DIR, name)
     try:
-        song = pygame.mixer.music.load(fullname)
+        pygame.mixer.music.load(fullname)
     except pygame.error:
         debug(c.DEBUG, ('COULD NOT LOAD MUSIC: ', fullname))
         raise SystemExit(str(geterror()))
-    return song
+    return
