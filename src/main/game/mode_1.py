@@ -23,9 +23,6 @@ from star import Star
 from ring import Ring
 from scoreboard import Scoreboard
 from loader import load_image, load_song
-os.environ['SDL_VIDEO_CENTERED'] = '1'
-if platform.system() == 'Windows':
-    os.environ['SDL_VIDEODRIVER'] = 'windib'
 
 
 class playBox():
@@ -60,7 +57,7 @@ def game(c):
     scoreboard.add(scoreSprite, allSprites)
     box_img, box_rect = load_image(c, 'letter_box.png')  # @UnusedVariable (lie)
     background, background_rect = load_image(c, 'starBG.png')
-    mySong = load_song(c, 'song.ogg')  # @UnusedVariable (except it it)
+    load_song(c, 'Skyline-Emotional-I.ogg')  # @UnusedVariable (except it it)
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
@@ -313,6 +310,7 @@ def game(c):
                     paused = False
                 else:
                     paused = True
+                    pygame.mixer.music.pause()
                     debug(c.DEBUG, "INTO PAUSE!!")
             # if L is pressed, toggle black auto-black circle.
             elif event.type == KEYDOWN and event.key == K_l:
@@ -376,6 +374,7 @@ def game(c):
                             # break
                         else:
                             paused = False
+                            pygame.mixer.music.unpause()
                             debug(c.DEBUG, "OUT OF PAUSE!")
                 if x_event.type == QUIT:
                     sys.exit()
@@ -420,6 +419,9 @@ def game(c):
         logFile.close()
     except Exception:
         debug(c.DEBUG, "File never opened")
-    pygame.quit()
-    sys.exit()
-game()
+    return
+
+def test():
+    c = Constants()
+    game(c)
+test()
