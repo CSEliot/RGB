@@ -48,7 +48,6 @@ def make_gamescreen(fullBool):
 # --FUNCTIONS to create our resources//--
 def load_image(c, name, colorkey=None):
     fullname = os.path.join(c.GFX_DIR, name)
-    debug(c.DEBUG, fullname)
     try:
         image = pygame.image.load(fullname)
     except pygame.error:

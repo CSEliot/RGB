@@ -34,7 +34,7 @@ class Constants(object):
         self.RED = pygame.color.Color('red')
         self.GREEN = pygame.color.Color('green')
         self.BLUE = pygame.color.Color('blue')
-        self.NO_MOUSE = pygame.mouse.set_visible(1)
+        self.NO_MOUSE = pygame.mouse.set_visible(0)
         self.WHITE = (255, 255, 255)
         self.BLANK = (0, 233, 0, 10)
         self.BLACK = (0, 0, 0)

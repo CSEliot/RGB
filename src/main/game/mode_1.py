@@ -121,6 +121,9 @@ def game(c):
     # throw down splash screen before beginning
     fade = 0
     splashInfo, splashInfo_rect = load_image(c, 'splashInfo.png')
+    # adjusting image cuz i can't make images.
+    splashInfo_rect.center = (c.CENTER_X-50, c.CENTER_Y)
+    
     pgext.color.setAlpha(splashInfo, fade, 1)
     # fade in
     for fade in range(255):
@@ -128,6 +131,7 @@ def game(c):
         c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
         pgext.color.setAlpha(splashInfo, fade, 1)
         pygame.display.flip()
+        noEvent = pygame.event.poll()
     sleep(2)
 
     # --Main Game Loop//--
@@ -434,7 +438,18 @@ def game(c):
         debug(c.DEBUG, "File never opened")
     return
 
-# def test():
-#    c = Constants()
-#    game(c)
+def test():
+    c = Constants()
+    c.FULLSCREEN = False
+    key = True
+    pygame.event.clear()
+    while key:
+        print pygame.event.poll()
+        if pygame.event.poll().type == NOEVENT:
+            print 'NOEVENT'
+        pygame.event.wait()
+        key = False
+         
+    #game(c)
+    
 # test()
