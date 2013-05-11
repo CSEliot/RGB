@@ -49,15 +49,17 @@ def main():
     # fade logo in and out
     fade = 0
     pgext.color.setAlpha(PygLogo, fade, 1)
+    pygame.event.clear()
     # fade in
     for fade in range(255):
-        """RETURN TO 0.001"""
-        sleep(0.00000001)
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(PygLogo, PygLogo_rect)
         pgext.color.setAlpha(PygLogo, fade, 1)
         pygame.display.flip()
-    sleep(2)
+        if pygame.event.poll().type != NOEVENT:
+            break
+    fade = 255
+    pgext.color.setAlpha(PygLogo, fade, 1)
     c.DISPLAYSURFACE.fill((0, 0, 0))
 
     background, background_rect = load_image(c, 'starBG.png')
@@ -71,13 +73,17 @@ def main():
     background_rect.center = c.CENTER
     fade = 0
     pgext.color.setAlpha(background, fade, 1)
-    # fade in
-    for fade in range(255):
+    pygame.event.clear()
+    # fade in BACKGROUND
+    for fade in range(150):
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(background, background_rect)
         pgext.color.setAlpha(background, fade, 1)
         pygame.display.flip()
-
+        if pygame.event.poll().type != NOEVENT:
+            break
+    fade = 255
+    pgext.color.setAlpha(background, fade, 1)
 
 
     mode1 = 1  # the menu option for campaign mode
