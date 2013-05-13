@@ -5,8 +5,7 @@ from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
 from loader import load_image, load_song
 from time import sleep
-from constants import Constants
-from debug import *
+from debug import *  # @UnusedWildImport
 
 
 def menu(c, background):

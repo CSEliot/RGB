@@ -23,7 +23,9 @@ from star import Star
 from ring import Ring
 from scoreboard import Scoreboard
 from loader import load_image, load_song
-from time import sleep
+from pause import pauseScreen
+
+
 
 
 class playBox():
@@ -79,6 +81,8 @@ def game(c):
     r = 0
     g = 0
     b = 0
+    cantPause = False  # begins false, when checking for situations, may be True
+    cantUnpause = False
     invert = 1
     paused = False
     total_input = 0
@@ -119,20 +123,24 @@ def game(c):
 
 
     # throw down splash screen before beginning
-    fade = 0
     splashInfo, splashInfo_rect = load_image(c, 'splashInfo.png')
     # adjusting image cuz i can't make images.
-    splashInfo_rect.center = (c.CENTER_X-50, c.CENTER_Y)
-    
+    splashInfo_rect.center = (c.CENTER_X - 50, c.CENTER_Y)
+
+    # fade logo in and out
+    fade = 0
     pgext.color.setAlpha(splashInfo, fade, 1)
+    pygame.event.clear()
     # fade in
     for fade in range(255):
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
         pgext.color.setAlpha(splashInfo, fade, 1)
         pygame.display.flip()
-        noEvent = pygame.event.poll()
-    sleep(2)
+        if pygame.event.poll().type != NOEVENT:
+            break
+    fade = 255
+    pgext.color.setAlpha(splashInfo, fade, 1)
 
     # --Main Game Loop//--
     going = True
@@ -320,15 +328,9 @@ def game(c):
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
-                keyPressed = pygame.key.get_pressed()
-                debug(c.DEBUG, keyPressed)
-                if keyPressed:
-                    debug(c.DEBUG, "A KEY IS PRESSED, CAN NOT PAUSE")
-                    paused = False
-                else:
-                    paused = True
-                    pygame.mixer.music.pause()
-                    debug(c.DEBUG, "INTO PAUSE!!")
+                keyPressed1 = pygame.key.get_pressed()
+                pygame.mixer.music.pause()
+                pauseOption = pauseScreen()
             # if L is pressed, toggle black auto-black circle.
             elif event.type == KEYDOWN and event.key == K_l:
                 if total_input == 0:
@@ -380,12 +382,11 @@ def game(c):
         # --function controls//--
         # if paused is set to true, wait for p to be pressed again.
         """PAUSE WAIT STOP"""
-        while paused:
-                x_event = pygame.event.wait()
-                if x_event.type == KEYUP and event.key == K_p:
-                    pygame.event.pump()
-                    for p in pygame.key.get_pressed():
-                        if p == True:
+        if paused:
+                if event.type == KEYUP and event.key == K_p:
+                    for event in latest_events:
+                        if event in c.CONTROL_LIST:
+                            cantUnpause = True
                             debug(c.DEBUG, "A KEY IS PRESSED, CAN NOT UNPAUSE")
                             paused = True
                             # break
@@ -393,10 +394,10 @@ def game(c):
                             paused = False
                             pygame.mixer.music.unpause()
                             debug(c.DEBUG, "OUT OF PAUSE!")
-                if x_event.type == QUIT:
+                if event.type == QUIT:
                     sys.exit()
                     pygame.quit()
-                elif x_event.type == KEYDOWN and x_event.key == K_ESCAPE:
+                elif event.type == KEYDOWN and event.key == K_ESCAPE:
                     sys.exit()
                     pygame.quit()
 
@@ -449,7 +450,7 @@ def test():
             print 'NOEVENT'
         pygame.event.wait()
         key = False
-         
-    #game(c)
-    
-# test()
+
+    game(c)
+
+test()
