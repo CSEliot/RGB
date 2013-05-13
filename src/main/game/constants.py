@@ -1,4 +1,5 @@
 import pygame, sys, os, datetime, platform  # @UnusedImport
+from pygame.locals import *  # @UnusedWildImport
 import math as m  # @UnusedImport
 from loader import make_gamescreen
 class Constants(object):
@@ -7,7 +8,7 @@ class Constants(object):
     '''
 
     def __init__(self):
-        self.FULLSCREEN = True
+        self.FULLSCREEN = False
         DISPLAYSURFACE, wDisplay, scnError = make_gamescreen(self.FULLSCREEN)
         self.OG_STDOUT = sys.stdout
         self.whichDisplay = wDisplay
@@ -52,4 +53,4 @@ class Constants(object):
         self.DATE = datetime.date.timetuple(datetime.date.today())[0] , \
                     datetime.date.timetuple(datetime.date.today())[1] , \
                     datetime.date.timetuple(datetime.date.today())[2]
-
+        self.CONTROL_LIST = [K_r, K_g, K_b, K_a, K_s, K_d, K_LEFT, K_RIGHT]
