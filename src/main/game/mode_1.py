@@ -43,6 +43,7 @@ class playBox():
 def game(c):
 
 
+
     allSprites = pygame.sprite.Group()
     ringSprite = pygame.sprite.GroupSingle()
     circSprites = pygame.sprite.LayeredUpdates()
@@ -127,7 +128,7 @@ def game(c):
     # adjusting image cuz i can't make images.
     splashInfo_rect.center = (c.CENTER_X - 50, c.CENTER_Y)
 
-    # fade logo in and out
+    # fade info in and out
     fade = 0
     pgext.color.setAlpha(splashInfo, fade, 1)
     pygame.event.clear()
@@ -353,17 +354,27 @@ def game(c):
         for circle in circSprites.sprites():
             if circle.catchable:
                 debug(c.DEBUG, (circle.color, (r, g, b)))
-                if circle.color == (r, g, b):
+                if circle.color == (r, g, b): 
                     circle.catch()
                     circle.remove(circSprites)
                     circle.add(caughtSprite)
-                    scoreboard.addScore(1000)
                 else:
                     circle.catch()
                     circle.remove(circSprites)
                     circle.add(caughtSprite)
-                    scoreboard.addScore(-100)
-
+                    
+        """REPEATED POINTS HOLDING COLORS"""
+        # every .1 seconds should add or remove points based on accuracy
+        if not caughtSprite.sprite is None:
+            if caughtSprite.sprite.color == (r, g, b):
+                scoreboard.addScore(113)
+            else:
+                scoreboard.addScore(-69)
+                
+        
+            
+            
+            
         """DELETE FREE STARS SHOOTING"""
         for star in starSprites.sprites():
             if star.shooting:
@@ -379,6 +390,7 @@ def game(c):
                     debug(c.DEBUG, 'KILLED A STAR')
                     scoreboard.addScore(500)
             debug(c.DEBUG, ('Stars #: ', len(starSprites.sprites())))
+
         # --function controls//--
         # if paused is set to true, wait for p to be pressed again.
         """PAUSE WAIT STOP"""
@@ -453,4 +465,4 @@ def test():
 
     game(c)
 
-test()
+#test()

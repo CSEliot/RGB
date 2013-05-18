@@ -19,6 +19,7 @@ from debug import debug  # @UnusedImport
 from log import log  # @UnusedImport @Reimport
 from loader import load_image, load_song  # @UnusedImport
 from menu import *  # @UnusedWildImport
+from RGB_alpha import main as classic  # @UnresolvedImport
 from time import sleep  # @UnusedImport @Reimport
 from mode_1 import game as campaign
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -88,6 +89,7 @@ def main():
 
     mode1 = 1  # the menu option for campaign mode
     options = 2
+    alpha = 3
 
     playing = True
     while playing:
@@ -96,6 +98,8 @@ def main():
             campaign(c)
         elif selected == options:
             pass
+        elif selected == alpha:
+            classic(c)
     # parent loop, for the whole game. Keep looping till proper option given
         # call the menu function, an option is what it will return.
         # if option is not quit, do one of the following:
@@ -104,7 +108,5 @@ def main():
             # run game mode 3: classic
             # run credits
             # run options
-
-
 if __name__ == '__main__':
     main()

@@ -5,7 +5,12 @@ from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
 from loader import load_image, load_song
 from time import sleep
+from constants import Constants
 from debug import *  # @UnusedWildImport
+# ignore the mouse:
+pygame.event.set_blocked(pygame.MOUSEMOTION)
+pygame.event.set_blocked(pygame.MOUSEBUTTONUP)
+pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
 
 
 def menu(c, background):
@@ -14,11 +19,12 @@ def menu(c, background):
 
     # menu elements
     selected = 1  # tells which button is currently highlighted
-    buttons = 2  # tells max # selected can reach
+    buttons = 3  # tells max # selected can reach
     newSelected = True  # tells if something new has been highlighted
     unselected = selected  # used to change unhighlighted button back
     playButton = 1  # represents placeholder for button
     optionsButton = 2  # represents placeholder for button
+    alphaButton = 3
     entered = False  # tells if the user has chosen a button
 
 
@@ -32,6 +38,7 @@ def menu(c, background):
     play, play_rect = load_image(c, 'menu/play.png')
     options, options_rect = load_image(c, 'menu/options.png')
     logo, logo_rect = load_image(c, 'menu/logo.png')
+    alpha, alpha_rect= load_image(c, 'menu/alpha.png')
 
     if c.DISPLAY_W < corners_rect.width or \
     c.DISPLAY_H < corners_rect.height + (logo.get_height() / 2):
@@ -61,17 +68,21 @@ def menu(c, background):
         options_rect.center = optionsPos
         corners_rect.center = c.CENTER
     else:
-        playPos = c.CENTER[0], c.CENTER[1] - 50  # adjusting by specific pixels
+        playPos = c.CENTER[0], c.CENTER[1] - 100  # adjusting by specific pixels
         play_rect.center = playPos
         logoPos = c.CENTER[0], c.CENTER[1] - 300  # adjusting by specific pixels
         logo_rect.center = logoPos
-        optionsPos = c.CENTER[0], c.CENTER[1] + 50  # adjusting by specific pixels
+        optionsPos = c.CENTER[0], c.CENTER[1] + 20  # adjusting by specific pixels
         options_rect.center = optionsPos
+        alphaPos = c.CENTER[0], c.CENTER[1] + 130
+        alpha_rect.center = alphaPos
+        # and then the corners, seperate
         corners_rect.center = c.CENTER
 
     # set original images
     OGOptions = options
     OGPlay = play
+    OGAlpha = alpha
 
 
     # --Main Game Loop//--
@@ -88,6 +99,7 @@ def menu(c, background):
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == K_DOWN:
                 if selected < buttons:
+                    # set the unselected as the previous selected one.
                     unselected = selected
                     selected += 1
                     newSelected = True
@@ -100,14 +112,17 @@ def menu(c, background):
                 entered = True
 
         if newSelected:
-            newSelected = False
             # revert unselected button back
+            newSelected = False
             if unselected == playButton:
                 play = OGPlay
                 play_rect.center = playPos
             elif unselected == optionsButton:
                 options = OGOptions
                 options_rect.center = optionsPos
+            elif unselected == alphaButton:
+                alpha = OGAlpha
+                alpha_rect.center = alphaPos
             # change image of newly selected
             if selected == playButton:
                 play = pygame.transform.smoothscale(play, (play_rect.width + 7, \
@@ -119,6 +134,12 @@ def menu(c, background):
                                                         options_rect.height + 5))
                 pgext.color.setColor(options, (0, 255, 255))
                 options_rect.center = optionsPos
+            elif selected == alphaButton:
+                alpha = pygame.transform.smoothscale(alpha, (alpha_rect.width + 7, \
+                                                        alpha_rect.height + 5))
+                pgext.color.setColor(alpha, (0, 255, 255))
+                alpha_rect.center = alphaPos                    
+            
 
         # leave menu screen
         if entered:
@@ -131,13 +152,24 @@ def menu(c, background):
         c.DISPLAYSURFACE.blit(logo, logo_rect)
         c.DISPLAYSURFACE.blit(play, play_rect)
         c.DISPLAYSURFACE.blit(options, options_rect)
+        c.DISPLAYSURFACE.blit(alpha, alpha_rect)
         c.FPSCLOCK.tick_busy_loop(c.FPS)
         pygame.display.flip()
 
     pygame.quit()
     sys.exit()
 
-# def test():
-#    c = Constants()
-#    menu(c)
+def test():
+    c = Constants()
+    background, background_rect = load_image(c, 'starBG.png')
+    # CUTTING the background to fit the DISPLAYSURFACE
+    # take the center's x value, and move it left to the end of the display's
+    # edge, so from center, minus the half value of width (CENTER_X) is the edge
+    xCut = background_rect.centerx - c.CENTER_X
+    yCut = background_rect.centery - c.CENTER_Y
+    background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
+    background_rect = background.get_rect()
+    background_rect.center = c.CENTER
+    
+    menu(c, background)
 # test()

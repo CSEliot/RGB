@@ -11,7 +11,7 @@ class Circle (pygame.sprite.Sprite):
         self.size = 1
         self.speed = speed
         self.radius = 300  # for collision detection w/ stars . . . wtf?
-        self.color = color
+        self.color = color # of the form: (r, g, b)
         self.image, self.rect = load_image(c, 'R_small.png')
         self.OGCenter = CENTER
         self.rect.center = self.OGCenter
