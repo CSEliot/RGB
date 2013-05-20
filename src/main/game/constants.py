@@ -14,7 +14,6 @@ class Constants(object):
         self.whichDisplay = wDisplay
         self.screenError = scnError
         # default game values
-        self.DEBUG = False
         self.RING_SIZE = 540.0  # for circles  reference only!
         self.RING_RADIUS = 265.0  # for stars / speed
         self.BPM = 60.0
@@ -53,4 +52,61 @@ class Constants(object):
         self.DATE = datetime.date.timetuple(datetime.date.today())[0] , \
                     datetime.date.timetuple(datetime.date.today())[1] , \
                     datetime.date.timetuple(datetime.date.today())[2]
+        # --controls and options//--
+        default = False
+        settingsList = self.get_OPTIONS(default)
         self.CONTROL_LIST = [K_r, K_g, K_b, K_a, K_s, K_d, K_LEFT, K_RIGHT]
+        self.DEBUG = False
+
+    def get_OPTIONS(self, setDefault):
+        optFile = file(self.DATA_DIR, 'r')
+        optList = optFile.read().split()
+        returnList = []
+        # grab location of option setting in the list, then +1 to find
+        # designated setting.
+        # if a setting can't be found, it'll revert to default for that
+        # setting.
+        if setDefault:
+            returnList = [True, 1.0, 'r', 'g', 'b', 'UP', 'DOWN', 'LEFT', \
+                          'RIGHT', 'p', 'i']
+        try:
+            # grabs the next thing in the list, which should be a setting
+            returnList.append(optList[optList.index('FULLSCREEN:') + 1])
+        except:
+            returnList.append(True)
+        try:
+            returnList.append(optList[optList.index('VOLUME:') + 1])
+        except:
+            returnList.append(1.0)
+        try:
+            returnList.append(optList[optList.index('R:') + 1])
+        except:
+            returnList.append('r')
+        try:
+            returnList.append(optList[optList.index('G:') + 1])
+        except:
+            returnList.append('g')
+        try:
+            returnList.append(optList[optList.index('B:') + 1])
+        except:
+            returnList.append('b')
+        try:
+            returnList.append(optList[optList.index('UP:') + 1])
+        except:
+            returnList.append('UP')
+        try:
+            returnList.append(optList[optList.index('DOWN:') + 1])
+        except:
+            returnList.append('DOWN')
+        try:
+            returnList.append(optList[optList.index('LEFT:') + 1])
+        except:
+            returnList.append('LEFT')
+        try:
+            returnList.append(optList[optList.index('RIGHT:') + 1])
+        except:
+            returnList.append('RIGHT')
+        try:
+            returnList.append(optList[optList.index('B:') + 1])
+        except:
+            returnList.append('b')

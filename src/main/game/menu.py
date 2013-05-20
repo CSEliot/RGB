@@ -38,7 +38,7 @@ def menu(c, background):
     play, play_rect = load_image(c, 'menu/play.png')
     options, options_rect = load_image(c, 'menu/options.png')
     logo, logo_rect = load_image(c, 'menu/logo.png')
-    alpha, alpha_rect= load_image(c, 'menu/alpha.png')
+    alpha, alpha_rect = load_image(c, 'menu/alpha.png')
 
     if c.DISPLAY_W < corners_rect.width or \
     c.DISPLAY_H < corners_rect.height + (logo.get_height() / 2):
@@ -127,7 +127,7 @@ def menu(c, background):
             if selected == playButton:
                 play = pygame.transform.smoothscale(play, (play_rect.width + 7, \
                                                         play_rect.height + 5))
-                pgext.color.setColor(play, (0, 255, 255))
+                pgext.color.setColor(play, (255, 255, 0))
                 play_rect.center = playPos
             elif selected == optionsButton:
                 options = pygame.transform.smoothscale(options, (options_rect.width + 7, \
@@ -137,9 +137,9 @@ def menu(c, background):
             elif selected == alphaButton:
                 alpha = pygame.transform.smoothscale(alpha, (alpha_rect.width + 7, \
                                                         alpha_rect.height + 5))
-                pgext.color.setColor(alpha, (0, 255, 255))
-                alpha_rect.center = alphaPos                    
-            
+                pgext.color.setColor(alpha, (255, 0, 255))
+                alpha_rect.center = alphaPos
+
 
         # leave menu screen
         if entered:
@@ -170,6 +170,6 @@ def test():
     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
-    
+
     menu(c, background)
 # test()
