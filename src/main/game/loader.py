@@ -63,6 +63,7 @@ def load_image(c, name, colorkey=None):
 
 def load_song(c, name):
     fullname = os.path.join(c.MUSC_DIR, name)
+    pygame.mixer.music.set_volume(c.VOLUME)
     try:
         pygame.mixer.music.load(fullname)
     except pygame.error:

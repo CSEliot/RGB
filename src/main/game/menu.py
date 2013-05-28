@@ -30,7 +30,7 @@ def menu(c, background):
 
 
 
-    load_song(c, 'menuV2.ogg')
+    load_song(c, 'menuV3.ogg')
     pygame.mixer.music.set_volume(.5)
     pygame.mixer.music.play()
 
@@ -144,7 +144,6 @@ def menu(c, background):
         # leave menu screen
         if entered:
             sleep(1)
-            pygame.mixer.music.stop()
             return selected
 
         c.DISPLAYSURFACE.blit(background, background_rect)
@@ -159,7 +158,7 @@ def menu(c, background):
     pygame.quit()
     sys.exit()
 
-def test():
+if __name__ == "__main__":
     c = Constants()
     background, background_rect = load_image(c, 'starBG.png')
     # CUTTING the background to fit the DISPLAYSURFACE
@@ -172,4 +171,3 @@ def test():
     background_rect.center = c.CENTER
 
     menu(c, background)
-# test()
