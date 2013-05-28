@@ -117,7 +117,7 @@ for i in range(2):
         scn_tst = "Full-screen error({0}): {1}".format(e.errno, e.strerror)
 
 # --main//--
-def main(c):
+def gameAlpha(c):
 
 # --Initialize Everything//--
     r = 0
@@ -150,21 +150,26 @@ def main(c):
     splashInfo, splashInfo_rect = load_image(c, 'splashInfoAlpha.png')
     # adjusting image cuz i can't make images.
     splashInfo_rect.center = (c.CENTER_X - 50, c.CENTER_Y)
- 
+
     # fill background
-    c.DISPLAYSURFACE.fill((0,0,0))
+    c.DISPLAYSURFACE.fill((0, 0, 0))
     # fade info in and out
     fade = 0
     pgext.color.setAlpha(splashInfo, fade, 1)
     pygame.event.clear()
     # fade in
+    inInfoScreen = True
     for fade in range(255):
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
         pgext.color.setAlpha(splashInfo, fade, 1)
         pygame.display.flip()
         if pygame.event.poll().type != NOEVENT:
+            inInfoScreen = False
             break
+    while inInfoScreen:
+        if pygame.event.poll().type != NOEVENT:
+            inInfoScreen = False
     fade = 255
     pgext.color.setAlpha(splashInfo, fade, 1)
 
@@ -427,6 +432,7 @@ def main(c):
         print "File never opened"
 #     pygame.quit()
 #     sys.exit()
-# if __name__ == '__main__':
-#     c = Constants()
-#     main(c)
+
+if __name__ == '__main__':
+    c = Constants()
+    gameAlpha(c)

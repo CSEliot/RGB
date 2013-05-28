@@ -21,14 +21,22 @@ class Ring(pygame.sprite.Sprite):
 
     def spin(self, direction):  # Will change ring angle, based on direction
         # --Spin the Ring//--
-        if direction == -1:
-            self.rotate_by += self.rotation_speed
-        elif direction == 1:
-            self.rotate_by += -self.rotation_speed
-        elif direction == 2:
-            self.angle += 90
-        elif direction == -2:
-            self.angle += -90
+        if direction == 'left':
+            self.angle = -180
+        elif direction == 'upleft':
+            self.angle = -225
+        elif direction == 'upright':
+            self.angle = -315
+        elif direction == 'up':
+            self.angle = -270
+        elif direction == 'right':
+            self.angle = 0
+        elif direction == 'downleft':
+            self.angle = -135
+        elif direction == 'downright':
+            self.angle = -45
+        elif direction == 'down':
+            self.angle = -90
 
     def update(self):
         self.angle += self.rotate_by

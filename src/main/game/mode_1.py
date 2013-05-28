@@ -42,7 +42,7 @@ class playBox():
 
 def game(c):
 
-
+#    pygame.key.set_repeat(0, 0)
 
     allSprites = pygame.sprite.Group()
     ringSprite = pygame.sprite.GroupSingle()
@@ -59,9 +59,8 @@ def game(c):
     ring.add(ringSprite, allSprites)
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
     scoreboard.add(scoreSprite, allSprites)
-    box_img, box_rect = load_image(c, 'letter_box.png')  # @UnusedVariable (lie)
+    box_img, _box_rect = load_image(c, 'letter_box.png')
     background, background_rect = load_image(c, 'starBG.png')
-    load_song(c, 'Skyline-Emotional-I.ogg')  # @UnusedVariable (except it it)
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
@@ -82,9 +81,6 @@ def game(c):
     r = 0
     g = 0
     b = 0
-    cantPause = False  # begins false, when checking for situations, may be True
-    cantUnpause = False
-    invert = 1
     paused = False
     total_input = 0
     fpsList = []
@@ -92,9 +88,12 @@ def game(c):
     toggle_color_g = False
     toggle_color_b = False
     display_sprites = True
-    controlSwitch = 0  # @UnusedVariable
-    controls = [[K_r, K_g, K_b], [K_a, K_s, K_d]]  # @UnusedVariable
-
+    controls = c.CONTROL_LIST
+    leftHold = False
+    rightHold = False
+    upHold = False
+    downHold = False
+    quitGame = False  # if user returns a True from pause, we quit game, etc.
 
 
     """BUTTON / SPRITE RENDERING"""
@@ -133,15 +132,23 @@ def game(c):
     pgext.color.setAlpha(splashInfo, fade, 1)
     pygame.event.clear()
     # fade in
+    inInfoScreen = True
     for fade in range(255):
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
         pgext.color.setAlpha(splashInfo, fade, 1)
         pygame.display.flip()
         if pygame.event.poll().type != NOEVENT:
+            inInfoScreen = False
             break
+    # if the info is still being read/no button pressed, just wait.
+    while inInfoScreen:
+        if pygame.event.poll().type != NOEVENT:
+            inInfoScreen = False
     fade = 255
     pgext.color.setAlpha(splashInfo, fade, 1)
+    load_song(c, 'Skyline-Emotional-I.ogg')  # stops other music from playing too
+
 
     # --Main Game Loop//--
     going = True
@@ -253,67 +260,83 @@ def game(c):
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 going = False
             # --game-play events//--
-            elif event.type == KEYDOWN and event.key == (
-                                           controls[controlSwitch][0]):
+            elif event.type == KEYDOWN and event.key == controls[0]:
                 r = 255
                 toggle_color_r = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == (
-                                           controls[controlSwitch][0]):
+            elif event.type == KEYUP and event.key == controls[0]:
                 r = 0
                 toggle_color_r = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key == (
-                                           controls[controlSwitch][1]):
+            elif event.type == KEYDOWN and event.key == controls[1]:
                 g = 255
                 toggle_color_g = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == (
-                                           controls[controlSwitch][1]):
+            elif event.type == KEYUP and event.key == controls[1]:
                 g = 0
                 toggle_color_g = False
                 total_input += -1
-            elif event.type == KEYDOWN and event.key == (
-                                           controls[controlSwitch][2]):
+            elif event.type == KEYDOWN and event.key == controls[2]:
                 b = 255
                 toggle_color_b = True
                 total_input += 1
-            elif event.type == KEYUP and event.key == (
-                                           controls[controlSwitch][2]):
+            elif event.type == KEYUP and event.key == controls[2]:
                 b = 0
                 toggle_color_b = False
                 total_input += -1
             # Ring Spinning
-            elif event.type == KEYDOWN and event.key == K_LEFT:
-                ring.spin(1 * invert)
-            elif event.type == KEYDOWN and event.key == K_RIGHT:
-                ring.spin(-1 * invert)
-            elif event.type == KEYUP and event.key == K_LEFT:
-                ring.spin(-1 * invert)
-            elif event.type == KEYUP and event.key == K_RIGHT:
-                ring.spin(1 * invert)
-            elif event.type == KEYUP and event.key == K_UP:
-                ring.spin(-2 * invert)
-            elif event.type == KEYUP and event.key == K_DOWN:
-                ring.spin(2 * invert)
+            elif event.type == KEYDOWN and event.key == controls[5]:
+                leftHold = True
+                if upHold:
+                    ring.spin('upleft')
+                elif downHold:
+                    ring.spin('downleft')
+                else:
+                    ring.spin('left')
+            elif event.type == KEYUP and event.key == controls[5]:
+                leftHold = False
+            elif event.type == KEYDOWN and event.key == controls[6]:
+                rightHold = True
+                if upHold:
+                    ring.spin('upright')
+                elif downHold:
+                    ring.spin('downright')
+                else:
+                    ring.spin('right')
+            elif event.type == KEYUP and event.key == controls[6]:
+                rightHold = False
+            elif event.type == KEYDOWN and event.key == controls[3]:
+                upHold = True
+                if leftHold:
+                    ring.spin('upleft')
+                elif rightHold:
+                    ring.spin('upright')
+                else:
+                    ring.spin('up')
+            elif event.type == KEYUP and event.key == controls[3]:
+                upHold = False
+            elif event.type == KEYDOWN and event.key == controls[4]:
+                downHold = True
+                if leftHold:
+                    ring.spin('downleft')
+                elif rightHold:
+                    ring.spin('downright')
+                else:
+                    ring.spin('down')
+            elif event.type == KEYUP and event.key == controls[4]:
+                downHold = False
 
             #====================================
             # --non-game-play events//--
             #====================================
-            # if O is pressed, toggle context display
+            # if O is pressed, toggle context display -------TO BE REMOVED SOON
             elif event.type == KEYDOWN and event.key == K_o:
                 if display_sprites == True:
                     display_sprites = False
                 else:
                     display_sprites = True
-            # if I is pressed, invert controls
-            elif event.type == KEYDOWN and event.key == K_i:
-                if invert == 1:
-                    invert = -1
-                else:
-                    invert = 1
-            # if Q is pressed, print output to file log.txt
-            elif event.type == KEYDOWN and event.key == K_q:
+            # if I is pressed, print output to file log.txt
+            elif event.type == KEYDOWN and event.key == controls[8]:
                 if logging:
                     log(c)
                     try:
@@ -327,23 +350,8 @@ def game(c):
                     c.DEBUG = True
                     logFile = log(c)
             # if P is pressed, pause game.
-            elif event.type == KEYUP and event.key == K_p:
-                pygame.event.pump()
-                keyPressed1 = pygame.key.get_pressed()
-                pygame.mixer.music.pause()
-                pauseOption = pauseScreen()
-            # if L is pressed, toggle black auto-black circle.
-            elif event.type == KEYDOWN and event.key == K_l:
-                if total_input == 0:
-                    total_input = 100
-                else:
-                    total_input = 0
-            # if K is pressed, swap ASD/RGB controls
-            elif event.type == KEYUP and event.key == K_k:
-                if controlSwitch == 0:
-                    controlSwitch = 1
-                else:
-                    controlSwitch = 0
+            elif event.type == KEYUP and event.key == controls[7]:
+                paused = True
 
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
@@ -354,7 +362,7 @@ def game(c):
         for circle in circSprites.sprites():
             if circle.catchable:
                 debug(c.DEBUG, (circle.color, (r, g, b)))
-                if circle.color == (r, g, b): 
+                if circle.color == (r, g, b):
                     circle.catch()
                     circle.remove(circSprites)
                     circle.add(caughtSprite)
@@ -362,19 +370,19 @@ def game(c):
                     circle.catch()
                     circle.remove(circSprites)
                     circle.add(caughtSprite)
-                    
+
         """REPEATED POINTS HOLDING COLORS"""
         # every .1 seconds should add or remove points based on accuracy
         if not caughtSprite.sprite is None:
             if caughtSprite.sprite.color == (r, g, b):
-                scoreboard.addScore(113)
+                scoreboard.addScore(1)
             else:
-                scoreboard.addScore(-69)
-                
-        
-            
-            
-            
+                scoreboard.addScore(-1)
+
+
+
+
+
         """DELETE FREE STARS SHOOTING"""
         for star in starSprites.sprites():
             if star.shooting:
@@ -384,41 +392,19 @@ def game(c):
                 if star.pos[0] > c.DISPLAY_W or star.pos[0] < 0:
                     star.kill()
                     debug(c.DEBUG, 'KILLED A STAR')
-                    scoreboard.addScore(500)
+                    scoreboard.addScore(50)
                 elif star.pos[1] > c.DISPLAY_H or star.pos[1] < 0:
                     star.kill()
                     debug(c.DEBUG, 'KILLED A STAR')
-                    scoreboard.addScore(500)
+                    scoreboard.addScore(50)
             debug(c.DEBUG, ('Stars #: ', len(starSprites.sprites())))
-
-        # --function controls//--
-        # if paused is set to true, wait for p to be pressed again.
-        """PAUSE WAIT STOP"""
-        if paused:
-                if event.type == KEYUP and event.key == K_p:
-                    for event in latest_events:
-                        if event in c.CONTROL_LIST:
-                            cantUnpause = True
-                            debug(c.DEBUG, "A KEY IS PRESSED, CAN NOT UNPAUSE")
-                            paused = True
-                            # break
-                        else:
-                            paused = False
-                            pygame.mixer.music.unpause()
-                            debug(c.DEBUG, "OUT OF PAUSE!")
-                if event.type == QUIT:
-                    sys.exit()
-                    pygame.quit()
-                elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                    sys.exit()
-                    pygame.quit()
 
 
         """KILL STARS COLLISION DETECTION"""
         killGroup = pygame.sprite.spritecollide(ring, starSprites, False, \
                                     pygame.sprite.collide_mask)
         for sprite in killGroup:
-            scoreboard.addScore(-250)
+            scoreboard.addScore(-50)
             sprite.kill()
 
 
@@ -441,8 +427,19 @@ def game(c):
             scoreSprite.draw(c.DISPLAYSURFACE)
             c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
 
-        """UPDATE AND DELAY"""
+        """DELAY"""
         c.FPSCLOCK.tick_busy_loop(c.FPS)
+
+        """PAUSE UNPAUSE"""
+        if paused:
+            pygame.mixer.music.pause()
+            quitGame = pauseScreen(c)
+            if quitGame:
+                going = False
+            pygame.mixer.music.unpause()
+            paused = False
+
+        """UPDATE"""
         pygame.display.flip()  # update()
 
     try:
@@ -451,18 +448,10 @@ def game(c):
         debug(c.DEBUG, "File never opened")
     return
 
-def test():
+if __name__ == "__main__":
     c = Constants()
     c.FULLSCREEN = False
-    key = True
-    pygame.event.clear()
-    while key:
-        print pygame.event.poll()
-        if pygame.event.poll().type == NOEVENT:
-            print 'NOEVENT'
-        pygame.event.wait()
-        key = False
 
     game(c)
 
-#test()
+

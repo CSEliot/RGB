@@ -19,7 +19,7 @@ from debug import debug  # @UnusedImport
 from log import log  # @UnusedImport @Reimport
 from loader import load_image, load_song  # @UnusedImport
 from menu import *  # @UnusedWildImport
-from RGB_alpha import main as alpha  # @UnresolvedImport
+from RGB_alpha import gameAlpha as alpha  # @UnresolvedImport
 from time import sleep  # @UnusedImport @Reimport
 from mode_1 import game as campaign
 import pickle
@@ -43,7 +43,6 @@ class playBox():
 
 
 def main():
-
 
     PygLogo, PygLogo_rect = load_image(c, 'pygame_logo.png')  # @UnusedVariable
     PygLogo = pygame.transform.smoothscale(PygLogo, (c.DISPLAY_W - 250, c.DISPLAY_H - 500))
