@@ -258,7 +258,10 @@ def game(c):
             if event.type == QUIT:
                 going = False
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                going = False
+                if c.DEBUG:
+                    going = False
+                else:
+                    paused = True
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == controls[0]:
                 r = 255
@@ -434,7 +437,7 @@ def game(c):
         if paused:
             pygame.mixer.music.pause()
             quitGame = pauseScreen(c)
-            if quitGame:
+            if quitGame == 3:
                 going = False
             pygame.mixer.music.unpause()
             paused = False
