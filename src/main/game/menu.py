@@ -14,6 +14,8 @@ pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
 
 
 def menu(c, background):
+    # the background is the current information from the screen. It's faster
+    # than grabbing it from the constants file.
     background_rect = background.get_rect()
 
 
