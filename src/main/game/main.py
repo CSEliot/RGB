@@ -44,6 +44,7 @@ class playBox():
 
 def main():
 
+    #TESTING FILE CHANGES FROM VMWARE.
     PygLogo, PygLogo_rect = load_image(c, 'pygame_logo.png')  # @UnusedVariable
     PygLogo = pygame.transform.smoothscale(PygLogo, (c.DISPLAY_W - 250, c.DISPLAY_H - 500))
     PygLogo_rect = PygLogo.get_rect()
