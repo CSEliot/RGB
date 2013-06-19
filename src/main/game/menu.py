@@ -45,6 +45,7 @@ def menu(c, background):
     if c.DISPLAY_W < corners_rect.width or \
     c.DISPLAY_H < corners_rect.height + (logo.get_height() / 2):
         # RESIZE TO FIT THE SMALL SCREEN.
+        # RESIZING VVVVVVVVVVVVVVVVV
         playHeight = int(play.get_height() * .5)
         playWidth = int(play.get_width() * .5)
         play = pygame.transform.smoothscale(play, (playWidth, playHeight))
@@ -57,18 +58,24 @@ def menu(c, background):
         optionsWidth = int(options.get_width() * .5)
         options = pygame.transform.smoothscale(options, (optionsWidth, optionsHeight))
         options_rect = options.get_rect()
+        alphaHeight = int(alpha.get_height() * .5)
+        alphaWidth = int(alpha.get_width() * .5)
+        alpha = pygame.transform.smoothscale(alpha, (alphaWidth, alphaHeight))
+        alpha_rect = alpha.get_rect()
         cornersHeight = int(corners.get_height() * .5)
         cornersWidth = int(corners.get_width() * .5)
         corners = pygame.transform.smoothscale(corners, (cornersWidth, cornersHeight))
         corners_rect = corners.get_rect()
-        # menu locations
+        # RESIZING ^^^^^^^^^^^^^^^^^
+        # menu locations, done both resizing or not.
         playPos = c.CENTER[0], c.CENTER[1] - 25  # adjusting by specific pixels
         play_rect.center = playPos
         logoPos = c.CENTER[0], c.CENTER[1] - 150  # adjusting by specific pixels
         logo_rect.center = logoPos
         optionsPos = c.CENTER[0], c.CENTER[1] + 25  # adjusting by specific pixels
         options_rect.center = optionsPos
-        corners_rect.center = c.CENTER
+        alphaPos = c.CENTER[0], c.CENTER[1] + 75
+        alpha_rect.center = alphaPos
     else:
         playPos = c.CENTER[0], c.CENTER[1] - 100  # adjusting by specific pixels
         play_rect.center = playPos
@@ -78,8 +85,8 @@ def menu(c, background):
         options_rect.center = optionsPos
         alphaPos = c.CENTER[0], c.CENTER[1] + 130
         alpha_rect.center = alphaPos
-        # and then the corners, seperate
-        corners_rect.center = c.CENTER
+    # and then the corners, seperate
+    corners_rect.center = c.CENTER
 
     # set original images
     OGOptions = options

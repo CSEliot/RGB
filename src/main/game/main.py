@@ -26,8 +26,13 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 if platform.system() == 'Windows':
     os.environ['SDL_VIDEODRIVER'] = 'windib'
 
-
+# SCREEN IS LOADED HERE, environment is instantiated within constants.py
+# for convenience purposes.
 c = Constants()
+# since constants doesn't know about 'debug', and it is where the boolean is
+# made, we'll print the 'whichDisplay' here for debugging.
+debug(c.DEBUG, (c.whichDisplay, c.screenError))
+debug(c.DEBUG, c.displayInfo)
 
 class playBox():
     # This class holds all our variables to access while playing.

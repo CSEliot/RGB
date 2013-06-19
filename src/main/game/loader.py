@@ -20,21 +20,40 @@ def make_gamescreen(fullBool):
             options = (FULLSCREEN | DOUBLEBUF | HWSURFACE)
             std_res = (window_width, window_height)
             DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
+            print pygame.display.gl_get_attribute(GL_ALPHA_SIZE)
             whichDisplay = "Display 1"
             screenError = "Window Error: None"
+            displayInfo = "{0}\n{1}\n{2}\n{3}\n".format(
+                          pygame.display.get_driver(),
+                          pygame.display.Info(),
+                          pygame.display.get_wm_info(),
+                          pygame.display.list_modes(32)
+                          )
         except Exception as e:
-            options = 0
+            options = (FULLSCREEN)
             std_res = (window_width - 100, window_height - 100)
             DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
             whichDisplay = "Display 2"
-            screenError = "Window Error {0}: {1}".format(e.errno, e.strerror)
+            screenError = "Window Error {0}".format(e)
+            displayInfo = "{0}{1}\n{2}\n{3}\n".format(
+                          pygame.display.get_driver(),
+                          pygame.display.Info(),
+                          pygame.display.get_wm_info(),
+                          pygame.display.list_modes(32)
+                          )
     else:
         try:
             options = 0
-            std_res = (1000, 700)
+            std_res = (800, 600)
             DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
             whichDisplay = "Display 3"
             screenError = "Window Error: None"
+            displayInfo = "{0}\n{1}\n{2}\n{3}\n".format(
+                          pygame.display.get_driver(),
+                          pygame.display.Info(),
+                          pygame.display.get_wm_info(),
+                          pygame.display.list_modes(32)
+                          )
         except Exception as e:
             # If for some reason this resolution does not fit user's display it will
             # fit to their native resolution.
@@ -42,8 +61,14 @@ def make_gamescreen(fullBool):
             std_res = (window_width - 100, window_height - 100)
             DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
             whichDisplay = "Display 4"
-            screenError = "Window Error {0}: {1}".format(e.errno, e.strerror)
-    return DISPLAYSURFACE, whichDisplay, screenError
+            screenError = "Window Error: {0}".format(e)
+            displayInfo = "{0}\n{1}\n{2}\n{3}\n".format(
+                          pygame.display.get_driver(),
+                          pygame.display.Info(),
+                          pygame.display.get_wm_info(),
+                          pygame.display.list_modes(32)
+                          )
+    return DISPLAYSURFACE, whichDisplay, screenError, displayInfo
 
 # --FUNCTIONS to create our resources//--
 def load_image(c, name, colorkey=None):

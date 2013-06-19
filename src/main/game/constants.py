@@ -25,7 +25,9 @@ class Constants(object):
                              setList[10]]
         self.FULLSCREEN = setList[0]
         self.VOLUME = setList[1]
-        DISPLAYSURFACE, wDisplay, scnError = make_gamescreen(self.FULLSCREEN)
+        DISPLAYSURFACE, wDisplay, scnError, displayInfo = \
+        make_gamescreen(self.FULLSCREEN)
+        self.displayInfo = displayInfo
         self.OG_STDOUT = sys.stdout
         self.whichDisplay = wDisplay
         self.screenError = scnError
