@@ -48,9 +48,16 @@ class playBox():
 
 def main():
 
+    # display the version ID
+    font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
+    versionID_SurfaceObj = font_renderObj
+    versionID_RectObj = versionID_SurfaceObj.get_rect()
+    versionID_RectObj.topleft = (0, 0)
+
+
     # TESTING FILE CHANGES FROM VMWARE PART 2
     PygLogo, PygLogo_rect = load_image(c, 'pygame_logo.png')  # @UnusedVariable
-    PygLogo = pygame.transform.smoothscale(PygLogo, (c.DISPLAY_W - 250, c.DISPLAY_H - 500))
+    PygLogo = pygame.transform.smoothscale(PygLogo, (600, 350))
     PygLogo_rect = PygLogo.get_rect()
     PygLogo_rect.center = c.CENTER
     # fade logo in and out
@@ -62,6 +69,7 @@ def main():
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(PygLogo, PygLogo_rect)
         pgext.color.setAlpha(PygLogo, fade, 1)
+        c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
         pygame.display.flip()
         if pygame.event.poll().type != NOEVENT:
             break
@@ -86,6 +94,7 @@ def main():
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(background, background_rect)
         pgext.color.setAlpha(background, fade, 1)
+        c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
         pygame.display.flip()
         if pygame.event.poll().type != NOEVENT:
             break
