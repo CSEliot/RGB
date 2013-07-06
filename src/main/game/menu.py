@@ -158,6 +158,15 @@ def menu(c, background):
                 alpha_rect.center = alphaPos
 
 
+
+        # display the version ID
+        font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
+        versionID_SurfaceObj = font_renderObj
+        versionID_RectObj = versionID_SurfaceObj.get_rect()
+        versionID_RectObj.topleft = (0, 0)
+
+
+
         # leave menu screen
         if entered:
             sleep(1)
@@ -169,6 +178,7 @@ def menu(c, background):
         c.DISPLAYSURFACE.blit(play, play_rect)
         c.DISPLAYSURFACE.blit(options, options_rect)
         c.DISPLAYSURFACE.blit(alpha, alpha_rect)
+        c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
         c.FPSCLOCK.tick_busy_loop(c.FPS)
         pygame.display.flip()
 

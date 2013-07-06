@@ -41,6 +41,13 @@ class playBox():
 
 
 def game(c, background):
+    
+    
+    # display the version ID
+    font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
+    versionID_SurfaceObj = font_renderObj
+    versionID_RectObj = versionID_SurfaceObj.get_rect()
+    versionID_RectObj.topleft = (0, 0)
 
 #    pygame.key.set_repeat(0, 0)
 
@@ -116,11 +123,7 @@ def game(c, background):
     b_letter_rect.center = (c.CENTER_X + 50, (c.CENTER_Y * 2) - 20)
     box_rectB = b_letter_rect
 
-    # display the version ID
-    font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
-    versionID_SurfaceObj = font_renderObj
-    versionID_RectObj = versionID_SurfaceObj.get_rect()
-    versionID_RectObj.topleft = (0, 0)
+
 
 
     # throw down splash screen before beginning
@@ -138,6 +141,7 @@ def game(c, background):
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
         pgext.color.setAlpha(splashInfo, fade, 1)
+        c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
         pygame.display.flip()
         if pygame.event.poll().type != NOEVENT:
             inInfoScreen = False
