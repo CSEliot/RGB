@@ -29,7 +29,7 @@ def menu(c, background):
     alphaButton = 3
     entered = False  # tells if the user has chosen a button
 
-
+    bgRotAngle = 0
 
 
     load_song(c, 'menuV3.ogg')
@@ -89,14 +89,22 @@ def menu(c, background):
     corners_rect.center = c.CENTER
 
     # set original images
-    OGOptions = options
-    OGPlay = play
-    OGAlpha = alpha
-
+    OGOptions = options.copy()
+    OGPlay = play.copy()
+    OGAlpha = alpha.copy()
+    OGBackground = background.copy()
 
     # --Main Game Loop//--
     going = True
     while going:
+        """ROTATION TESTING"""
+        # rotate the background ;)
+        bgRotAngle += .05
+        background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
+        background_rect = background.get_rect()
+        background_rect.center = c.CENTER
+        
+        
         """EVENT HANDLING INPUT"""
         # grab all the latest input
         latest_events = pygame.event.get()
@@ -173,9 +181,9 @@ if __name__ == "__main__":
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
-    xCut = background_rect.centerx - c.CENTER_X
-    yCut = background_rect.centery - c.CENTER_Y
-    background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
+    #     xCut = background_rect.centerx - c.CENTER_X
+    #     yCut = background_rect.centery - c.CENTER_Y
+    #     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
 
