@@ -73,9 +73,9 @@ def main():
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
-    xCut = background_rect.centerx - c.CENTER_X
-    yCut = background_rect.centery - c.CENTER_Y
-    background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
+    #     xCut = background_rect.centerx - c.CENTER_X
+    #     yCut = background_rect.centery - c.CENTER_Y
+    #     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     fade = 0
@@ -101,7 +101,7 @@ def main():
     while playing:
         selected = menu(c, background)
         if selected == mode1:
-            campaign(c)
+            campaign(c, background)
         elif selected == mode2:
             pass
         elif selected == mode3:

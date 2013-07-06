@@ -1,5 +1,5 @@
-import pygame, debug, os  # @UnusedImport
-from pygame.locals import *  # @UnusedWildImport
+import pygame, os
+from pygame.locals import FULLSCREEN , DOUBLEBUF , HWSURFACE, RLEACCEL
 from pygame.compat import geterror  # @UnusedImport
 from debug import debug  # @Reimport
 
@@ -20,7 +20,6 @@ def make_gamescreen(fullBool):
             options = (FULLSCREEN | DOUBLEBUF | HWSURFACE)
             std_res = (window_width, window_height)
             DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
-            print pygame.display.gl_get_attribute(GL_ALPHA_SIZE)
             whichDisplay = "Display 1"
             screenError = "Window Error: None"
             displayInfo = "{0}\n{1}\n{2}\n{3}\n".format(
