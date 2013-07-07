@@ -52,7 +52,7 @@ class Constants(object):
         self.FPSCLOCK = pygame.time.Clock()
         self.FONT_LARGE = pygame.font.SysFont('arial', 32, True)
         self.FONT_SMALL = pygame.font.SysFont('arial', 16)
-        self.VERSION = 'betaV1.21'
+        self.VERSION = 'betaV1.22'
         self.DISPLAY_W = self.DISPLAYSURFACE.get_width()
         self.CENTER_X = (self.DISPLAY_W / 2)
         self.DISPLAY_H = self.DISPLAYSURFACE.get_height()

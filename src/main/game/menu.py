@@ -43,50 +43,38 @@ def menu(c, background):
     logo, logo_rect = load_image(c, 'menu/logo.png')
     alpha, alpha_rect = load_image(c, 'menu/alpha.png')
 
-        #     if c.DISPLAY_W < corners_rect.width or \
-        #     c.DISPLAY_H < corners_rect.height + (logo.get_height() / 2):
-    if True:
-        # RESIZE TO FIT THE SMALL SCREEN.
-        # RESIZING VVVVVVVVVVVVVVVVV
-        playHeight = int(play.get_height() * .5)
-        playWidth = int(play.get_width() * .5)
-        play = pygame.transform.smoothscale(play, (playWidth, playHeight))
-        play_rect = play.get_rect()
-        logoHeight = int(logo.get_height() * .5)
-        logoWidth = int(logo.get_width() * .5)
-        logo = pygame.transform.smoothscale(logo, (logoWidth, logoHeight))
-        logo_rect = logo.get_rect()
-        optionsHeight = int(options.get_height() * .5)
-        optionsWidth = int(options.get_width() * .5)
-        options = pygame.transform.smoothscale(options, (optionsWidth, optionsHeight))
-        options_rect = options.get_rect()
-        alphaHeight = int(alpha.get_height() * .5)
-        alphaWidth = int(alpha.get_width() * .5)
-        alpha = pygame.transform.smoothscale(alpha, (alphaWidth, alphaHeight))
-        alpha_rect = alpha.get_rect()
-        cornersHeight = int(corners.get_height() * .5)
-        cornersWidth = int(corners.get_width() * .5)
-        corners = pygame.transform.smoothscale(corners, (cornersWidth, cornersHeight))
-        corners_rect = corners.get_rect()
-        # RESIZING ^^^^^^^^^^^^^^^^^
-        # menu locations, done both resizing or not.
-        playPos = c.CENTER[0], c.CENTER[1] - 25  # adjusting by specific pixels
-        play_rect.center = playPos
-        logoPos = c.CENTER[0], c.CENTER[1] - 150  # adjusting by specific pixels
-        logo_rect.center = logoPos
-        optionsPos = c.CENTER[0], c.CENTER[1] + 25  # adjusting by specific pixels
-        options_rect.center = optionsPos
-        alphaPos = c.CENTER[0], c.CENTER[1] + 75
-        alpha_rect.center = alphaPos
-    else:
-        playPos = c.CENTER[0], c.CENTER[1] - 100  # adjusting by specific pixels
-        play_rect.center = playPos
-        logoPos = c.CENTER[0], c.CENTER[1] - 300  # adjusting by specific pixels
-        logo_rect.center = logoPos
-        optionsPos = c.CENTER[0], c.CENTER[1] + 20  # adjusting by specific pixels
-        options_rect.center = optionsPos
-        alphaPos = c.CENTER[0], c.CENTER[1] + 130
-        alpha_rect.center = alphaPos
+    # RESIZE TO FIT THE SMALL SCREEN.
+    # RESIZING VVVVVVVVVVVVVVVVV
+    playHeight = int(play.get_height() * .5)
+    playWidth = int(play.get_width() * .5)
+    play = pygame.transform.smoothscale(play, (playWidth, playHeight))
+    play_rect = play.get_rect()
+    logoHeight = int(logo.get_height() * .5)
+    logoWidth = int(logo.get_width() * .5)
+    logo = pygame.transform.smoothscale(logo, (logoWidth, logoHeight))
+    logo_rect = logo.get_rect()
+    optionsHeight = int(options.get_height() * .5)
+    optionsWidth = int(options.get_width() * .5)
+    options = pygame.transform.smoothscale(options, (optionsWidth, optionsHeight))
+    options_rect = options.get_rect()
+    alphaHeight = int(alpha.get_height() * .5)
+    alphaWidth = int(alpha.get_width() * .5)
+    alpha = pygame.transform.smoothscale(alpha, (alphaWidth, alphaHeight))
+    alpha_rect = alpha.get_rect()
+    cornersHeight = int(corners.get_height() * .5)
+    cornersWidth = int(corners.get_width() * .5)
+    corners = pygame.transform.smoothscale(corners, (cornersWidth, cornersHeight))
+    corners_rect = corners.get_rect()
+    # RESIZING ^^^^^^^^^^^^^^^^^
+    # menu locations, done both resizing or not.
+    playPos = c.CENTER[0], c.CENTER[1] - 25  # adjusting by specific pixels
+    play_rect.center = playPos
+    logoPos = c.CENTER[0], c.CENTER[1] - 150  # adjusting by specific pixels
+    logo_rect.center = logoPos
+    optionsPos = c.CENTER[0], c.CENTER[1] + 25  # adjusting by specific pixels
+    options_rect.center = optionsPos
+    alphaPos = c.CENTER[0], c.CENTER[1] + 75
+    alpha_rect.center = alphaPos
     # and then the corners, seperate
     corners_rect.center = c.CENTER
 
@@ -103,7 +91,7 @@ def menu(c, background):
         """ROTATION TESTING"""
         # rotate the background ;)
         bgRotAngle += .05
-        background = pygame.transform.rotate(OGBackground, bgRotAngle%360)#rotozoom(OGBackground, bgRotAngle%360 , 1)
+        background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
         background_rect = background.get_rect()
         background_rect.center = c.CENTER
         
@@ -183,7 +171,7 @@ def menu(c, background):
         if entered:
             sleep(1)
             return selected
-        #c.DISPLAYSURFACE.fill((0,0,0))
+        c.DISPLAYSURFACE.fill((255,255,255))
         c.DISPLAYSURFACE.blit(background, background_rect)
         c.DISPLAYSURFACE.blit(corners, corners_rect)
         c.DISPLAYSURFACE.blit(logo, logo_rect)
@@ -201,13 +189,14 @@ def menu(c, background):
 if __name__ == "__main__":
     c = Constants()
     background, background_rect = load_image(c, 'starBG.png')
+    #     background = pygame.Surface.convert(background)
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
     #     xCut = background_rect.centerx - c.CENTER_X
     #     yCut = background_rect.centery - c.CENTER_Y
     mult = 1
-    #background = background.subsurface((0,0), (c.DISPLAY_W*mult , c.DISPLAY_H*mult)).copy()
+    #background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H)).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
 
