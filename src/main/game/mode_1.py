@@ -75,12 +75,10 @@ def game(c, background):
     #     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
-    OGBackground = background.copy()
     logging = False
 
     '''INSTANTIATING OTHER VARIABLES'''
     # tracks the number of frames passed. Gets reset when == to FPS.
-    bgRotAngle = 0
     logFile = file
     mainFrame = 0
     testFrame = 0
@@ -162,13 +160,6 @@ def game(c, background):
         mainFrame += 1
         # Paint the background
         c.DISPLAYSURFACE.blit(background, background_rect)
-        """ROTATION TESTING"""
-        # rotate the background ;)
-        bgRotAngle += .05
-        background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
-        background_rect = background.get_rect()
-        background_rect.center = c.CENTER
-
 
         """LOGGING output information: FPS, event info, AA, etc."""
         # for every 30 or FPS number of frames, print an average fps.
@@ -464,12 +455,9 @@ def game(c, background):
 if __name__ == "__main__":
     c = Constants()
     background, background_rect = load_image(c, 'starBG.png')
+
     # CUTTING the background to fit the DISPLAYSURFACE
-    # take the center's x value, and move it left to the end of the display's
-    # edge, so from center, minus the half value of width (CENTER_X) is the edge
-#     xCut = background_rect.centerx - c.CENTER_X
-#     yCut = background_rect.centery - c.CENTER_Y+200
-#     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
+    background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     
