@@ -5,6 +5,7 @@ from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
 from loader import load_image, load_song
 from time import sleep
+from time import time
 from constants import Constants
 from debug import *  # @UnusedWildImport
 # ignore the mouse:
@@ -30,7 +31,7 @@ def menu(c, background):
     entered = False  # tells if the user has chosen a button
 
     bgRotAngle = 0
-
+    fpsList = []
 
     load_song(c, 'menuV3.ogg')
     pygame.mixer.music.set_volume(.5)
@@ -42,8 +43,9 @@ def menu(c, background):
     logo, logo_rect = load_image(c, 'menu/logo.png')
     alpha, alpha_rect = load_image(c, 'menu/alpha.png')
 
-    if c.DISPLAY_W < corners_rect.width or \
-    c.DISPLAY_H < corners_rect.height + (logo.get_height() / 2):
+        #     if c.DISPLAY_W < corners_rect.width or \
+        #     c.DISPLAY_H < corners_rect.height + (logo.get_height() / 2):
+    if True:
         # RESIZE TO FIT THE SMALL SCREEN.
         # RESIZING VVVVVVVVVVVVVVVVV
         playHeight = int(play.get_height() * .5)
@@ -96,11 +98,12 @@ def menu(c, background):
 
     # --Main Game Loop//--
     going = True
+    timePiece = time()
     while going:
         """ROTATION TESTING"""
         # rotate the background ;)
         bgRotAngle += .05
-        background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
+        background = pygame.transform.rotate(OGBackground, bgRotAngle%360)#rotozoom(OGBackground, bgRotAngle%360 , 1)
         background_rect = background.get_rect()
         background_rect.center = c.CENTER
         
@@ -166,12 +169,21 @@ def menu(c, background):
         versionID_RectObj.topleft = (0, 0)
 
 
+        fpsList.append(c.FPSCLOCK.get_fps())
+        # report the frame rate every 5 seconds
+        if time() - timePiece >= 2:
+            avgFPS = mean(fpsList)
+            debug(c.DEBUG, avgFPS)
+            timePiece = time()
+            pygame.display.set_caption('RGB. FPS: {0}'.format(avgFPS))
+            fpsList = []
+
 
         # leave menu screen
         if entered:
             sleep(1)
             return selected
-
+        #c.DISPLAYSURFACE.fill((0,0,0))
         c.DISPLAYSURFACE.blit(background, background_rect)
         c.DISPLAYSURFACE.blit(corners, corners_rect)
         c.DISPLAYSURFACE.blit(logo, logo_rect)
@@ -181,6 +193,7 @@ def menu(c, background):
         c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
         c.FPSCLOCK.tick_busy_loop(c.FPS)
         pygame.display.flip()
+        #         pygame.transform.set_smoothscale_backend(SSE)
 
     pygame.quit()
     sys.exit()
@@ -193,7 +206,8 @@ if __name__ == "__main__":
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
     #     xCut = background_rect.centerx - c.CENTER_X
     #     yCut = background_rect.centery - c.CENTER_Y
-    #     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
+    mult = 1
+    #background = background.subsurface((0,0), (c.DISPLAY_W*mult , c.DISPLAY_H*mult)).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
 

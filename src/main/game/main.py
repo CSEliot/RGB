@@ -81,9 +81,7 @@ def main():
     # CUTTING the background to fit the DISPLAYSURFACE
     # take the center's x value, and move it left to the end of the display's
     # edge, so from center, minus the half value of width (CENTER_X) is the edge
-    #     xCut = background_rect.centerx - c.CENTER_X
-    #     yCut = background_rect.centery - c.CENTER_Y
-    #     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
+    #     background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H)).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     fade = 0
