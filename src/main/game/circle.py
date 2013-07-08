@@ -34,11 +34,13 @@ class Circle (pygame.sprite.Sprite):
             self.catchable = True
         if self.size >= self.MAX_SIZE + 30:
             self.death()
+        if self.captured == True:
+            self.fadeBy += 5
 
     def death(self):
-#        pgext.color.setAlpha(self.image, self.fadeBy, )
-#        if self.fadeBy >= 90:
-        self.kill()
+        pgext.color.setAlpha(self.image, self.fadeBy, 0)
+        if self.fadeBy >= 90:
+            self.kill()
 
     def catch(self):
         self.captured = True

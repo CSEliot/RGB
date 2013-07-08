@@ -30,8 +30,12 @@ def menu(c, background):
     alphaButton = 3
     entered = False  # tells if the user has chosen a button
 
+    #Other Variables
     bgRotAngle = 0
     fpsList = []
+    fpsWait = 2 #how many seconds till we report the game's FPS.
+    frameCount = 0
+    
 
     load_song(c, 'menuV3.ogg')
     pygame.mixer.music.set_volume(.5)
@@ -43,7 +47,7 @@ def menu(c, background):
     logo, logo_rect = load_image(c, 'menu/logo.png')
     alpha, alpha_rect = load_image(c, 'menu/alpha.png')
 
-    # RESIZE TO FIT THE SMALL SCREEN.
+    # RESIZE TO FIT THE SCREEN.
     # RESIZING VVVVVVVVVVVVVVVVV
     playHeight = int(play.get_height() * .5)
     playWidth = int(play.get_width() * .5)
@@ -86,14 +90,17 @@ def menu(c, background):
 
     # --Main Game Loop//--
     going = True
-    timePiece = time()
+    oldTime = time()
     while going:
         """ROTATION TESTING"""
-        # rotate the background ;)
-        bgRotAngle += .05
-        background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
-        background_rect = background.get_rect()
-        background_rect.center = c.CENTER
+        # rotate the background, but only 15 times/second, not 30.
+        # if the frame rate is 30/sec, then rotate when its an odd frame.
+        if frameCount%2 == 0:
+            bgRotAngle += .05
+            background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
+            background_rect = background.get_rect()
+            background_rect.center = c.CENTER
+        frameCount += 1
         
         
         """EVENT HANDLING INPUT"""
@@ -159,12 +166,18 @@ def menu(c, background):
 
         fpsList.append(c.FPSCLOCK.get_fps())
         # report the frame rate every 5 seconds
-        if time() - timePiece >= 2:
+        newTime = time()
+        if newTime - oldTime >= fpsWait:
             avgFPS = mean(fpsList)
             debug(c.DEBUG, avgFPS)
-            timePiece = time()
             pygame.display.set_caption('RGB. FPS: {0}'.format(avgFPS))
             fpsList = []
+            oldTime = time()
+
+        # reset frame count once it exceeds 30 frames
+        if frameCount >= 30:
+            frameCount = 0
+            
 
 
         # leave menu screen

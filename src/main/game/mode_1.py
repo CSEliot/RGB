@@ -75,10 +75,13 @@ def game(c, background):
     #     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
+    OGBackground = background.copy()
     logging = False
 
     '''INSTANTIATING OTHER VARIABLES'''
     # tracks the number of frames passed. Gets reset when == to FPS.
+    bgRotAngle = 0
+    frameCount = 0
     logFile = file
     mainFrame = 0
     testFrame = 0
@@ -160,6 +163,16 @@ def game(c, background):
         mainFrame += 1
         # Paint the background
         c.DISPLAYSURFACE.blit(background, background_rect)
+        """ROTATION TESTING"""
+        # rotate the background, but only 15 times/second, not 30.
+        # if the frame rate is 30/sec, then rotate when its an odd frame.
+        if frameCount%5 == 0:
+            bgRotAngle += .05
+            background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
+            background_rect = background.get_rect()
+            background_rect.center = c.CENTER
+        frameCount += 1
+
 
         """LOGGING output information: FPS, event info, AA, etc."""
         # for every 30 or FPS number of frames, print an average fps.
@@ -367,21 +380,27 @@ def game(c, background):
             if circle.catchable:
                 debug(c.DEBUG, (circle.color, (r, g, b)))
                 if circle.color == (r, g, b):
-                    circle.catch()
                     circle.remove(circSprites)
                     circle.add(caughtSprite)
+                    scoreboard.addScore(200)
                 else:
                     circle.catch()
-                    circle.remove(circSprites)
-                    circle.add(caughtSprite)
+                    scoreboard.addScore(-10)
+                    #circle.remove(circSprites)
+                    #circle.add(caughtSprite)
 
         """REPEATED POINTS HOLDING COLORS"""
         # every .1 seconds should add or remove points based on accuracy
         if not caughtSprite.sprite is None:
-            if caughtSprite.sprite.color == (r, g, b):
-                scoreboard.addScore(1)
-            else:
-                scoreboard.addScore(-1)
+            for circle in caughtSprite.sprites():
+                circle.catch()
+                circle.remove(caughtSprite)
+            #===================================================================
+            # if caughtSprite.sprite.color == (r, g, b):
+            #     scoreboard.addScore(1)
+            # else:
+            #     scoreboard.addScore(-1)
+            #===================================================================
 
 
 
@@ -408,7 +427,7 @@ def game(c, background):
         killGroup = pygame.sprite.spritecollide(ring, starSprites, False, \
                                     pygame.sprite.collide_mask)
         for sprite in killGroup:
-            scoreboard.addScore(-50)
+            scoreboard.addScore(-300)
             sprite.kill()
 
 
@@ -457,7 +476,7 @@ if __name__ == "__main__":
     background, background_rect = load_image(c, 'starBG.png')
 
     # CUTTING the background to fit the DISPLAYSURFACE
-    background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H))
+    #     background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     
