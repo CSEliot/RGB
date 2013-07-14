@@ -25,6 +25,7 @@ class Constants(object):
                              setList[10]]
         self.FULLSCREEN = setList[0]
         self.VOLUME = setList[1]
+        ## BUILDING SCREEN FROM LOADER
         DISPLAYSURFACE, wDisplay, scnError, displayInfo = \
         make_gamescreen(self.FULLSCREEN)
         self.displayInfo = displayInfo

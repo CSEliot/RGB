@@ -2,7 +2,7 @@ import pygame, pgext  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
 from debug import debug
 from loader import load_image
-import math as m
+from math import *
 
 class Circle (pygame.sprite.Sprite):
 
@@ -16,14 +16,14 @@ class Circle (pygame.sprite.Sprite):
         self.OGCenter = CENTER
         self.rect.center = self.OGCenter
         self._layer = layer
-        debug(c.DEBUG, "IN THE CIRCLE CLASS")
         pgext.color.setColor(self.image, color)
         self.imageOG = self.image
         self.MAX_SIZE = c.RING_SIZE
-        self.fadeBy = 2
+        self.fadeBy = 100
         self.captured = False
         self.catchable = False
-        debug(c.DEBUG, self.speed)
+        debug(c.DEBUG, ("{0}'s speed: {1}".format(self.color, self.speed)))
+        self.dieing = False
 
     def update(self):
         if not(self.captured):
@@ -32,15 +32,15 @@ class Circle (pygame.sprite.Sprite):
             self.rect = self.rect = self.image.get_rect(center=(self.OGCenter))
         if self.size >= self.MAX_SIZE:
             self.catchable = True
-        if self.size >= self.MAX_SIZE + 30:
-            self.death()
-        if self.captured == True:
-            self.fadeBy += 5
+        if self.dieing:
+            self.fadeBy -= 10
+            pgext.color.setAlpha(self.image, self.fadeBy, 2)
+        if self.fadeBy <= 0:
+            self.kill()
+            
 
     def death(self):
-        pgext.color.setAlpha(self.image, self.fadeBy, 0)
-        if self.fadeBy >= 90:
-            self.kill()
+        self.dieing = True
 
     def catch(self):
         self.captured = True

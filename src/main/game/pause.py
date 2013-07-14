@@ -22,7 +22,6 @@ def pauseScreen(c):
 
 
 
-    paused = True
 
     #create a copy of our original surface that we can manipulate.
     pgext.color.greyscale(c.DISPLAYSURFACE)
@@ -37,56 +36,50 @@ def pauseScreen(c):
         c.DISPLAYSURFACE.blit(OGDisplay, OGRect)
         pgext.filters.pixelize(c.DISPLAYSURFACE, pixelize)
         pygame.display.flip()
-        #         sleep(0.01)#
+        sleep(0.05)#
     OGDisplay = c.DISPLAYSURFACE.copy()
     pygame.display.flip()
     
     
     
-    corners, corners_rect = load_image(c, "pause/scrbx.png")
-    bReturn, bReturn_rect = load_image(c, 'pause/return.png')
-    options, options_rect = load_image(c, 'pause/options.png')
-    paused, paused_rect = load_image(c, 'pause/paused.png')
-    bQuit, bQuit_rect = load_image(c, 'pause/quit.png')
+    corners, __corners_rect = load_image(c, "pause/scrbx.png")
+    bReturn, __bReturn_rect = load_image(c, 'pause/return.png')
+    options, __options_rect = load_image(c, 'pause/options.png')
+    paused, __paused_rect = load_image(c, 'pause/paused.png')
+    bQuit, __bQuit_rect = load_image(c, 'pause/quit.png')
 
-    if c.DISPLAY_W < corners_rect.width or \
-    c.DISPLAY_H < corners_rect.height + (paused.get_height() / 2):
-        # RESIZE TO FIT THE SMALL SCREEN.
-        bReturnHeight = int(bReturn.get_height() * .5)
-        bReturnWidth = int(bReturn.get_width() * .5)
-        bReturn = pygame.transform.smoothscale(bReturn, (bReturnWidth, bReturnHeight))
-        bReturn_rect = bReturn.get_rect()
-        pausedHeight = int(paused.get_height() * .5)
-        pausedWidth = int(paused.get_width() * .5)
-        paused = pygame.transform.smoothscale(paused, (pausedWidth, pausedHeight))
-        paused_rect = paused.get_rect()
-        optionsHeight = int(options.get_height() * .5)
-        optionsWidth = int(options.get_width() * .5)
-        options = pygame.transform.smoothscale(options, (optionsWidth, optionsHeight))
-        options_rect = options.get_rect()
-        cornersHeight = int(corners.get_height() * .5)
-        cornersWidth = int(corners.get_width() * .5)
-        corners = pygame.transform.smoothscale(corners, (cornersWidth, cornersHeight))
-        corners_rect = corners.get_rect()
-        # menu locations
-        bReturnPos = c.CENTER[0], c.CENTER[1] - 25  # adjusting by specific pixels
-        bReturn_rect.center = bReturnPos
-        pausedPos = c.CENTER[0], c.CENTER[1] - 150  # adjusting by specific pixels
-        paused_rect.center = pausedPos
-        optionsPos = c.CENTER[0], c.CENTER[1] + 25  # adjusting by specific pixels
-        options_rect.center = optionsPos
-        corners_rect.center = c.CENTER
-    else:
-        bReturnPos = c.CENTER[0], c.CENTER[1] - 100  # adjusting by specific pixels
-        bReturn_rect.center = bReturnPos
-        pausedPos = c.CENTER[0], c.CENTER[1] - 300  # adjusting by specific pixels
-        paused_rect.center = pausedPos
-        optionsPos = c.CENTER[0], c.CENTER[1] + 20  # adjusting by specific pixels
-        options_rect.center = optionsPos
-        bQuitPos = c.CENTER[0], c.CENTER[1] + 130
-        bQuit_rect.center = bQuitPos
-        # and then the corners, seperate
-        corners_rect.center = c.CENTER
+    # RESIZE TO FIT THE SMALL SCREEN.
+    bReturnHeight = int(bReturn.get_height() * .5)
+    bReturnWidth = int(bReturn.get_width() * .5)
+    bReturn = pygame.transform.smoothscale(bReturn, (bReturnWidth, bReturnHeight))
+    bReturn_rect = bReturn.get_rect()
+    pausedHeight = int(paused.get_height() * .5)
+    pausedWidth = int(paused.get_width() * .5)
+    paused = pygame.transform.smoothscale(paused, (pausedWidth, pausedHeight))
+    paused_rect = paused.get_rect()
+    optionsHeight = int(options.get_height() * .5)
+    optionsWidth = int(options.get_width() * .5)
+    options = pygame.transform.smoothscale(options, (optionsWidth, optionsHeight))
+    options_rect = options.get_rect()
+    cornersHeight = int(corners.get_height() * .5)
+    cornersWidth = int(corners.get_width() * .5)
+    corners = pygame.transform.smoothscale(corners, (cornersWidth, cornersHeight))
+    corners_rect = corners.get_rect()
+    bQuitHeight = int(bQuit.get_height() * .5)
+    bQuitWidth = int(bQuit.get_width() * .5)
+    bQuit = pygame.transform.smoothscale(bQuit, (bQuitWidth, bQuitHeight))
+    bQuit_rect = bQuit.get_rect()
+    # menu locations
+    bReturnPos = c.CENTER[0], c.CENTER[1] - 25  # adjusting by specific pixels
+    bReturn_rect.center = bReturnPos
+    bQuitPos = c.CENTER[0], c.CENTER[1] + 80
+    bQuit_rect.center = bQuitPos
+    pausedPos = c.CENTER[0], c.CENTER[1] - 150  # adjusting by specific pixels
+    paused_rect.center = pausedPos
+    optionsPos = c.CENTER[0], c.CENTER[1] + 25  # adjusting by specific pixels
+    options_rect.center = optionsPos
+    corners_rect.center = c.CENTER
+
 
     # set original images
     OGOptions = options

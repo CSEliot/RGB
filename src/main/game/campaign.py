@@ -40,8 +40,9 @@ class playBox():
         self.layer = 0
 
 
-def game(c, background):
+def campaign(c, background):
     
+    debug(c.DEBUG, "ENTERING: campaign")
     
     # display the version ID
     font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
@@ -67,21 +68,14 @@ def game(c, background):
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
     scoreboard.add(scoreSprite, allSprites)
     box_img, _box_rect = load_image(c, 'letter_box.png')
-    # CUTTING the background to fit the DISPLAYSURFACE
-    # take the center's x value, and move it left to the end of the display's
-    # edge, so from center, minus the half value of width (CENTER_X) is the edge
-    #     xCut = background_rect.centerx - c.CENTER_X
-    #     yCut = background_rect.centery - c.CENTER_Y
-    #     background = background.subsurface((xCut, yCut), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     OGBackground = background.copy()
     logging = False
 
     '''INSTANTIATING OTHER VARIABLES'''
-    # tracks the number of frames passed. Gets reset when == to FPS.
-    bgRotAngle = 0
-    frameCount = 0
+    frameCount = 0      # tracks the number of frames passed.
+    bgRotAngle = 0      # background rotation angle
     logFile = file
     mainFrame = 0
     testFrame = 0
@@ -103,7 +97,7 @@ def game(c, background):
     upHold = False
     downHold = False
     quitGame = False  # if user returns a True from pause, we quit game, etc.
-
+    maxPoints = 20 # goes down every second that circle is not matched
 
     """BUTTON / SPRITE RENDERING"""
     r_letter = c.FONT_LARGE.render('R', True, c.RED)
@@ -162,12 +156,13 @@ def game(c, background):
         testFrame += 1
         mainFrame += 1
         # Paint the background
+        c.DISPLAYSURFACE.fill((0,0,0))
         c.DISPLAYSURFACE.blit(background, background_rect)
         """ROTATION TESTING"""
         # rotate the background, but only 15 times/second, not 30.
         # if the frame rate is 30/sec, then rotate when its an odd frame.
-        if frameCount%5 == 0:
-            bgRotAngle += .05
+        if frameCount%3 == 0:
+            bgRotAngle += .03
             background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
             background_rect = background.get_rect()
             background_rect.center = c.CENTER
@@ -178,8 +173,8 @@ def game(c, background):
         # for every 30 or FPS number of frames, print an average fps.
         fpsList.append(c.FPSCLOCK.get_fps())
         if testFrame == c.FPS:
-            debug(c.DEBUG, (mean(fpsList)))
-            debug(c.DEBUG, scoreboard.scoreString)
+            debug(c.DEBUG, ("Average FPS: {0}".format(mean(fpsList))))
+            debug(c.DEBUG, ("Current Score: {0}".format(scoreboard.scoreString)))
             testFrame = 0
             pygame.display.set_caption('RGB. FPS: {0}'.format(mean(fpsList)))
             fpsList = []
@@ -196,7 +191,6 @@ def game(c, background):
                 pBox.cSpeed = action[3]
                 pBox.fSpeed = action[4]
             elif action[0] == 'P':
-                now = datetime.datetime.now()
                 pygame.mixer.music.play()
             # if the action is to spawn a circle/star, gotta que it up.
             elif action[0] == 'C' or action[0] == 'F':
@@ -210,18 +204,19 @@ def game(c, background):
                     debug(c.DEBUG, ('Star speed set to: ', action[1]))
             elif action[0][0] == 'W':
                 if action[0] == 'W':
+                    now = datetime.datetime.now()
                     waiting = True
+                    waitMade = datetime.datetime.now()
                 elif action[0] == 'WG':
                     pBox.cWait = action[1]
                     pBox.fWait = action[1]
                 elif action[0] == 'WC':
                     pBox.cWait = action[1]
-                else:
+                elif action[0] == 'WF':
                     pBox.fWait = action[1]
             elif action[0] == 'S':
                 pygame.mixer.music.stop()
         if waiting:
-            change = datetime.datetime.now() - now
             if action[0] == 'C':
                 if mainFrame >= pBox.cWait or firstAction:
                     if action[2] == '':
@@ -234,6 +229,7 @@ def game(c, background):
                     tempCirc = Circle(c, c.CENTER, tempSpeed, tempColor, \
                                       pBox.layer)
                     tempCirc.add(circSprites, allSprites)
+                    circMade = datetime.datetime.now()
                     # circSprites.add(tempCirc)
                     # allSprites.add(tempCirc)
                     pBox.layer += 1
@@ -252,10 +248,12 @@ def game(c, background):
                     waiting = False
                     mainFrame = 0
             elif action[0] == 'W':
+                change = datetime.datetime.now() - now
                 # if the action is to JUST wait x amount of time
-                print "LINE 213: ", change.total_seconds(), action[1] / 30.0
                 if change.total_seconds() >= action[1] / 30.0:
                     waiting = False
+                    totalWaitTime = datetime.datetime.now() - waitMade 
+                    debug(c.DEBUG, ("Wait Time: ", totalWaitTime.total_seconds()))
                     mainFrame = 0
                     # we must also set the wait for the next action to 0,
                     # or else the wait would be Wx + Wcircle/star.
@@ -271,6 +269,8 @@ def game(c, background):
         for event in latest_events:
             if event.type == QUIT:
                 going = False
+                pygame.quit()
+                sys.exit()
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 if c.DEBUG:
                     going = False
@@ -378,29 +378,25 @@ def game(c, background):
         # catch matching circles!!
         for circle in circSprites.sprites():
             if circle.catchable:
+                # catchable becomes true when the circle comes in contact 
+                # with the ring.
                 debug(c.DEBUG, (circle.color, (r, g, b)))
-                if circle.color == (r, g, b):
-                    circle.remove(circSprites)
-                    circle.add(caughtSprite)
-                    scoreboard.addScore(200)
-                else:
-                    circle.catch()
-                    scoreboard.addScore(-10)
-                    #circle.remove(circSprites)
-                    #circle.add(caughtSprite)
-
-        """REPEATED POINTS HOLDING COLORS"""
-        # every .1 seconds should add or remove points based on accuracy
-        if not caughtSprite.sprite is None:
-            for circle in caughtSprite.sprites():
+                circle.remove(circSprites)
+                circle.add(caughtSprite)
                 circle.catch()
-                circle.remove(caughtSprite)
-            #===================================================================
-            # if caughtSprite.sprite.color == (r, g, b):
-            #     scoreboard.addScore(1)
-            # else:
-            #     scoreboard.addScore(-1)
-            #===================================================================
+
+        """REPEATED POINTS HOLDING COLORS CAUGHT"""
+        # every .1 seconds should add or remove points based on accuracy
+        if not (caughtSprite.sprite is None):
+            for circle in caughtSprite.sprites():
+                if circle.color == (r, g, b) and not(circle.dieing):
+                    totalCircTime = datetime.datetime.now() - circMade 
+                    debug(c.DEBUG, ("CIRCTIME: ", totalCircTime.total_seconds()))
+                    scoreboard.addScore(maxPoints)
+                    maxPoints = 20
+                    circle.death()
+                elif not(circle.dieing):
+                    maxPoints -= .5
 
 
 
@@ -465,10 +461,7 @@ def game(c, background):
         """UPDATE"""
         pygame.display.flip()  # update()
 
-    try:
-        logFile.close()
-    except Exception:
-        debug(c.DEBUG, "File never opened")
+
     return
 
 if __name__ == "__main__":
@@ -476,10 +469,10 @@ if __name__ == "__main__":
     background, background_rect = load_image(c, 'starBG.png')
 
     # CUTTING the background to fit the DISPLAYSURFACE
-    #     background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H))
+    background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     
-    game(c, background)
+    campaign(c, background)
 
 

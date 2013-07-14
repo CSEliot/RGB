@@ -14,6 +14,8 @@ pygame.event.set_blocked(pygame.MOUSEBUTTONUP)
 pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
 
 
+
+
 def menu(c, background):
     # the background is the current information from the screen. It's faster
     # than grabbing it from the constants file.
@@ -41,11 +43,11 @@ def menu(c, background):
     pygame.mixer.music.set_volume(.5)
     pygame.mixer.music.play()
 
-    corners, corners_rect = load_image(c, "menu/menuBox.png")
-    play, play_rect = load_image(c, 'menu/play.png')
-    options, options_rect = load_image(c, 'menu/options.png')
-    logo, logo_rect = load_image(c, 'menu/logo.png')
-    alpha, alpha_rect = load_image(c, 'menu/alpha.png')
+    corners, __corners_rect = load_image(c, "menu/menuBox.png")
+    play,__play_rect = load_image(c, 'menu/play.png')
+    options, __options_rect = load_image(c, 'menu/options.png')
+    logo, __logo_rect = load_image(c, 'menu/logo.png')
+    alpha, __alpha_rect = load_image(c, 'menu/alpha.png')
 
     # RESIZE TO FIT THE SCREEN.
     # RESIZING VVVVVVVVVVVVVVVVV
@@ -87,7 +89,14 @@ def menu(c, background):
     OGPlay = play.copy()
     OGAlpha = alpha.copy()
     OGBackground = background.copy()
-
+    
+    # display the version ID
+    font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
+    versionID_SurfaceObj = font_renderObj
+    versionID_RectObj = versionID_SurfaceObj.get_rect()
+    versionID_RectObj.topleft = (0, 0)
+    
+    
     # --Main Game Loop//--
     going = True
     oldTime = time()
@@ -96,7 +105,7 @@ def menu(c, background):
         # rotate the background, but only 15 times/second, not 30.
         # if the frame rate is 30/sec, then rotate when its an odd frame.
         if frameCount%2 == 0:
-            bgRotAngle += .05
+            bgRotAngle += 1
             background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
             background_rect = background.get_rect()
             background_rect.center = c.CENTER
@@ -157,11 +166,7 @@ def menu(c, background):
 
 
 
-        # display the version ID
-        font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
-        versionID_SurfaceObj = font_renderObj
-        versionID_RectObj = versionID_SurfaceObj.get_rect()
-        versionID_RectObj.topleft = (0, 0)
+
 
 
         fpsList.append(c.FPSCLOCK.get_fps())
@@ -202,14 +207,8 @@ def menu(c, background):
 if __name__ == "__main__":
     c = Constants()
     background, background_rect = load_image(c, 'starBG.png')
-    #     background = pygame.Surface.convert(background)
-    # CUTTING the background to fit the DISPLAYSURFACE
-    # take the center's x value, and move it left to the end of the display's
-    # edge, so from center, minus the half value of width (CENTER_X) is the edge
-    #     xCut = background_rect.centerx - c.CENTER_X
-    #     yCut = background_rect.centery - c.CENTER_Y
-    mult = 1
-    #background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H)).copy()
+    mult = 1.5
+    background = background.subsurface((0,0),(800*mult, 600*mult) ).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
 
