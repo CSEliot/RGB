@@ -1,31 +1,32 @@
 Changelog
-
-
-beta v1.23 // xx.xx.2013		
-							*NOTE: Everything Star related will be forgotten for
-								   now. The focus is on getting circles feel 
-								   right. 
-							Added:
-								- Toggle controls by pressing K to ASD/RGB
-							Changed:
-								- Game will not be in fullscreen, for now.
-								- Circles fade when matched. 
-								- StarBackGround Rotation speed lowered.
-								- Hitting escape will bring up a menu similar to
-								  pausing.
-								- *MAJOR GAMEPLAY CHANGES*
-									- Circles will always hit the ring on time.
-									- The longer you take to match the circle's
-										color, the less points you'll gain.
-									- If matched, circles will fade out.
-							Removed:
-								- Herobrine
-							Fixed:
-								- Algorhythm modified, circle timing needs
-								testing.
-
-
-
+-------------------------
+beta v1.22b // 7.14.2013
+-------------------------
+Added:
+	- YAY we have a credits.txt now! Less illegal!
+	- Toggle controls by pressing K to ASD/RGB
+Changed:
+	- Game is automatically in debug mode, which is finished.
+	  This includes the following:
+	  	- Every time the game is run, data is written to a log file.
+	  	- Hitting escape won't bring up a pause menu, but P will.
+	- Game will not be in fullscreen, for now.
+	- Circles fade when matched. 
+	- StarBackGround Rotation speed lowered.
+	- *MAJOR GAMEPLAY CHANGES*
+		- Circles will always hit the ring on time.
+		- The longer you take to match the circle's
+			color, the less points you'll gain.
+		- If matched, circles will fade out.
+Removed:
+	- Herobrine
+Fixed: --
+Known-Issues:
+	- Circles aren't in time correctly past 3
+	seconds. 
+*NOTE: Everything Star related will be forgotten for
+	   now. The focus is on getting circles feel 
+	   right. 
 
 
 
