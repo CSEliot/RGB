@@ -10,13 +10,12 @@
 
 import pygame, sys, os, datetime, platform  # @UnusedImport
 import pgext, pygame.gfxdraw, pygame.surface  # @UnusedImport
-from numpy import *  # @UnusedWildImport
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
 import math as m  # @UnusedImport
 from constants import Constants  # @UnusedImport
 from debug import debug  # @UnusedImport
-from log import log  # @UnusedImport @Reimport
+from log import log as logger # @UnusedImport @Reimport
 from loader import load_image, load_song  # @UnusedImport
 from menu import *  # @UnusedWildImport
 from RGB_alpha import gameAlpha as alpha  # @UnresolvedImport
@@ -31,7 +30,7 @@ if platform.system() == 'Windows':
 c = Constants()
 
 if c.DEBUG:
-    logFile = log(c)
+    logFile = logger(c)
 # since constants doesn't know about 'debug', and it is where the boolean is
 # made, we'll print the 'whichDisplay' here for debugging.
 debug(c.DEBUG, (c.whichDisplay, c.screenError))
@@ -130,7 +129,7 @@ def main():
             # run credits
             # run options
     try:
-        log(c)
+        logger(c)
         logFile.close()
     except Exception:
         debug(c.DEBUG, "File never opened")
