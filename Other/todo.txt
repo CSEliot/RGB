@@ -1,14 +1,15 @@
 --Planned--
-*Beta*
-v1.3// 07.xx.2013.xx:xx - 
-						Added:
-							- Playable campaign demo, for testers.
-							- Changelog popup before game starts
-							- Volume control (options)
-						Changed:
-							- Input feedback from RGB letters to ring
-						Removed:
-
+-------------------------
+beta v1.3 // 07.xx.2013
+-------------------------	
+Added:
+	- Incomplete creative mode.
+	- Playable campaign demo, for testers.
+Changed: --
+Fixed: --
+Known-Issues:
+	- Circles aren't in time correctly past 3
+	seconds. 
 
 v2+// 03.xx.2013.xx:xx - 	
 						Added:

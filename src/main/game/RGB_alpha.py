@@ -117,7 +117,7 @@ def gameAlpha(c):
     while going:
 
     # Paint the background color, which CAN change.
-        DISPLAYSURFACE.fill(BACKGROUND_COLOR)
+        c.DISPLAYSURFACE.fill(BACKGROUND_COLOR)
 
         """RECORD UNCHANGED RGB"""
     # record unchanged r, g, b values.
@@ -184,12 +184,11 @@ def gameAlpha(c):
                 else:
                     display_sprites = True
         # if q is pressed, print output to file log.txt
-            elif event.type == KEYDOWN and event.key == K_q:
+            elif event.type == KEYDOWN and False:
                 if orig_stdout == sys.stdout:
                     rep_log = open('data/log.txt', 'a')
                     sys.stdout = rep_log
                     print "LOGGING TO FILE BEGINNING--"
-                    print "Display Info: {0}".format(which_display)
                 else:
                     print "LOGGING TO FILE ENDING--"
                     sys.stdout = orig_stdout
@@ -256,7 +255,7 @@ def gameAlpha(c):
             circle_size_list[i] += CIRCLE_GROWTH_SPEED
             if display_antialiasing == False:
                 # draw circle to the screen, grabbing each color amount: R, G, B
-                pygame.gfxdraw.filled_circle(DISPLAYSURFACE,
+                pygame.gfxdraw.filled_circle(c.DISPLAYSURFACE,
                                              CENTER_X, CENTER_Y,
                                              circle_size_list[i], (
                                              circle_color_list[i][0],
@@ -264,25 +263,25 @@ def gameAlpha(c):
                                              circle_color_list[i][2]))
             if display_antialiasing == True:
                 # an anti-aliasing ring is drawn on top of the circle edge.
-                pygame.gfxdraw.aacircle(DISPLAYSURFACE,
+                pygame.gfxdraw.aacircle(c.DISPLAYSURFACE,
                                         CENTER_X, CENTER_Y,
                                         circle_size_list[i] - 1, (
                                         circle_color_list[i][0],
                                         circle_color_list[i][1],
                                         circle_color_list[i][2]))
-                pygame.gfxdraw.filled_circle(DISPLAYSURFACE,
+                pygame.gfxdraw.filled_circle(c.DISPLAYSURFACE,
                                              CENTER_X, CENTER_Y,
                                              circle_size_list[i], (
                                              circle_color_list[i][0],
                                              circle_color_list[i][1],
                                              circle_color_list[i][2]))
-                pygame.gfxdraw.aacircle(DISPLAYSURFACE,
+                pygame.gfxdraw.aacircle(c.DISPLAYSURFACE,
                                         CENTER_X, CENTER_Y,
                                         circle_size_list[i], (
                                         circle_color_list[i][0],
                                         circle_color_list[i][1],
                                         circle_color_list[i][2]))
-                pygame.gfxdraw.aacircle(DISPLAYSURFACE,
+                pygame.gfxdraw.aacircle(c.DISPLAYSURFACE,
                                         CENTER_X, CENTER_Y,
                                         circle_size_list[i] + 1, (
                                         circle_color_list[i][0],
@@ -320,10 +319,10 @@ def gameAlpha(c):
 
         """DISPLAY SPRITE TOGGLE"""
         if display_sprites == True:
-            DISPLAYSURFACE.blit(r_SurfaceObj, r_RectObj)
-            DISPLAYSURFACE.blit(g_SurfaceObj, g_RectObj)
-            DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
-            DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
+            c.DISPLAYSURFACE.blit(r_SurfaceObj, r_RectObj)
+            c.DISPLAYSURFACE.blit(g_SurfaceObj, g_RectObj)
+            c.DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
+            c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
 
         """LOGGING output information: FPS, event info, AA, etc."""
         num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))
