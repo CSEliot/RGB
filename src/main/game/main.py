@@ -83,7 +83,7 @@ def main():
     pgext.color.setAlpha(PygLogo, fade, 1)
     c.DISPLAYSURFACE.fill((0, 0, 0))
 
-    mult = 1.5
+    mult = 1.6
     background, __background_rect = load_image(c, 'starBG.png')
     background = background.subsurface((0,0),(800*mult, 600*mult) ).copy()
     background_rect = background.get_rect()

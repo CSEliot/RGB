@@ -123,8 +123,6 @@ def campaign(c, background):
 
     # throw down splash screen before beginning
     splashInfo, splashInfo_rect = load_image(c, 'splashInfo.png')
-    # adjusting image cuz i can't make images.
-    splashInfo_rect.center = (c.CENTER_X - 50, c.CENTER_Y)
 
     # fade info in and out
     fade = 0

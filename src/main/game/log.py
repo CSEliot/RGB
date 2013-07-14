@@ -10,7 +10,7 @@ def log(c):
     # Input: the original stdout, log file
     #
     #===========================================================================
-    saveDir = os.path.join(c.DATA_DIR, 'log.txt')
+    saveDir = os.path.join(c.DATA_DIR, 'logs/log-{0}.txt'.format(c.DATE))
     # --TESTING the full-screen function//--
     #     for i in range(2):  # @UnusedVariable
     #         try:

@@ -207,7 +207,7 @@ def menu(c, background):
 if __name__ == "__main__":
     c = Constants()
     background, background_rect = load_image(c, 'starBG.png')
-    mult = 1.5
+    mult = 1.6
     background = background.subsurface((0,0),(800*mult, 600*mult) ).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
