@@ -1,18 +1,13 @@
 --Planned--
 *Beta*
-v1// 04.xx.2013.xx:xx - 
+v1.3// 07.xx.2013.xx:xx - 
 						Added:
-							- Menu Screen / Game States
-							- Music can now begin and end at user given time
-							- New command functions: make nth circle 
-										recede, control growing speeds.
+							- Playable campaign demo, for testers.
 							- Changelog popup before game starts
 							- Volume control (options)
 						Changed:
 							- Input feedback from RGB letters to ring
-							- Improved Image Quality
 						Removed:
-							- Herobrine
 
 
 v2+// 03.xx.2013.xx:xx - 	
@@ -21,7 +16,6 @@ v2+// 03.xx.2013.xx:xx -
 							- **pre-window launch settings window
 							- Choice between classic, creative, and campaign
 							- Sound Effects
-							- Title Splash Screen*
 							- ring sticking/smoothing
 							- A difficulty setting, a BPM multiplier 
 										ex: Diff:E, Diff:M, Diff:H

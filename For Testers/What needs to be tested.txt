@@ -6,5 +6,4 @@ The following things should be tested every time:
 	Possible bugs/glitches
 	Just work every crevice of the program to it's knees.
 
-New for the latest update(beta v0):
-	commands, timing, GIVE ME IDEAS!
+	

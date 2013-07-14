@@ -6,15 +6,15 @@
 #        A rhythm game based around the monitor's use of RGB pixels to create
 # images to be displayed to the screen.
 
-import pygame, sys, os, pygame.gfxdraw, pygame.surface, pgext
+import sys, os, pygame.gfxdraw, pgext
 from pygame.locals import *  # @UnusedWildImport
-from pygame.compat import geterror
 from constants import Constants
 from loader import load_image
 # from cgi import escape
 # from PIL.Image import ANTIALIAS
 # from IPython.utils.timing import clock
 import math as m
+from debug import debug
 
 pygame.init()
 
@@ -32,98 +32,39 @@ KEY:
 _______________________________________________________________________________
 '''
 
-"""FULLSCREEN ON STARTUP?"""
-FULLSCREEN_RES = True
-"""||||||||||||||||||||||"""
-
-"""SCREEN INFORMATION"""
-user_screen_data = pygame.display.Info()
-window_width = user_screen_data.current_w
-window_height = user_screen_data.current_h
-pygame.display.set_caption('RGB - The Game of COLORS by Eliot C-S')
-if FULLSCREEN_RES == True:
-    try:
-        options = (FULLSCREEN | DOUBLEBUF | HWSURFACE)
-        std_res = (window_width, window_height)
-        DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
-        which_display = "Display 1"
-    except Exception as e:
-        options = 0
-        std_res = (window_width - 100, window_height - 100)
-        DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
-        which_display = "Display 2"
-        screen_error = "Window Error {0}: {1}".format(e.errno, e.strerror)
-else:
-    try:
-        options = (DOUBLEBUF | HWSURFACE)
-        std_res = (1000, 700)
-        DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
-        which_display = "Display 3"
-    except Exception as e:
-    # If for some reason this resolution does not fit user's display, it will
-    # fit to their native resolution.
-        options = 0
-        std_res = (window_width - 100, window_height - 100)
-        DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
-        which_display = "Display 4"
-        screen_error = "Window Error {0}: {1}".format(e.errno, e.strerror)
-
-
 # --constants//--
 """_________ALL_VARIABLES_BELOW_MAY_BE_MODIFIED_FOR_EXPERIMENTING____________"""
 CIRCLE_GROWTH_SPEED = 3
-FPS = 60  # frames per second ceiling setting
+FPS = 30  # frames per second ceiling setting
 RED = pygame.color.Color('red')
 GREEN = pygame.color.Color('green')
 BLUE = pygame.color.Color('blue')
 pygame.mouse.set_visible(0)
-# ring_img = pygame.image.load("ring_gray.png")
 """_________ALL_VARIABLES_ABOVE_MAY_BE_MODIFIED_FOR_EXPERIMENTING____________"""
 WHITE = (255, 255, 255)
 BLANK = (0, 233, 0, 10)
 BLACK = (0, 0, 0)
 fpsClock = pygame.time.Clock()
 fontObj_large = pygame.font.Font('freesansbold.ttf', 32)
-fontObj_small = pygame.font.Font('freesansbold.ttf', 8)
-version_num = 'v0.1.4c'
-CENTER_X = (DISPLAYSURFACE.get_width() / 2)
-CENTER_Y = (DISPLAYSURFACE.get_height() / 2)
-# a^2 + b^2 = c^2. This calculates the longest distance from rectangle center.
-C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)
 
-Instructions = "INSTRUCTIONS: " + \
-               "\nU = turn on AA (useless) " + \
-               "\n"
-
-
-
-class Circle (pygame.sprite.Sprite):
-
-    def __init__(self):
-        self.image, self.rect = load_image('ring.png', None)
-        self.size = 0
-        self.color = (0, 0, 0)
-
-
-
-
-# --TESTING the full-screen function//--
-for i in range(2):
-    try:
-    # toggle_fullscreen returns a 1/0 based on if it worked
-        attempt_fullscreen = pygame.display.toggle_fullscreen()
-        scn_tst = "About the full-screen, there were no errors boss!"
-    except Exception as e:
-        scn_tst = "Full-screen error({0}): {1}".format(e.errno, e.strerror)
 
 # --main//--
 def gameAlpha(c):
 
+    debug(c.DEBUG, "ENTERING: Alpha")
+
+    font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
+    versionID_SurfaceObj = font_renderObj
+    versionID_RectObj = versionID_SurfaceObj.get_rect()
+    versionID_RectObj.topleft = (0, 0)
 # --Initialize Everything//--
+    CENTER_X = (c.DISPLAYSURFACE.get_width() / 2)
+    CENTER_Y = (c.DISPLAYSURFACE.get_height() / 2)
+    # a^2 + b^2 = c^2. This calculates the longest distance from rectangle center.
+    C_LENGTH = m.sqrt((CENTER_X) ** 2 + (CENTER_Y) ** 2)
     r = 0
     g = 0
     b = 0
-    angle = 0
     rotate_by = 0
     paused = False
     total_input = 0
@@ -133,15 +74,10 @@ def gameAlpha(c):
     toggle_color_g = BLACK
     toggle_color_b = BLACK
     display_sprites = True
-    # rep_log = file.__class__
     orig_stdout = sys.stdout
     current_circle_quantity = 0
     display_antialiasing = False
-#     ring_img, ring_rect = load_image('ring.png', None)
-#     box_img, box_rect = load_image('letter_box.png', None)
     BACKGROUND_COLOR = pygame.color.Color('white')  # background color
-#     box_rect.center = (CENTER_X, CENTER_Y)
-#     ring_rect.center = (CENTER_X, CENTER_Y)
     inverted = False
     rotation_speed = 2
     pygame.transform.set_smoothscale_backend('GENERIC')
@@ -177,7 +113,6 @@ def gameAlpha(c):
 
 
 # --Main Game Loop//--
-    made_background = False
     going = True
     while going:
 
@@ -255,7 +190,6 @@ def gameAlpha(c):
                     sys.stdout = rep_log
                     print "LOGGING TO FILE BEGINNING--"
                     print "Display Info: {0}".format(which_display)
-                    print attempt_fullscreen, scn_tst
                 else:
                     print "LOGGING TO FILE ENDING--"
                     sys.stdout = orig_stdout
@@ -281,8 +215,8 @@ def gameAlpha(c):
             if event.type == KEYDOWN or event.type == KEYUP:
                 print event.dict
 
-    # --function controls//--
-    # if paused is set to true, wait for p to be pressed again.
+        # --function controls//--
+        # if paused is set to true, wait for p to be pressed again.
         """PAUSE WAIT STOP"""
         while paused:
                 x_event = pygame.event.wait()
@@ -303,22 +237,12 @@ def gameAlpha(c):
                     sys.exit()
                     pygame.quit()
 
-#         """SPIN ROTATE"""
-#     # --Spin the Ring//--
-#         if inverted == True:
-#             angle += -rotate_by * 2
-#         else:
-#             angle += rotate_by * 2
-#         ring_imgNew = ring_img  # .convert()
-#         ring_imgNew = pygame.transform.rotozoom(ring_img, angle, 1)
-#         ring_rectNew = ring_imgNew.get_rect(center=(CENTER_X, CENTER_Y))
-
         """RECORD CHANGES RGB"""
-    # record the changes to R, G, and B
+        # record the changes to R, G, and B
         new_rgb = [r, g, b]
 
         """ADD NEW CIRCLES LISTS"""
-    # if the color to print has not changed, a new circle will not be made
+        # if the color to print has not changed, a new circle will not be made
         if total_input > 0:
             if not new_rgb == old_rgb:
                     circle_color_list.append(new_rgb)
@@ -326,12 +250,12 @@ def gameAlpha(c):
                     current_circle_quantity += 1
 
         """DRAW CIRCLES SCREEN DISPLAYSURFACE"""
-    # for each circle to be drawn
+        # for each circle to be drawn
         for i in range(current_circle_quantity):
-    # increase the circle size
+            # increase the circle size
             circle_size_list[i] += CIRCLE_GROWTH_SPEED
             if display_antialiasing == False:
-    # draw circle to the screen, grabbing each color amount: R, G, B
+                # draw circle to the screen, grabbing each color amount: R, G, B
                 pygame.gfxdraw.filled_circle(DISPLAYSURFACE,
                                              CENTER_X, CENTER_Y,
                                              circle_size_list[i], (
@@ -339,7 +263,7 @@ def gameAlpha(c):
                                              circle_color_list[i][1],
                                              circle_color_list[i][2]))
             if display_antialiasing == True:
-    # an anti-aliasing ring is drawn on top of the circle edge.
+                # an anti-aliasing ring is drawn on top of the circle edge.
                 pygame.gfxdraw.aacircle(DISPLAYSURFACE,
                                         CENTER_X, CENTER_Y,
                                         circle_size_list[i] - 1, (
@@ -369,11 +293,11 @@ def gameAlpha(c):
 
 
         """POP LARGE CIRCLES"""
-    # get rid of big circles
+        # get rid of big circles
         if len(circle_size_list) >= 1:
             if circle_size_list[0] >= C_LENGTH:
                 circle_size_list.pop(0)
-    # paint the background to the color of the last circle
+                # paint the background to the color of the last circle
                 BACKGROUND_COLOR = circle_color_list[0]
                 circle_color_list.pop(0)
                 current_circle_quantity += -1
@@ -391,12 +315,6 @@ def gameAlpha(c):
         b_RectObj = b_SurfaceObj.get_rect()
         b_RectObj.center = (CENTER_X + 50, (CENTER_Y * 2) - 25)
 
-    # display the version ID
-        font_renderObj = fontObj_small.render(version_num, False, BLACK, WHITE)
-        versionID_SurfaceObj = font_renderObj
-        versionID_RectObj = versionID_SurfaceObj.get_rect()
-        versionID_RectObj.topleft = (0, 0)
-
 
 
 
@@ -406,15 +324,6 @@ def gameAlpha(c):
             DISPLAYSURFACE.blit(g_SurfaceObj, g_RectObj)
             DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
             DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
-#             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-#             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-#             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-#             DISPLAYSURFACE.blit(ring_imgNew, ring_rectNew)
-#             DISPLAYSURFACE.blit(box_img, r_RectObj)
-#             DISPLAYSURFACE.blit(box_img, g_RectObj)
-#             DISPLAYSURFACE.blit(box_img, b_RectObj)
-            # pygame.draw.circle(DISPLAYSURFACE, BLACK, ring_imgNew.get_rect().center, 5, 2)
-            print pygame.transform.get_smoothscale_backend()
 
         """LOGGING output information: FPS, event info, AA, etc."""
         num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))

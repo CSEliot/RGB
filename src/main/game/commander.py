@@ -34,7 +34,7 @@ def commander(c):
                 print UserWarning
                 sys.exit(UserWarning)
             # calculate the global wait times.
-            # (how many frames until the next action is committed.
+            # (how many frames until the next action is committed.)
             cWait = c.FPS / (bpm / 60.0)
             fWait = cWait
             # calculate the move speed of circle and star

@@ -4,6 +4,7 @@ from pygame.compat import geterror  # @UnusedImport
 from debug import debug  # @Reimport
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
+os.environ['SDL_VIDEO_CENTERED'] = '1' # centers the window
 pygame.init()
 
 
@@ -11,7 +12,6 @@ pygame.init()
 user_screen_data = pygame.display.Info()
 window_width = user_screen_data.current_w
 window_height = user_screen_data.current_h
-pygame.display.set_caption('RGB - Beta v4')
 
 def make_gamescreen(fullBool):
     # Making a screen, w/ 4 different possible outcomes.
@@ -42,8 +42,8 @@ def make_gamescreen(fullBool):
                           )
     else:
         try:
-            options = 0
-            std_res = (800, 600)
+            options = (DOUBLEBUF | HWSURFACE)
+            std_res = (800, 700)
             DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
             whichDisplay = "Display 3"
             screenError = "Window Error: None"

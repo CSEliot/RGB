@@ -1,6 +1,13 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+
+creative:
+for RGB, have a status comparing the 3 colors. if there is a change, send a new 
+action through, and if RGB is (0,0,0), then, before the next action, create a
+Wait action. For the stars . . .
+
+
 Previewing circles: much like in other rhythm games, I want to give the player
 time to react to incoming circles, so I think it'd be best to have them spawn
 and then grow slowly, exponentially, and achieve the same time.
