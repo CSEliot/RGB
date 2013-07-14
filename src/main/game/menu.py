@@ -104,8 +104,8 @@ def menu(c, background):
         """ROTATION TESTING"""
         # rotate the background, but only 15 times/second, not 30.
         # if the frame rate is 30/sec, then rotate when its an odd frame.
-        if frameCount%2 == 0:
-            bgRotAngle += 1
+        if frameCount%3 == 0:
+            bgRotAngle += .03
             background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
             background_rect = background.get_rect()
             background_rect.center = c.CENTER
@@ -189,7 +189,7 @@ def menu(c, background):
         if entered:
             sleep(1)
             return selected
-        c.DISPLAYSURFACE.fill((255,255,255))
+        c.DISPLAYSURFACE.fill((0,0,0))
         c.DISPLAYSURFACE.blit(background, background_rect)
         c.DISPLAYSURFACE.blit(corners, corners_rect)
         c.DISPLAYSURFACE.blit(logo, logo_rect)
