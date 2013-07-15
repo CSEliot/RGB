@@ -1,9 +1,7 @@
-NOTE: before testing, PLEASE press Q to begin recording to log.txt. 
-It MUST be pressed (Q) again to turn off the recording and save to file.
-
-The following things should be tested every time:
+Version 1.22d:
 	Frame Rate
 	Possible bugs/glitches
-	Just work every crevice of the program to it's knees.
+	Gameplay/concept feedback, how do you like the look? Do you like the pause?
+	critique bryan's art and let him know what you think.
 
 	
