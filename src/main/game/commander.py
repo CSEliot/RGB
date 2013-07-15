@@ -30,8 +30,7 @@ def commander(c):
                 bpm = action.replace('BPM', '')
                 bpm = float(bpm)
             except Exception:
-                raise UserWarning, "Invalid BPM possible. See commands.txt"
-                print UserWarning
+                print "Invalid BPM possible. See commands.txt"
                 sys.exit(UserWarning)
             # calculate the global wait times.
             # (how many frames until the next action is committed.)
@@ -50,8 +49,7 @@ def commander(c):
             if action == 'Play:':
                 commandList.append(['P'])
             else:
-                raise UserWarning, "Invalid Play action given. See commands.txt"
-                print UserWarning
+                print "Invalid Play action given. See commands.txt"
                 sys.exit(UserWarning)
         elif action[0] == 'C':
             color = ''
@@ -63,8 +61,7 @@ def commander(c):
                     cSpeed = (c.RING_SIZE / c.FPS) / cSpeed
                     debug(c.DEBUG, cSpeed)
                 except Exception:
-                    raise UserWarning, "Invalid CSP given. See commands.txt"
-                    print UserWarning
+                    print "Invalid CSP given. See commands.txt"
                     sys.exit(UserWarning)
                 commandList.append(['CS', cSpeed])
             # if it does not begin with CS, that means it is for making a circle
@@ -85,8 +82,7 @@ def commander(c):
                         cSpeed = float(cSpeed)
                         cSpeed = (c.RING_SIZE / c.FPS) / cSpeed
                     except Exception:
-                        raise UserWarning, "Invalid CSpeed given. See commands.txt"
-                        print UserWarning
+                        print "Invalid CSpeed given. See commands.txt"
                         sys.exit(UserWarning)
                 # grab the right colors!
                 R, G, B = 0, 0, 0
@@ -98,8 +94,7 @@ def commander(c):
                 if color.find('B') != -1:
                     B = 255
                 if (R, G, B) == (0, 0, 0):
-                    raise UserWarning, "No colors found. See commands.txt"
-                    print UserWarning
+                    print "No colors found. See commands.txt"
                     sys.exit(UserWarning)
                 commandList.append(['C', (R, G, B), cSpeed])
         elif action[0] == 'F':
@@ -110,8 +105,7 @@ def commander(c):
                     fSpeed = float(fSpeed)
                     fSpeed = (c.RING_RADIUS / c.FPS) / fSpeed
                 except Exception:
-                    raise UserWarning, "Invalid FSP given. See commands.txt"
-                    print UserWarning
+                    print "Invalid FSP given. See commands.txt"
                     sys.exit(UserWarning)
                 commandList.append(['FS', fSpeed])
             else:
@@ -125,8 +119,7 @@ def commander(c):
                         fSpeed = float(fSpeed)
                         fSpeed = (c.RING_RADIUS / c.FPS) / fSpeed
                     except Exception:
-                        raise UserWarning, "Invalid  Fx/# given. See commands.txt"
-                        print UserWarning
+                        print "Invalid  Fx/# given. See commands.txt"
                         sys.exit(UserWarning)
                     commandList.append(['F', fAngle, fSpeed])
                 else:
@@ -134,8 +127,7 @@ def commander(c):
                     try:
                         fAngle = float(fAngle)
                     except Exception:
-                        raise UserWarning, "Invalid  Fx given. See commands.txt"
-                        print UserWarning
+                        print "Invalid  Fx given. See commands.txt"
                         sys.exit(UserWarning)
                     commandList.append(['F', fAngle, ''])
         elif action[0] == 'W':
@@ -146,8 +138,7 @@ def commander(c):
                     # how many frames before the next action occurs
                     waitTime = c.FPS * float(waitTime)
                 except Exception:
-                    raise UserWarning, "Invalid W# given. See commands.txt"
-                    print UserWarning
+                    print "Invalid W# given. See commands.txt"
                     sys.exit(UserWarning)
                 commandList.append(['W', waitTime])
             elif action[1] == 'G':
@@ -157,8 +148,7 @@ def commander(c):
                 try:
                     gWait = c.FPS * float(gWait)
                 except Exception:
-                    raise UserWarning, "Invalid WG# given. See commands.txt"
-                    print UserWarning
+                    print "Invalid WG# given. See commands.txt"
                     sys.exit(UserWarning)
                 commandList.append(['WG', gWait])
             elif action[1] == 'C':
@@ -168,8 +158,7 @@ def commander(c):
                 try:
                     cWait = c.FPS * float(cWait)
                 except Exception:
-                    raise UserWarning, "Invalid WC# given. See commands.txt"
-                    print UserWarning
+                    print "Invalid WC# given. See commands.txt"
                     sys.exit(UserWarning)
                 commandList.append(['WC', cWait])
             elif action[1] == 'F':
@@ -179,16 +168,14 @@ def commander(c):
                 try:
                     fWait = c.FPS * float(fWait)
                 except Exception:
-                    raise UserWarning, "Invalid WF# given. See commands.txt"
-                    print UserWarning
+                    print "Invalid WF# given. See commands.txt"
                     sys.exit(UserWarning)
                 commandList.append(['WF', fWait])
         elif action[0] == ':':
             if action == ':Stop':
                 commandList.append(['S'])
             else:
-                raise UserWarning, "Invalid Stop given. See commands.txt"
-                print UserWarning
+                print "Invalid Stop given. See commands.txt"
                 sys.exit(UserWarning)
     debug(c.DEBUG, commandList)
     return commandList

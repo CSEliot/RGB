@@ -1,14 +1,15 @@
 Changelog
 -------------------------
-beta v1.22c // 7.14.2013
+beta v1.22d // 7.15.2013
 -------------------------
 Added:
-	- New images!
+	- New ring image!
 Changed:
-	- background slightly larger.
-	- log filename now reflects date!! Multiple log filessssss (in folder)!
+	- command.txt errors now print more sensibly, log will have the answer!
+	- campaign has 20 seconds of gameplay!
 Removed:
 Fixed: 
+	- Log folder not created.
 Known-Issues:
 	- Circles aren't in time correctly past 3
 	seconds. 
