@@ -67,7 +67,7 @@ def campaign(c, background):
     ring.add(ringSprite, allSprites)
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
     scoreboard.add(scoreSprite, allSprites)
-    box_img, _box_rect = load_image(c, 'letter_box.png')
+    box_img, _box_rect = load_image(c, 'campaign/letter_box.png')
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     OGBackground = background.copy()
@@ -122,7 +122,7 @@ def campaign(c, background):
 
 
     # throw down splash screen before beginning
-    splashInfo, splashInfo_rect = load_image(c, 'splashInfo.png')
+    splashInfo, splashInfo_rect = load_image(c, 'campaign/splashInfo.png')
 
     # fade info in and out
     fade = 0

@@ -7,9 +7,9 @@ class Star (pygame.sprite.Sprite):
 
     def __init__(self, c, CENTER, speed, angle):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_image(c, 'dstar.png')
+        self.image, self.rect = load_image(c, 'campaign/unlit_star.png')
         self.OGImage = self.image
-        self.dimage, _ = load_image(c, 'star.png')
+        self.dimage, _ = load_image(c, 'campaign/lit_star.png')
         self.speed = speed
         self.radius = 40
         self.OGPos = CENTER

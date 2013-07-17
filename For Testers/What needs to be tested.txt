@@ -1,7 +1,7 @@
-Version 1.22d:
+Version 1.23:
 	Frame Rate
 	Possible bugs/glitches
 	Gameplay/concept feedback, how do you like the look? Do you like the pause?
 	critique bryan's art and let him know what you think.
-
+	critique faisal's music and let him know what you think.
 	
