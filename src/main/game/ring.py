@@ -7,7 +7,7 @@ class Ring(pygame.sprite.Sprite):
 
     def __init__(self, c, CENTER):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_image(c, 'clean ring.png')
+        self.image, self.rect = load_image(c, 'campaign/ring.png')
         self.OGImage = self.image
         self.OGCenter = CENTER
         self.rect.center = self.OGCenter
