@@ -6,7 +6,8 @@ from debug import debug  # @Reimport
 pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
 os.environ['SDL_VIDEO_CENTERED'] = '1' # centers the window
 pygame.init()
-
+#ignore mouse motion input
+pygame.event.set_blocked((pygame.MOUSEMOTION, pygame.ACTIVEEVENT))
 
 """SCREEN INFORMATION"""
 user_screen_data = pygame.display.Info()
@@ -94,3 +95,20 @@ def load_song(c, name):
         debug(c.DEBUG, ('COULD NOT LOAD MUSIC: ', fullname))
         raise SystemExit(str(geterror()))
     return
+
+#this function only gets used in the Constants class, because Constants can't
+#call itself.
+def load_image_C(gfx_dir, DEBUG, name, colorkey=None):
+    fullname = os.path.join(gfx_dir, name)
+    try:
+        image = pygame.image.load(fullname)
+    except pygame.error:
+        debug(DEBUG, ('Cannot load image:', fullname))
+        raise SystemExit(str(geterror()))
+    # image = image.convert()
+    if colorkey is not None:
+        if colorkey is -1:
+            colorkey = image.get_at((0, 0))
+        image.set_colorkey(colorkey, RLEACCEL)
+        return image, image.get_rect()
+    return image.convert_alpha(), image.get_rect()

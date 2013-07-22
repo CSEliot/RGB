@@ -1,7 +1,7 @@
 import pygame, sys, os, datetime, platform  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
 import math as m  # @UnusedImport
-from loader import make_gamescreen
+from loader import make_gamescreen, load_image_C
 import cPickle
 class Constants(object):
     '''
@@ -53,7 +53,7 @@ class Constants(object):
         self.FPSCLOCK = pygame.time.Clock()
         self.FONT_LARGE = pygame.font.SysFont('arial', 32, True)
         self.FONT_SMALL = pygame.font.SysFont('arial', 16)
-        self.VERSION = 'betaV1.22d'
+        self.VERSION = 'betaV1.23'
         self.DISPLAY_W = self.DISPLAYSURFACE.get_width()
         self.CENTER_X = (self.DISPLAY_W / 2)
         self.DISPLAY_H = self.DISPLAYSURFACE.get_height()
@@ -64,8 +64,20 @@ class Constants(object):
         self.DATE = datetime.date.timetuple(datetime.date.today())[0] , \
                     datetime.date.timetuple(datetime.date.today())[1] , \
                     datetime.date.timetuple(datetime.date.today())[2]
-
-
+        # loading images
+        self.RING_IMG, self.RING_RECT = \
+            load_image_C(self.GFX_DIR,self.DEBUG, 'campaign/ring.png')
+        self.CIRC_IMG, self.CIRC_RECT = \
+            load_image_C(self.GFX_DIR,self.DEBUG, 'campaign/circle.png')
+        self.STAR_LIT_IMG, self.STAR_RECT = \
+            load_image_C(self.GFX_DIR,self.DEBUG, 'campaign/lit_star.png')
+        self.STAR_UNLIT_IMG, self.STAR_RECT = \
+            load_image_C(self.GFX_DIR,self.DEBUG, 'campaign/unlit_star.png')
+        self.RING_MASK = pygame.mask.from_surface(self.RING_IMG, 255)
+        self.STAR_MASK, self.__RECT = \
+            load_image_C(self.GFX_DIR,self.DEBUG, 'masks/star_mask.png')
+        # eventually, the background's spin will be constant, and always there.
+        self.BgAngle = 0
     def get_OPTIONS(self):
         optFile = open(os.path.join(self.DATA_DIR, 'options.dat'), 'r')
         optList = cPickle.load(optFile)
