@@ -1,17 +1,32 @@
 Changelog
 -------------------------
-beta v1.23 // 7.15.2013
+beta v1.23 // 7.22.2013
 -------------------------
 Added:
-	- New ring image!
+	- Credits.png before quitting.
+	- In commands.txt, new "JumpTo" action has been added.
+	- Menu rearranged based on Elwin's feedback.
 Changed:
-	- Image files are better Organized and named
+	- Points changes made based on Elwin's Feedback.
+	- Circles will disappear instead of staying, you miss it, too bad.
+	- Using collision mask for ring and star now.
+	- README.txt updated.
+	- Pause pixelize effect slowed by 0.03 per frame, based on Elwin's feedback.
+	- background doesn't rotate in campaign mode. Does this increase framerate.
 Removed:
 Fixed: 
+	- Stars not colliding with the ring.
 Known-Issues:
 	- Circles aren't in time correctly past 3
 	seconds. 
-
+	- Options menu still not implemented.
+Intentional:
+	- When the game is in debug mode (debug mode is default), hitting ESC
+		in campaign mode will quit. But normally, it brings up pause menu.
+	- Creative mode isn't completed, alpha mode is there for now.
+	- commands.txt will be updated with more playable commands once creative
+		mode is finished.
+	- Loudness.
 
 
 

@@ -58,6 +58,7 @@ def campaign(c, background):
     buttonSprites = pygame.sprite.Group()  # @UnusedVariable
     starSprites = pygame.sprite.LayeredUpdates()
     caughtSprite = pygame.sprite.GroupSingle()
+    dieingSprites = pygame.sprite.GroupSingle()
     scoreSprite = pygame.sprite.GroupSingle()
     pBox = playBox()
     playList = commander(c)
@@ -97,7 +98,7 @@ def campaign(c, background):
     upHold = False
     downHold = False
     quitGame = False  # if user returns a True from pause, we quit game, etc.
-    maxPoints = 20 # goes down every second that circle is not matched
+    startTime = 0
 
     """BUTTON / SPRITE RENDERING"""
     r_letter = c.FONT_LARGE.render('R', True, c.RED)
@@ -147,7 +148,6 @@ def campaign(c, background):
     pgext.color.setAlpha(splashInfo, fade, 1)
     load_song(c, "It's Melting.ogg")  # stops other music from playing too
 
-
     # --Main Game Loop//--
     going = True
     while going:
@@ -159,12 +159,14 @@ def campaign(c, background):
         """ROTATION TESTING"""
         # rotate the background, but only 15 times/second, not 30.
         # if the frame rate is 30/sec, then rotate when its an odd frame.
-        if frameCount%3 == 0:
-            bgRotAngle += .03
-            background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
-            background_rect = background.get_rect()
-            background_rect.center = c.CENTER
-        frameCount += 1
+        #=======================================================================
+        # if frameCount%5 == 0:
+        #     bgRotAngle += .03
+        #     background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
+        #     background_rect = background.get_rect()
+        #     background_rect.center = c.CENTER
+        # frameCount += 1
+        #=======================================================================
 
 
         """LOGGING output information: FPS, event info, AA, etc."""
@@ -182,14 +184,17 @@ def campaign(c, background):
         # for every new action, if the wait was long enough, perform the action
         if not waiting:
             action = playIt.next()
+            
             if action[0] == 'B':
                 # if the command is BPM, set the proper variables.
                 pBox.cWait = action[1]
                 pBox.fWait = action[2]
                 pBox.cSpeed = action[3]
                 pBox.fSpeed = action[4]
+            elif action[0] == 'J':
+                startTime = action[1]
             elif action[0] == 'P':
-                pygame.mixer.music.play()
+                pygame.mixer.music.play(1, startTime)
             # if the action is to spawn a circle/star, gotta que it up.
             elif action[0] == 'C' or action[0] == 'F':
                 waiting = True
@@ -214,6 +219,7 @@ def campaign(c, background):
                     pBox.fWait = action[1]
             elif action[0] == 'S':
                 pygame.mixer.music.stop()
+                going = False
         if waiting:
             if action[0] == 'C':
                 if mainFrame >= pBox.cWait or firstAction:
@@ -379,30 +385,47 @@ def campaign(c, background):
                 # catchable becomes true when the circle comes in contact 
                 # with the ring.
                 debug(c.DEBUG, (circle.color, (r, g, b)))
-                circle.remove(circSprites)
                 circle.add(caughtSprite)
+                circle.remove(circSprites)
                 circle.catch()
+                totalCircTime = datetime.datetime.now() - circMade
 
         """REPEATED POINTS HOLDING COLORS CAUGHT"""
         # every .1 seconds should add or remove points based on accuracy
         if not (caughtSprite.sprite is None):
             for circle in caughtSprite.sprites():
                 if circle.color == (r, g, b) and not(circle.dieing):
-                    totalCircTime = datetime.datetime.now() - circMade 
                     debug(c.DEBUG, ("CIRCTIME: ", totalCircTime.total_seconds()))
-                    scoreboard.addScore(maxPoints)
-                    maxPoints = 20
-                    circle.death()
-                elif not(circle.dieing):
-                    maxPoints -= .5
+                    #if the circle is more than 1 color, than we give bonus
+                    if circle.color[0]+circle.color[1]+circle.color[2] >255:
+                        scoreboard.addScore(40)
+                    else:
+                        scoreboard.addScore(20)
+                    circle.remove(caughtSprite)
+                    circle.add(dieingSprites)
+                else:
+                    circle.remove(caughtSprite)
+                    circle.add(dieingSprites)
+                    scoreboard.addScore(-10)
 
 
+        # a circle begins in circSprites, then hits the ring, gets caught, and
+        # goes into "caughtSprite" group. From there, it tries to match with
+        # the user's input, then dies and goes into the "dieingCircs" group.
+        # the purpose of the last group is just to have it animate the fading
+        # or "dieing" sequence before disappearing.
+        for circle in dieingSprites.sprites():
+            circle.death()
 
 
 
         """DELETE FREE STARS SHOOTING"""
         for star in starSprites.sprites():
-            if star.shooting:
+            if star.travDist >= 255:
+                if not(ringSprite.sprite.angle == star.angleDeg):
+                    star.kill()
+                    scoreboard.addScore(-30)
+            elif star.shooting:
                 debug(c.DEBUG, 'I AM SHOOTING1!')
                 # if the star has gone off the screen in the x or y direction
                 # kill it and add points!!
@@ -414,20 +437,19 @@ def campaign(c, background):
                     star.kill()
                     debug(c.DEBUG, 'KILLED A STAR')
                     scoreboard.addScore(50)
-            debug(c.DEBUG, ('Stars #: ', len(starSprites.sprites())))
+        debug(c.DEBUG, ('Stars #: ', len(starSprites.sprites())))
 
 
         """KILL STARS COLLISION DETECTION"""
-        killGroup = pygame.sprite.spritecollide(ring, starSprites, False, \
-                                    pygame.sprite.collide_mask)
-        for sprite in killGroup:
-            scoreboard.addScore(-300)
-            sprite.kill()
+#         for sprite in killGroup:
+#             scoreboard.addScore(-30)
+#             sprite.kill()
 
 
         """DISPLAY SPRITE TOGGLE"""
         allSprites.update()
         if display_sprites == True:
+            dieingSprites.draw(c.DISPLAYSURFACE)
             caughtSprite.draw(c.DISPLAYSURFACE)
             circSprites.draw(c.DISPLAYSURFACE)
             starSprites.draw(c.DISPLAYSURFACE)

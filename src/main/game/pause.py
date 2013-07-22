@@ -36,7 +36,7 @@ def pauseScreen(c):
         c.DISPLAYSURFACE.blit(OGDisplay, OGRect)
         pgext.filters.pixelize(c.DISPLAYSURFACE, pixelize)
         pygame.display.flip()
-        sleep(0.05)#
+        sleep(0.02)#
     OGDisplay = c.DISPLAYSURFACE.copy()
     pygame.display.flip()
     

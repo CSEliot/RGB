@@ -1,7 +1,6 @@
 import pygame, pgext  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
 from debug import debug
-from loader import load_image
 from math import *
 
 class Circle (pygame.sprite.Sprite):
@@ -12,7 +11,7 @@ class Circle (pygame.sprite.Sprite):
         self.speed = speed
         self.radius = 300  # for collision detection w/ stars . . . wtf?
         self.color = color # of the form: (r, g, b)
-        self.image, self.rect = load_image(c, 'campaign/circle.png')
+        self.image, self.rect = c.CIRC_IMG.copy(), c.CIRC_RECT
         self.OGCenter = CENTER
         self.rect.center = self.OGCenter
         self._layer = layer
@@ -24,7 +23,7 @@ class Circle (pygame.sprite.Sprite):
         self.catchable = False
         debug(c.DEBUG, ("{0}'s speed: {1}".format(self.color, self.speed)))
         self.dieing = False
-
+        
     def update(self):
         if not(self.captured):
             self.size += int(round(self.speed))

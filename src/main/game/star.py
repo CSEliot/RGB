@@ -1,20 +1,22 @@
 import pygame, pgext  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
-from loader import load_image
 import math
 
 class Star (pygame.sprite.Sprite):
 
     def __init__(self, c, CENTER, speed, angle):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_image(c, 'campaign/unlit_star.png')
+        self.image, self.rect = c.STAR_UNLIT_IMG.copy(), c.STAR_RECT
         self.OGImage = self.image
-        self.dimage, _ = load_image(c, 'campaign/lit_star.png')
+        self.dimage, _ = c.STAR_LIT_IMG.copy(), None
         self.speed = speed
         self.radius = 40
         self.OGPos = CENTER
         self.pos = CENTER
         self.rect.center = self.pos
+        # angle in degrees
+        self.angleDeg = angle
+        # angle in radians
         self.angle = (angle * 1.0) * (3.141 / 180)
         self.spinBy = 10
         self.spinAngle = 0
@@ -27,7 +29,7 @@ class Star (pygame.sprite.Sprite):
         xPos = self.speed * math.cos(self.angle)
         yPos = self.speed * math.sin(self.angle)
         # add them to the new self.pos, and reassign the new .rect placement
-        self.pos = (self.pos[0] + xPos, self.pos[1] + yPos)
+        self.pos = (self.pos[0] + xPos, self.pos[1] - yPos)
         # spin the star
         self.spinAngle += self.spinBy
         self.image = pygame.transform.rotozoom(self.OGImage, self.spinAngle, 1)
@@ -43,5 +45,5 @@ class Star (pygame.sprite.Sprite):
     def shoot(self, shooting):
         if shooting:
             self.OGImage = self.dimage
-            self.speed = self.speed + 10
+            self.speed = self.speed + 20
             self.spinBy = self.spinBy + 10

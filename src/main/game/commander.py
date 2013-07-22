@@ -24,6 +24,7 @@ def commander(c):
     commands = commands.split()
     commandList = []
     for action in commands:
+        # the action[0] just checks the first letter in the action.
         # Option 1: set the BPM
         if action[0] == 'B':
             try:
@@ -176,6 +177,17 @@ def commander(c):
                 commandList.append(['S'])
             else:
                 print "Invalid Stop given. See commands.txt"
+                sys.exit(UserWarning)
+        elif action[0] == 'J':
+            if "JumpTo," in action:
+                try:
+                    startTime = float(action.replace('JumpTo,', ''))
+                except Exception:
+                    print "Invalid start time given. Must be in seconds. See commands.txt"
+                    sys.exit(UserWarning)
+                commandList.append(['J', startTime])
+            else:
+                print "Invalid start time given. Must be 'JumpTo,X'. See commands.txt"
                 sys.exit(UserWarning)
     debug(c.DEBUG, commandList)
     return commandList

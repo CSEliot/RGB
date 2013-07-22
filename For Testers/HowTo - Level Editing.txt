@@ -17,6 +17,8 @@ Here are the commands:
 Play:      	-The song will begin playing. Note: Give BPM and other parameters
 					before beginning the song, but there is no wait time before 
 					the first song. see example. 
+JumpTo,#    -The number you choose is how many seconds in you want the song
+					to start, mostly for testing purposes. 
 BPM#		-Will set circle and star speed to match beats per minutes of song.
 					use http://songbpm.com/ to find a song's bpm.
 					BPM will automatically arrange the WSP#, CSP# and FSP#.

@@ -17,7 +17,8 @@ from constants import Constants  # @UnusedImport
 from debug import debug  # @UnusedImport
 from log import log as logger # @UnusedImport @Reimport
 from loader import load_image, load_song  # @UnusedImport
-from menu import *  # @UnusedWildImport
+from mainMenu import *  # @UnusedWildImport
+from modeMenu import modeMenu 
 from RGB_alpha import gameAlpha as alpha  # @UnresolvedImport
 from time import sleep  # @UnusedImport @Reimport
 from campaign import campaign
@@ -61,7 +62,8 @@ def main():
     versionID_RectObj.topleft = (0, 0)
 
 
-    # TESTING FILE CHANGES FROM VMWARE PART 2
+    
+
     PygLogo, __PygLogo_rect = load_image(c, 'pygame_logo.png')
     PygLogo = pygame.transform.smoothscale(PygLogo, (600, 350))
     PygLogo_rect = PygLogo.get_rect()
@@ -110,16 +112,38 @@ def main():
     mode1 = 1  # the menu option for campaign mode
     mode2 = 2
     mode3 = 3
+    gameModeSelecting = False
 
+
+    load_song(c, 'menuV3.ogg')
+    pygame.mixer.music.play()
+    
     playing = True
     while playing:
-        selected = menu(c, background)
+        selected = mainMenu(c, background)
+        # menu will return a list, [gamemode,option,quit]. if it's gamemode
+        # we have to look at the second number in the list.
         if selected == mode1:
-            campaign(c, background)
+            gameModeSelecting = True
         elif selected == mode2:
             pass
         elif selected == mode3:
-            alpha(c)
+            playing = False
+        elif selected == "QUIT":
+            playing = False
+        while gameModeSelecting:
+            gameMode = modeMenu(c, background)
+            if gameMode == 1:
+                campaign(c, background)
+                load_song(c, 'menuV3.ogg')
+                pygame.mixer.music.play()
+            elif gameMode == 2:
+                alpha(c)
+                #creative(c, background)
+            elif gameMode == 3:
+                gameModeSelecting = False
+            elif gameMode == "QUIT":
+                gameModeSelecting = False
     # parent loop, for the whole game. Keep looping till proper option given
         # call the menu function, an option is what it will return.
         # if option is not quit, do one of the following:
@@ -128,11 +152,30 @@ def main():
             # run game mode 3: alpha
             # run credits
             # run options
+            
+    credits, __credits_rect = load_image(c, 'credits/Credits.png')
+#     credits = pygame.transform.smoothscale(credits, (c.DISPLAY_W, c.DISPLAY_H))
+    credits_rect = credits.get_rect()
+    credits_rect.center = c.CENTER
+    wait = 0
+    pygame.event.clear()
+    c.DISPLAYSURFACE.blit(credits, credits_rect)
+    c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
+    pygame.display.flip()
+    for wait in range(10):
+        sleep(0.1)
+        if pygame.event.poll().type != NOEVENT:
+            break
+            
+            
     try:
         logger(c)
         logFile.close()
     except Exception:
         debug(c.DEBUG, "File never opened")
 
+        
+    pygame.quit()
+    sys.exit()
 if __name__ == '__main__':
     main()
