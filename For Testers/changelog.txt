@@ -1,16 +1,18 @@
 Changelog
 -------------------------
-beta v1.23a // 7.22.2013
+beta v1.23b // 7.23.2013
 -------------------------
 Added:
-	- More verbose debug messaging for campaign.
 Changed:
+	- Points do not go negative.
+	- Credits is a bit neater. 
 Removed:
 Fixed: 
-	- Game crashing in campaign mode.
-Known-Issues:
 	- Stars causing negative points.	
+Known-Issues:
+	- Circles move too quickly past 3 seconds.
 Intentional:
+	- current commands.txt is just testing stars.
 	- When the game is in debug mode (debug mode is default), hitting ESC
 		in campaign mode will quit. But normally, it brings up pause menu.
 	- Creative mode isn't completed, alpha mode is there for now.

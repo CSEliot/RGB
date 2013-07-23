@@ -14,10 +14,13 @@ class Scoreboard(pygame.sprite.Sprite):
         self.DISPLAY_W = DISPLAY_W
         self.DISPLAY_H = DISPLAY_H
         self.rect.center = (self.DISPLAY_W / 2, self.DISPLAY_H / 2)
-       # self.rect.topright = (self.DISPLAY_W - 50, 50)
+        # self.rect.topright = (self.DISPLAY_W - 50, 50)
 
     def addScore(self, score):
-        self.score += score
+        # we prevent the score from going negative.
+        if self.score + score > 0:
+            # though it's +, it could be plus a negative.
+            self.score += score
         self.scoreString = str(self.score)
 
     def update(self):

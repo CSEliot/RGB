@@ -423,11 +423,14 @@ def campaign(c, background):
 
         """DELETE FREE STARS SHOOTING"""
         for star in starSprites.sprites():
-            if star.travDist >= 255:
+            debug(c.DEBUG, ("Ring Angle: ", ringSprite.sprite.angle) )
+            debug(c.DEBUG, ("Star Angle: ", star.angleDeg))
+            
+            if star.travDist >= (264-star.speed) and not(star.shooting):
                 if not(ringSprite.sprite.angle == star.angleDeg):
                     star.kill()
                     scoreboard.addScore(-30)
-            elif star.shooting:
+            if star.shooting:
                 debug(c.DEBUG, 'I AM SHOOTING1!')
                 # if the star has gone off the screen in the x or y direction
                 # kill it and add points!!
@@ -440,13 +443,6 @@ def campaign(c, background):
                     debug(c.DEBUG, 'KILLED A STAR')
                     scoreboard.addScore(50)
         debug(c.DEBUG, ('Stars #: ', len(starSprites.sprites())))
-
-
-        """KILL STARS COLLISION DETECTION"""
-#         for sprite in killGroup:
-#             scoreboard.addScore(-30)
-#             sprite.kill()
-
 
         """DISPLAY SPRITE TOGGLE"""
         allSprites.update()
