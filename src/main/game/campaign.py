@@ -120,7 +120,7 @@ def campaign(c, background):
     box_rectB = b_letter_rect
 
 
-
+    debug(c.DEBUG, "Variable and object instantiating successful.")
 
     # throw down splash screen before beginning
     splashInfo, splashInfo_rect = load_image(c, 'campaign/splashInfo.png')
@@ -148,6 +148,8 @@ def campaign(c, background):
     pgext.color.setAlpha(splashInfo, fade, 1)
     load_song(c, "It's Melting.ogg")  # stops other music from playing too
 
+
+    debug(c.DEBUG, "Song loading successful, main game loop about to begin.")
     # --Main Game Loop//--
     going = True
     while going:
