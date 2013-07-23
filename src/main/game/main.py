@@ -155,10 +155,11 @@ def main():
             
     credits, __credits_rect = load_image(c, 'credits/Credits.png')
 #     credits = pygame.transform.smoothscale(credits, (c.DISPLAY_W, c.DISPLAY_H))
-    credits_rect = credits.get_rect()
-    credits_rect.center = c.CENTER
     wait = 0
     pygame.event.clear()
+    credits = pygame.transform.smoothscale(credits, (500,500))
+    credits_rect = credits.get_rect()
+    credits_rect.center = c.CENTER
     c.DISPLAYSURFACE.blit(credits, credits_rect)
     c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
     pygame.display.flip()
