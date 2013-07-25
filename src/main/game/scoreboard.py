@@ -21,6 +21,8 @@ class Scoreboard(pygame.sprite.Sprite):
         if self.score + score > 0:
             # though it's +, it could be plus a negative.
             self.score += score
+        else:
+            self.score = 0
         self.scoreString = str(self.score)
 
     def update(self):

@@ -39,6 +39,15 @@ class playBox():
         self.isFirst = True
         self.layer = 0
 
+def rotateBackground(background, counter, rotationAngle):
+    """ROTATION TESTING"""
+    # rotate the background, but only 15 times/second, not 30.
+    # if the frame rate is 30/sec, then rotate when its an odd frame.
+    rotationAngle += .03
+    background = pygame.transform.rotozoom(background, rotationAngle%360 , 1)
+    background_rect = background.get_rect()
+    background_rect.center = c.CENTER
+    return background, background_rect, rotationAngle
 
 def campaign(c, background):
     
@@ -75,11 +84,10 @@ def campaign(c, background):
     logging = False
 
     '''INSTANTIATING OTHER VARIABLES'''
-    frameCount = 0      # tracks the number of frames passed.
-    bgRotAngle = 0      # background rotation angle
+    rotAngle = 0      # background rotation angle
     logFile = file
     mainFrame = 0
-    testFrame = 0
+    counter = 0
     waiting = False
     firstAction = True
     r = 0
@@ -153,31 +161,22 @@ def campaign(c, background):
     # --Main Game Loop//--
     going = True
     while going:
-        testFrame += 1
+        counter += 1
         mainFrame += 1
         # Paint the background
         c.DISPLAYSURFACE.fill((0,0,0))
         c.DISPLAYSURFACE.blit(background, background_rect)
-        """ROTATION TESTING"""
-        # rotate the background, but only 15 times/second, not 30.
-        # if the frame rate is 30/sec, then rotate when its an odd frame.
-        #=======================================================================
-        # if frameCount%5 == 0:
-        #     bgRotAngle += .03
-        #     background = pygame.transform.rotozoom(OGBackground, bgRotAngle%360 , 1)
-        #     background_rect = background.get_rect()
-        #     background_rect.center = c.CENTER
-        # frameCount += 1
-        #=======================================================================
-
+        if counter%5 == 0:
+            background, background_rect, rotAngle = \
+            rotateBackground(OGBackground, counter, rotAngle)
 
         """LOGGING output information: FPS, event info, AA, etc."""
         # for every 30 or FPS number of frames, print an average fps.
         fpsList.append(c.FPSCLOCK.get_fps())
-        if testFrame == c.FPS:
+        if counter == (c.FPS*5):
             debug(c.DEBUG, ("Average FPS: {0}".format(mean(fpsList))))
             debug(c.DEBUG, ("Current Score: {0}".format(scoreboard.scoreString)))
-            testFrame = 0
+            counter = 0
             pygame.display.set_caption('RGB. FPS: {0}'.format(mean(fpsList)))
             fpsList = []
 
@@ -431,18 +430,18 @@ def campaign(c, background):
                     star.kill()
                     scoreboard.addScore(-30)
             if star.shooting:
-                debug(c.DEBUG, 'I AM SHOOTING1!')
+#                 debug(c.DEBUG, 'I AM SHOOTING1!')
                 # if the star has gone off the screen in the x or y direction
                 # kill it and add points!!
                 if star.pos[0] > c.DISPLAY_W or star.pos[0] < 0:
                     star.kill()
-                    debug(c.DEBUG, 'KILLED A STAR')
+#                     debug(c.DEBUG, 'KILLED A STAR')
                     scoreboard.addScore(50)
                 elif star.pos[1] > c.DISPLAY_H or star.pos[1] < 0:
                     star.kill()
-                    debug(c.DEBUG, 'KILLED A STAR')
+#                     debug(c.DEBUG, 'KILLED A STAR')
                     scoreboard.addScore(50)
-        debug(c.DEBUG, ('Stars #: ', len(starSprites.sprites())))
+#         debug(c.DEBUG, ('Stars #: {0}'.format(len(starSprites.sprites())))
 
         """DISPLAY SPRITE TOGGLE"""
         allSprites.update()
