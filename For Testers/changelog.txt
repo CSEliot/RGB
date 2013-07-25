@@ -1,24 +1,18 @@
 Changelog
 -------------------------
-beta v1.23b // 7.23.2013
+beta v1.23c // 7.24.2013
 -------------------------
 Added:
+	- directx NOT forced as video driver.
+	- "Version Definitons.txt" to explain the meaning of version numbers.
 Changed:
-	- Points do not go negative.
-	- Credits is a bit neater. 
 Removed:
-Fixed: 
-	- Stars causing negative points.	
+Fixed:
+	- score wouldn't hit 0. 
+	- music mixer causing errors.
 Known-Issues:
-	- Circles move too quickly past 3 seconds.
+	- Circles grow too quickly past a speed of 3 seconds.
 Intentional:
-	- current commands.txt is just testing stars.
-	- When the game is in debug mode (debug mode is default), hitting ESC
-		in campaign mode will quit. But normally, it brings up pause menu.
-	- Creative mode isn't completed, alpha mode is there for now.
-	- commands.txt will be updated with more playable commands once creative
-		mode is finished.
-	- Loudness.
 
 
 

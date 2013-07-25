@@ -1,11 +1,15 @@
-import pygame, os
+import pygame, os, platform
 from pygame.locals import FULLSCREEN , DOUBLEBUF , HWSURFACE, RLEACCEL
 from pygame.compat import geterror  # @UnusedImport
 from debug import debug  # @Reimport
 
-pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
+# pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
+
 os.environ['SDL_VIDEO_CENTERED'] = '1' # centers the window
+# if platform.system()== 'Windows':
+#     os.environ['SDL_VIDEODRIVER'] = 'directx'
 pygame.init()
+pygame.mixer.init()
 #ignore mouse motion input
 pygame.event.set_blocked((pygame.MOUSEMOTION, pygame.ACTIVEEVENT))
 
@@ -24,10 +28,11 @@ def make_gamescreen(fullBool):
             whichDisplay = "Display 1"
             screenError = "Window Error: None"
             displayInfo = "{0}\n{1}\n{2}\n{3}\n".format(
+                          platform.system(),
                           pygame.display.get_driver(),
                           pygame.display.Info(),
                           pygame.display.get_wm_info(),
-                          pygame.display.list_modes(32)
+                          pygame.display.list_modes(32),
                           )
         except Exception as e:
             options = (FULLSCREEN)

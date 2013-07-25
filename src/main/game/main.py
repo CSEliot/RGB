@@ -22,13 +22,13 @@ from modeMenu import modeMenu
 from RGB_alpha import gameAlpha as alpha  # @UnresolvedImport
 from time import sleep  # @UnusedImport @Reimport
 from campaign import campaign
-os.environ['SDL_VIDEO_CENTERED'] = '1'
-if platform.system() == 'Windows':
-    os.environ['SDL_VIDEODRIVER'] = 'windib'
+
+
 
 # SCREEN IS LOADED HERE, environment is instantiated within constants.py
 # for convenience purposes.
 c = Constants()
+
 
 if c.DEBUG:
     logFile = logger(c)
@@ -53,6 +53,7 @@ class playBox():
 
 def main():
 
+    print ""
     debug(c.DEBUG, "ENTERING: main")
 
     # display the version ID
@@ -155,7 +156,6 @@ def main():
             
     credits, __credits_rect = load_image(c, 'credits/Credits.png')
 #     credits = pygame.transform.smoothscale(credits, (c.DISPLAY_W, c.DISPLAY_H))
-    wait = 0
     pygame.event.clear()
     credits = pygame.transform.smoothscale(credits, (500,500))
     credits_rect = credits.get_rect()
@@ -163,7 +163,7 @@ def main():
     c.DISPLAYSURFACE.blit(credits, credits_rect)
     c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
     pygame.display.flip()
-    for wait in range(10):
+    for time in range(10):
         sleep(0.1)
         if pygame.event.poll().type != NOEVENT:
             break
