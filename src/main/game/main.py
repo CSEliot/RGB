@@ -26,20 +26,6 @@ from creative import creative
 
 
 
-
-
-class playBox():
-    # This class holds all our variables to access while playing.
-    def __init__(self):
-        self.cAccel = 0
-        self.fAccel = 0
-        self.cWait = 0
-        self.fWait = 0
-        self.isPlaying = False
-        self.isFirst = True
-        self.layer = 0
-
-
 def main():
     
     # A holding object for transferring major variables and constants.
