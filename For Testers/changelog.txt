@@ -1,5 +1,21 @@
 Changelog
 -------------------------------------------------
+beta v1.3a // 7.24.2013
+-------------------------------------------------
+Added:
+Changed:
+Removed:
+Fixed:
+	- Creative Mode crashing.
+Known-Issues:
+	- Circles are growing too quickly. Will probably switch from using a resizing 
+		algorithm to simply using animated circles. Most likely an implementation for
+		1.4
+	- ring's color changing glow is off-center.
+	- Ring's glow goes way off in diagonal angles.
+Intentional:
+
+-------------------------------------------------
 beta v1.3 + Major Changes since 1.2 // 7.24.2013
 -------------------------------------------------
 Added:
