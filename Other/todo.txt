@@ -1,15 +1,18 @@
 --Planned--
 -------------------------
-beta v1.3 // 07.xx.2013
+beta v1.4 // 07.xx.2013
 -------------------------	
 Added:
-	- Incomplete creative mode.
-	- Playable campaign demo, for testers.
+	- Have things work in seconds. 
+	- Have actions be based on time since beginning of song, not time after
+		previous action.
+	- Change star commands from F to S.
 Changed: --
 Fixed: --
-Known-Issues:
 	- Circles aren't in time correctly past 3
-	seconds. 
+		seconds. By makign spritesheets instead.
+		
+Known-Issues:
 
 v2+// 03.xx.2013.xx:xx - 	
 						Added:

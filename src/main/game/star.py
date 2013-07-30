@@ -4,11 +4,11 @@ import math
 
 class Star (pygame.sprite.Sprite):
 
-    def __init__(self, c, CENTER, speed, angle):
+    def __init__(self, images, CENTER, speed, angle):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = c.STAR_UNLIT_IMG.copy(), c.STAR_RECT
+        self.image, self.rect = images[1].copy(), images[1].get_rect()
         self.OGImage = self.image
-        self.dimage, _ = c.STAR_LIT_IMG.copy(), None
+        self.dimage = images[0]
         self.speed = speed
         self.radius = 40
         self.OGPos = CENTER

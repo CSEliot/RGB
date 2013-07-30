@@ -17,25 +17,14 @@ from constants import Constants  # @UnusedImport
 from debug import debug  # @UnusedImport
 from log import log as logger # @UnusedImport @Reimport
 from loader import load_image, load_song  # @UnusedImport
-from mainMenu import *  # @UnusedWildImport
-from modeMenu import modeMenu 
-from RGB_alpha import gameAlpha as alpha  # @UnresolvedImport
+from menu import menu  # @UnusedWildImport
 from time import sleep  # @UnusedImport @Reimport
 from campaign import campaign
+from stock import Stock
+from creative import creative
 
 
 
-# SCREEN IS LOADED HERE, environment is instantiated within constants.py
-# for convenience purposes.
-c = Constants()
-
-
-if c.DEBUG:
-    logFile = logger(c)
-# since constants doesn't know about 'debug', and it is where the boolean is
-# made, we'll print the 'whichDisplay' here for debugging.
-debug(c.DEBUG, (c.whichDisplay, c.screenError))
-debug(c.DEBUG, c.displayInfo)
 
 
 
@@ -52,8 +41,21 @@ class playBox():
 
 
 def main():
+    
+    # A holding object for transferring major variables and constants.
+    c = Constants()
+    # holds and loads all game's images.
+    stock = Stock(c)
+    if c.DEBUG:
+        logFile = logger(c)
+    # since constants doesn't know about 'debug', and it is where the boolean is
+    # made, we'll print the 'whichDisplay' here for debugging.
+    debug(c.DEBUG, (c.whichDisplay, c.screenError))
+    debug(c.DEBUG, c.displayInfo)
+    
+    # SCREEN IS LOADED HERE, environment is instantiated within constants.py
+    # for convenience purposes.
 
-    print ""
     debug(c.DEBUG, "ENTERING: main")
 
     # display the version ID
@@ -65,7 +67,7 @@ def main():
 
     
 
-    PygLogo, __PygLogo_rect = load_image(c, 'pygame_logo.png')
+    PygLogo = load_image(c, 'pygame_logo.png')
     PygLogo = pygame.transform.smoothscale(PygLogo, (600, 350))
     PygLogo_rect = PygLogo.get_rect()
     PygLogo_rect.center = c.CENTER
@@ -87,7 +89,7 @@ def main():
     c.DISPLAYSURFACE.fill((0, 0, 0))
 
     mult = 1.6
-    background, __background_rect = load_image(c, 'starBG.png')
+    background = load_image(c, 'starBG.png')
     background = background.subsurface((0,0),(800*mult, 600*mult) ).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
@@ -110,41 +112,21 @@ def main():
     pgext.color.setAlpha(background, fade, 1)
 
 
-    mode1 = 1  # the menu option for campaign mode
-    mode2 = 2
-    mode3 = 3
-    gameModeSelecting = False
-
-
-    load_song(c, 'menuV3.ogg')
-    pygame.mixer.music.play()
+    
     
     playing = True
     while playing:
-        selected = mainMenu(c, background)
+        selected = menu(c, background, stock)
         # menu will return a list, [gamemode,option,quit]. if it's gamemode
         # we have to look at the second number in the list.
-        if selected == mode1:
-            gameModeSelecting = True
-        elif selected == mode2:
-            pass
-        elif selected == mode3:
-            playing = False
+        if selected == 'campaign':
+            campaign(c, background, stock)
+        elif selected == 'creative':
+            creative(c, background, stock)
+        elif selected == 'options':
+            creative(c, background, stock)
         elif selected == "QUIT":
             playing = False
-        while gameModeSelecting:
-            gameMode = modeMenu(c, background)
-            if gameMode == 1:
-                campaign(c, background)
-                load_song(c, 'menuV3.ogg')
-                pygame.mixer.music.play()
-            elif gameMode == 2:
-                alpha(c)
-                #creative(c, background)
-            elif gameMode == 3:
-                gameModeSelecting = False
-            elif gameMode == "QUIT":
-                gameModeSelecting = False
     # parent loop, for the whole game. Keep looping till proper option given
         # call the menu function, an option is what it will return.
         # if option is not quit, do one of the following:
@@ -154,16 +136,16 @@ def main():
             # run credits
             # run options
             
-    credits, __credits_rect = load_image(c, 'credits/Credits.png')
+    Credits = load_image(c, 'credits/Credits.png')
 #     credits = pygame.transform.smoothscale(credits, (c.DISPLAY_W, c.DISPLAY_H))
     pygame.event.clear()
-    credits = pygame.transform.smoothscale(credits, (500,500))
-    credits_rect = credits.get_rect()
+    Credits = pygame.transform.smoothscale(Credits, (500,500))
+    credits_rect = Credits.get_rect()
     credits_rect.center = c.CENTER
-    c.DISPLAYSURFACE.blit(credits, credits_rect)
+    c.DISPLAYSURFACE.blit(Credits, credits_rect)
     c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
     pygame.display.flip()
-    for time in range(10):
+    for time in range(100):
         sleep(0.1)
         if pygame.event.poll().type != NOEVENT:
             break

@@ -1,19 +1,35 @@
 Changelog
--------------------------
-beta v1.23c // 7.24.2013
--------------------------
+-------------------------------------------------
+beta v1.3 + Major Changes since 1.2 // 7.24.2013
+-------------------------------------------------
 Added:
-	- directx NOT forced as video driver.
+	- directX forced as video driver.
+	- Created a class to load all game files at once. 
+	- 3 different command files are now used to tell how the song will play.
+	- added ring glow to represent inputted color.
 	- "Version Definitons.txt" to explain the meaning of version numbers.
+	- MOTHA FUCKIN CREATIVE MODE.
+	- 3 unique command files. Each are explained in the HowTo
+	- Alpha is hidden in the menu. ;)
 Changed:
+	- Loading times times murdered.
+	- Code streamlined to make effects for the future, easier to implement.
+	- campaign mode will end when song does.
+	- Points do not go negative.
+	- Credits is a bit neater.
 Removed:
+	- Herobrine
 Fixed:
-	- score wouldn't hit 0. 
-	- music mixer causing errors.
+	- 0/360 degree stars dieing automatically after 1st mode. YAY MODULUS. 
 Known-Issues:
-	- Circles grow too quickly past a speed of 3 seconds.
+	- Circles are growing too quickly. Will probably switch from using a resizing 
+		algorithm to simply using animated circles. Most likely an implementation for
+		1.4
+	- ring's color changing glow is off-center.
 Intentional:
-
+	- YES, the stars' pattern is intentional. 
+	- When the game is in debug mode (debug mode is default), hitting ESC
+		in campaign mode will quit. But normally, it brings up pause menu.
 
 
 

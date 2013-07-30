@@ -83,9 +83,9 @@ def gameAlpha(c):
     pygame.transform.set_smoothscale_backend('GENERIC')
 
     # throw down splash screen before beginning
-    splashInfo, splashInfo_rect = load_image(c, 'splashInfoAlpha.png')
+    splashInfo = load_image(c, 'splashInfoAlpha.png')
     # adjusting image cuz i can't make images.
-    splashInfo_rect.center = (c.CENTER_X - 50, c.CENTER_Y)
+    splashInfo_rect = splashInfo.get_rect(center = (c.CENTER_X - 50, c.CENTER_Y))
 
     # fill background
     c.DISPLAYSURFACE.fill((0, 0, 0))

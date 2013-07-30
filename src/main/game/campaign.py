@@ -10,21 +10,57 @@
 
 import pygame, sys, os, datetime, platform  # @UnusedImport
 import pgext, pygame.gfxdraw, pygame.surface  # @UnusedImport
-from numpy import *  # @UnusedWildImport
+from numpy import mean
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
-import math as m  # @UnusedImport
 from constants import Constants
-from commander import commander
 from debug import debug
-from log import log  # @UnusedImport @Reimport
 from circle import Circle
 from star import Star
 from ring import Ring
 from scoreboard import Scoreboard
 from loader import load_image, load_song
 from pause import pauseScreen
+from commander import commander
 
+
+
+
+class counter():
+    # this class is meant to hold time variables, mostly for
+    # organizational purposes.
+    
+    def __init__(self):
+        self.timeIn = 0
+        self.timeOut = 0
+        self.timeList = []
+        
+    def getTime(self, choice):
+        # get time in total seconds
+        if choice == 1:
+            return self.timeIn.total_seconds()
+        elif choice == 2:
+            return self.timeOut.total_seconds()
+        elif choice == 3:
+            return self.timeList
+        else:
+            raise Exception('time choice must be 1, 2 or 3.')
+    
+    def setTime(self, choice):
+        if choice == 1:
+            self.timeIn = datetime.datetime.now()
+        elif choice == 2:
+            self.timeOut = datetime.datetime.now()
+        elif choice == 3:
+            self.timeList.append(datetime.datetime.now())
+            
+    def getDelta(self, now): 
+        # gives time difference of timeIn and timeOut in seconds
+        # if now is true, then we will grab the timeOut also, and math it.
+        if now:
+            return (datetime.datetime.now() - self.timeIn).total_seconds()
+        else:
+            return (self.timeOut - self.timeIn).total_seconds()
 
 
 
@@ -39,25 +75,48 @@ class playBox():
         self.isFirst = True
         self.layer = 0
 
-def rotateBackground(background, counter, rotationAngle):
+def rotateBackground(center, background, counter, rotationAngle):
     """ROTATION TESTING"""
     # rotate the background, but only 15 times/second, not 30.
     # if the frame rate is 30/sec, then rotate when its an odd frame.
     rotationAngle += .03
     background = pygame.transform.rotozoom(background, rotationAngle%360 , 1)
     background_rect = background.get_rect()
-    background_rect.center = c.CENTER
+    background_rect.center = center
     return background, background_rect, rotationAngle
 
-def campaign(c, background):
+def showSplashScreen(c, stock):
+    # throw down splash screen before beginning
+    splashInfo = stock.campaign["Info Splash"]
+    splashInfo_rect = splashInfo.get_rect()
+    # fade info in and out
+    fade = 0
+    pgext.color.setAlpha(splashInfo, fade, 1)
+    pygame.event.clear()
+    # fade in
+    inInfoScreen = True
+    for fade in range(255):
+        c.DISPLAYSURFACE.fill((0, 0, 0))
+        c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
+        pgext.color.setAlpha(splashInfo, fade, 1)
+        c.DISPLAYSURFACE.blit(stock.versionID, (0,0))
+        pygame.display.flip()
+        if pygame.event.poll().type != NOEVENT:
+            inInfoScreen = False
+            break
+    # if the info is still being read/no button pressed, just wait.
+    fade = 255
+    pgext.color.setAlpha(splashInfo, fade, 1)
+    while inInfoScreen:
+        if pygame.event.poll().type != NOEVENT:
+            inInfoScreen = False
+
+def campaign(c, background, stock):
     
     debug(c.DEBUG, "ENTERING: campaign")
     
-    # display the version ID
-    font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
-    versionID_SurfaceObj = font_renderObj
-    versionID_RectObj = versionID_SurfaceObj.get_rect()
-    versionID_RectObj.topleft = (0, 0)
+    
+    versionID = stock.getVersion()
 
 #    pygame.key.set_repeat(0, 0)
 
@@ -69,27 +128,34 @@ def campaign(c, background):
     caughtSprite = pygame.sprite.GroupSingle()
     dieingSprites = pygame.sprite.GroupSingle()
     scoreSprite = pygame.sprite.GroupSingle()
-    pBox = playBox()
-    playList = commander(c)
-    playIt = iter(playList)
+    pBox = playBox() # a jukebox for handling music settings.
+    pygame.mixer.music.set_endevent(USEREVENT)
+    
+    ring = Ring(c.CENTER, stock.campaign["Ring"], stock.campaign["Ring Glow"])
     '''CREATE IMAGES'''
-    ring = Ring(c, c.CENTER)
     ring.add(ringSprite, allSprites)
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
     scoreboard.add(scoreSprite, allSprites)
-    box_img, _box_rect = load_image(c, 'campaign/letter_box.png')
+    box_img = stock.campaign["RGB Light"]
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     OGBackground = background.copy()
-    logging = False
 
     '''INSTANTIATING OTHER VARIABLES'''
     rotAngle = 0      # background rotation angle
-    logFile = file
-    mainFrame = 0
+    waitCounterCirc = 0
+    waitCounterStar = 0
+    circleWaitStart = 0
+    circleWaitMade = 0
+    starWaitStart = 0
+    starWaitMade = 0
+    finishedCircleActions = False
+    finishedStarActions = False
+    circleAction = '_'
+    starAction = '_'
     counter = 0
-    waiting = False
-    firstAction = True
+    starWaiting = False
+    circleWaiting = False
     r = 0
     g = 0
     b = 0
@@ -107,7 +173,43 @@ def campaign(c, background):
     downHold = False
     quitGame = False  # if user returns a True from pause, we quit game, etc.
     startTime = 0
-
+    genList = os.path.join(c.DATA_DIR, 'campaign commands/genCommands.txt')
+    circleList = os.path.join(c.DATA_DIR, 'campaign commands/circleCommands.txt')
+    starList = os.path.join(c.DATA_DIR, 'campaign commands/starCommands.txt')
+    genList, circleList, starList = commander(c, 
+                                              genList, 
+                                              circleList, 
+                                              starList ) # commander takes the 
+    #                     commands.txt and converts it into a formatted list.
+    circleList, starList = iter(circleList), iter(starList)
+    
+    # take in the genList parameters now, before the level begins.
+    for loop in range(len(genList)):
+        setting = genList[loop]
+        if setting[0] == 'B':
+            # if the command is BPM, set the proper variables.
+            pBox.cWait = setting[1]
+            pBox.fWait = setting[2]
+            pBox.cSpeed = setting[3]
+            pBox.fSpeed = setting[4]
+        elif setting[0] == 'J':
+            startTime = setting[1]
+        # change the general speed for circles/stars
+        elif setting[0][0] == 'W':
+            if setting[0] == 'WG':
+                pBox.cWait = setting[1]
+                pBox.fWait = setting[1]
+            elif setting[0] == 'WC':
+                pBox.cWait = setting[1]
+            elif setting[0] == 'WF':
+                pBox.fWait = setting[1]
+    
+    
+    
+    
+    
+    
+    
     """BUTTON / SPRITE RENDERING"""
     r_letter = c.FONT_LARGE.render('R', True, c.RED)
     r_letter.scroll(2, 0)
@@ -129,47 +231,29 @@ def campaign(c, background):
 
 
     debug(c.DEBUG, "Variable and object instantiating successful.")
-
-    # throw down splash screen before beginning
-    splashInfo, splashInfo_rect = load_image(c, 'campaign/splashInfo.png')
-
-    # fade info in and out
-    fade = 0
-    pgext.color.setAlpha(splashInfo, fade, 1)
-    pygame.event.clear()
-    # fade in
-    inInfoScreen = True
-    for fade in range(255):
-        c.DISPLAYSURFACE.fill((0, 0, 0))
-        c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
-        pgext.color.setAlpha(splashInfo, fade, 1)
-        c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
-        pygame.display.flip()
-        if pygame.event.poll().type != NOEVENT:
-            inInfoScreen = False
-            break
-    # if the info is still being read/no button pressed, just wait.
-    while inInfoScreen:
-        if pygame.event.poll().type != NOEVENT:
-            inInfoScreen = False
-    fade = 255
-    pgext.color.setAlpha(splashInfo, fade, 1)
+    showSplashScreen(c, stock)
     load_song(c, "It's Melting.ogg")  # stops other music from playing too
 
 
     debug(c.DEBUG, "Song loading successful, main game loop about to begin.")
     # --Main Game Loop//--
     going = True
+    pygame.mixer.music.play(0, startTime)
     while going:
         counter += 1
-        mainFrame += 1
+        waitCounterCirc += 1
+        waitCounterStar += 1
         # Paint the background
         c.DISPLAYSURFACE.fill((0,0,0))
         c.DISPLAYSURFACE.blit(background, background_rect)
         if counter%5 == 0:
             background, background_rect, rotAngle = \
-            rotateBackground(OGBackground, counter, rotAngle)
-
+            rotateBackground(c.CENTER, OGBackground, counter, rotAngle)
+            
+            
+            
+            
+            
         """LOGGING output information: FPS, event info, AA, etc."""
         # for every 30 or FPS number of frames, print an average fps.
         fpsList.append(c.FPSCLOCK.get_fps())
@@ -181,93 +265,138 @@ def campaign(c, background):
             fpsList = []
 
 
+
+
         """TAKE ACTION COMMAND LIST"""
         # for every new action, if the wait was long enough, perform the action
-        if not waiting:
-            action = playIt.next()
-            
-            if action[0] == 'B':
-                # if the command is BPM, set the proper variables.
-                pBox.cWait = action[1]
-                pBox.fWait = action[2]
-                pBox.cSpeed = action[3]
-                pBox.fSpeed = action[4]
-            elif action[0] == 'J':
-                startTime = action[1]
-            elif action[0] == 'P':
-                pygame.mixer.music.play(1, startTime)
-            # if the action is to spawn a circle/star, gotta que it up.
-            elif action[0] == 'C' or action[0] == 'F':
-                waiting = True
+        if not circleWaiting:
+            if not finishedCircleActions:
+                try:
+                    circleAction = circleList.next()
+                except:
+                    finishedCircleActions = True
+            # if the circleAction is to spawn a circle/star, gotta que it up.
+            if circleAction[0] == 'C':
+                circleWaiting = True
             # change the general speed for circles/stars
-            elif action[0] == 'CS'or action[0] == 'FS':
-                if action[0] == 'CS':
-                    pBox.cSpeed = action[1]
-                else:
-                    pBox.fSpeed = action[1]
-                    debug(c.DEBUG, ('Star speed set to: ', action[1]))
-            elif action[0][0] == 'W':
-                if action[0] == 'W':
-                    now = datetime.datetime.now()
-                    waiting = True
-                    waitMade = datetime.datetime.now()
-                elif action[0] == 'WG':
-                    pBox.cWait = action[1]
-                    pBox.fWait = action[1]
-                elif action[0] == 'WC':
-                    pBox.cWait = action[1]
-                elif action[0] == 'WF':
-                    pBox.fWait = action[1]
-            elif action[0] == 'S':
+            elif circleAction[0] == 'CS':
+                if circleAction[0] == 'CS':
+                    pBox.cSpeed = circleAction[1]
+            elif circleAction[0][0] == 'W':
+                if circleAction[0] == 'W':
+                    circleWaitStart = datetime.datetime.now()
+                    circleWaiting = True
+                    circleWaitMade = datetime.datetime.now() # time started waiting
+                elif circleAction[0] == 'WC':
+                    pBox.cWait = circleAction[1]
+            elif circleAction[0] == 'S':
                 pygame.mixer.music.stop()
                 going = False
-        if waiting:
-            if action[0] == 'C':
-                if mainFrame >= pBox.cWait or firstAction:
-                    if action[2] == '':
-                        # if there is no given speed, then it's the general
+        if circleWaiting:
+            # All main actions have to wait before they can be performed,
+            # so once an action is read, waiting becomes True, and we test to
+            # see if the time passed is valid for the given wait time.
+            if circleAction[0] == 'C':
+                if waitCounterCirc >= pBox.cWait:
+                    if circleAction[2] == '':
+                        # if there is no given speed, then it's the global
                         # speed. . .
                         tempSpeed = pBox.cSpeed
                     else:
-                        tempSpeed = action[2]
-                    tempColor = action[1]
-                    tempCirc = Circle(c, c.CENTER, tempSpeed, tempColor, \
+                        tempSpeed = circleAction[2]
+                    tempColor = circleAction[1]
+                    debug(c.DEBUG, ("{0}'s speed: {1}".format(tempColor, tempSpeed)))
+                    tempCirc = Circle(stock.campaign['Circle'], 
+                                      c.CENTER, 
+                                      tempSpeed, 
+                                      tempColor, 
                                       pBox.layer)
                     tempCirc.add(circSprites, allSprites)
-                    circMade = datetime.datetime.now()
-                    # circSprites.add(tempCirc)
-                    # allSprites.add(tempCirc)
-                    pBox.layer += 1
-                    waiting = False
-                    mainFrame = 0
-            elif action[0] == 'F':
-                if mainFrame >= pBox.fWait or firstAction:
-                    if action[2] == '':
+                    circMade = datetime.datetime.now() #for debugging
+                    pBox.layer += 1 #determines which get drawn on top
+                    circleWaiting = False 
+                    waitCounterCirc = 0
+            elif circleAction[0] == 'W':
+                change = datetime.datetime.now() - circleWaitStart
+                # if the action is to JUST wait x amount of time
+                if change.total_seconds() >= circleAction[1] / c.FPS:
+                    circleWaiting = False
+                    totalWaitTime = datetime.datetime.now() - circleWaitMade 
+                    debug(c.DEBUG, ("Wait Time: ", totalWaitTime.total_seconds()))
+                    waitCounterCirc = 0
+
+
+
+
+
+
+
+
+
+        if not starWaiting:
+            if not finishedStarActions:
+                try:
+                    starAction = starList.next()
+                except:
+                    finishedStarActions = True
+            if starAction[0] == 'F':
+                starWaiting = True
+            # change the general speed for circles/stars
+            elif starAction[0] == 'FS':
+                    pBox.fSpeed = starAction[1]
+            elif starAction[0][0] == 'W':
+                if starAction[0] == 'W':
+                    starWaitStart = datetime.datetime.now()
+                    starWaiting = True
+                    starWaitMade = datetime.datetime.now()
+                elif starAction[0] == 'WF':
+                    pBox.fWait = starAction[1]
+            elif starAction[0] == 'S':
+                pygame.mixer.music.stop()
+                going = False
+        if starWaiting:
+            if starAction[0] == 'F':
+                if waitCounterStar >= pBox.fWait:
+                    if starAction[2] == '':
                         tempSpeed = pBox.fSpeed
                     else:
-                        tempSpeed = action[2]
-                    tempAngle = action[1]
-                    tempStar = Star(c, c.CENTER, tempSpeed, tempAngle)
+                        tempSpeed = starAction[2]
+                    tempAngle = starAction[1]
+                    images = (stock.campaign['Star Lit'],stock.campaign['Star Unlit'])
+                    tempStar = Star(images, c.CENTER, tempSpeed, tempAngle)
                     tempStar.add(starSprites, allSprites)
-                    # no longer waiting, bring on the next action!
-                    waiting = False
-                    mainFrame = 0
-            elif action[0] == 'W':
-                change = datetime.datetime.now() - now
-                # if the action is to JUST wait x amount of time
-                if change.total_seconds() >= action[1] / 30.0:
-                    waiting = False
-                    totalWaitTime = datetime.datetime.now() - waitMade 
+                    # no longer waiting, bring on the next starAction!
+                    starWaiting = False
+                    waitCounterStar = 0
+            elif starAction[0] == 'W':
+                change = datetime.datetime.now() - starWaitStart
+                # if the starAction is to JUST wait x amount of time
+                if change.total_seconds() >= starAction[1] / 30.0:
+                    starWaiting = False
+                    totalWaitTime = datetime.datetime.now() - starWaitMade 
                     debug(c.DEBUG, ("Wait Time: ", totalWaitTime.total_seconds()))
-                    mainFrame = 0
-                    # we must also set the wait for the next action to 0,
+                    waitCounterStar = 0
+                    # we must also set the wait for the next starAction to 0,
                     # or else the wait would be Wx + Wcircle/star.
-                    firstAction = True
-            # since the first action has just occurred, we must wait now.
-            if firstAction:
-                firstAction = False
 
 
+        
+        
+        
+        
+        
+        # test real quick to see if the song is over.
+        if finishedCircleActions and finishedStarActions:
+            if pygame.event.peek(USEREVENT):
+                pygame.mixer.music.stop()
+                going = False
+        
+        
+        
+        
+        
+        
+        
         """EVENT HANDLING INPUT"""
         # grab all the latest input
         latest_events = pygame.event.get()
@@ -286,26 +415,32 @@ def campaign(c, background):
                 r = 255
                 toggle_color_r = True
                 total_input += 1
+                ring.glowColor((r, g, b))
             elif event.type == KEYUP and event.key == controls[0]:
                 r = 0
                 toggle_color_r = False
                 total_input += -1
+                ring.glowColor((r, g, b))
             elif event.type == KEYDOWN and event.key == controls[1]:
                 g = 255
                 toggle_color_g = True
                 total_input += 1
+                ring.glowColor((r, g, b))
             elif event.type == KEYUP and event.key == controls[1]:
                 g = 0
                 toggle_color_g = False
                 total_input += -1
+                ring.glowColor((r, g, b))
             elif event.type == KEYDOWN and event.key == controls[2]:
                 b = 255
                 toggle_color_b = True
                 total_input += 1
+                ring.glowColor((r, g, b))
             elif event.type == KEYUP and event.key == controls[2]:
                 b = 0
                 toggle_color_b = False
                 total_input += -1
+                ring.glowColor((r, g, b))
             # Ring Spinning
             elif event.type == KEYDOWN and event.key == controls[5]:
                 leftHold = True
@@ -357,27 +492,13 @@ def campaign(c, background):
                     display_sprites = False
                 else:
                     display_sprites = True
-            # if I is pressed, print output to file log.txt
-            elif event.type == KEYDOWN and event.key == controls[8]:
-                if logging:
-                    log(c)
-                    try:
-                        logFile.close()
-                    except:
-                        raise
-                    c.DEBUG = False
-                    logging = False
-                else:
-                    logging = True
-                    c.DEBUG = True
-                    logFile = log(c)
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == controls[7]:
                 paused = True
 
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
-                debug(c.DEBUG, event.dict)
+                debug(c.DEBUG, (pygame.event.event_name(event.type), event.dict))
 
         """CATCH CIRCLES MATCHING COLORS"""
         # catch matching circles!!
@@ -422,13 +543,19 @@ def campaign(c, background):
 
         """DELETE FREE STARS SHOOTING"""
         for star in starSprites.sprites():
-            debug(c.DEBUG, ("Ring Angle: ", ringSprite.sprite.angle) )
-            debug(c.DEBUG, ("Star Angle: ", star.angleDeg))
             
             if star.travDist >= (264-star.speed) and not(star.shooting):
-                if not(ringSprite.sprite.angle == star.angleDeg):
+                # this tests the stars' distance, once it's close enough. . .
+                if not((ringSprite.sprite.angle)%360 == (star.angleDeg)%360):
+                    debug(c.DEBUG, "Star Died at:")
+                    debug(c.DEBUG, ("Ring Angle: ", ringSprite.sprite.angle) )
+                    debug(c.DEBUG, ("Star Angle: ", star.angleDeg))
                     star.kill()
                     scoreboard.addScore(-30)
+                else:
+                    debug(c.DEBUG, "Star Made it at:")
+                    debug(c.DEBUG, ("Ring Angle: ", ringSprite.sprite.angle) )
+                    debug(c.DEBUG, ("Star Angle: ", star.angleDeg))
             if star.shooting:
 #                 debug(c.DEBUG, 'I AM SHOOTING1!')
                 # if the star has gone off the screen in the x or y direction
@@ -461,10 +588,10 @@ def campaign(c, background):
             c.DISPLAYSURFACE.blit(box_img, box_rectG)
             c.DISPLAYSURFACE.blit(box_img, box_rectB)
             scoreSprite.draw(c.DISPLAYSURFACE)
-            c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
+            c.DISPLAYSURFACE.blit(versionID, (0,0))
 
         """DELAY"""
-        c.FPSCLOCK.tick_busy_loop(c.FPS)
+        c.FPSCLOCK.tick(c.FPS)
 
         """PAUSE UNPAUSE"""
         if paused:
@@ -482,14 +609,19 @@ def campaign(c, background):
     return
 
 if __name__ == "__main__":
+    from stock import Stock
+    
+    
     c = Constants()
-    background, background_rect = load_image(c, 'starBG.png')
+    stock = Stock(c)
+    background = load_image(c, 'starBG.png')
+    background_rect = background.get_rect()
 
     # CUTTING the background to fit the DISPLAYSURFACE
     background = background.subsurface((0,0), (c.DISPLAY_W , c.DISPLAY_H))
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     
-    campaign(c, background)
+    campaign(c, background, stock)
 
 
