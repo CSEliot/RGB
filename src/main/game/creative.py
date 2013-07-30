@@ -144,7 +144,7 @@ def creative(c, background, stock):
     pBox = playBox() # a jukebox for handling music settings.
     pygame.mixer.music.set_endevent(USEREVENT)
     
-    ring = Ring(c.CENTER, stock.campaign["Ring"])
+    ring = Ring(c.CENTER, stock.campaign["Ring"], stock.campaign["Ring Glow"])
     '''CREATE IMAGES'''
     ring.add(ringSprite, allSprites)
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
