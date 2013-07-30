@@ -8,7 +8,7 @@ import math as m  # @UnusedImport
 from time import sleep
 
 
-def pauseScreen(c):
+def pauseScreen(c, stock):
 
     # menu elements
     selected = 1  # tells which button is currently highlighted
@@ -42,11 +42,11 @@ def pauseScreen(c):
     
     
     
-    corners = load_image(c, "pause/scrbx.png")
-    bReturn = load_image(c, 'pause/return.png')
-    options = load_image(c, 'pause/options.png')
-    paused = load_image(c, 'pause/paused.png')
-    bQuit = load_image(c, 'pause/quit.png')
+    corners = stock.pause["Corners"]
+    bReturn = stock.pause["Return"]
+    options = stock.pause["Options"]
+    paused = stock.pause["Paused"]
+    bQuit = stock.pause["Quit"]
 
     # RESIZE TO FIT THE SMALL SCREEN.
     bReturnHeight = int(bReturn.get_height() * .5)

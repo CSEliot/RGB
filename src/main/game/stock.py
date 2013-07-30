@@ -50,6 +50,11 @@ class Stock(object):
                                                              False, 
                                                              c.BLACK, 
                                                              c.WHITE)}
+        self.pause = {"Corners":load_image(c, "pause/scrbx.png"),
+                      "Return":load_image(c, 'pause/return.png'),
+                      "Options":load_image(c, 'pause/options.png'),
+                      "Paused":load_image(c, 'pause/paused.png'),
+                      "Quit":load_image(c, 'pause/quit.png')}
     
     def getVersion(self):
         return self.versionID

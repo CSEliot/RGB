@@ -1,5 +1,21 @@
 Changelog
 -------------------------------------------------
+beta v1.3d // 7.30.2013
+-------------------------------------------------
+Added:
+	- sound effects file with potential sfx for buttons. please listen.
+Changed:
+Removed:
+Fixed:
+	- campaign mode folders accidentally deleted. re-added them.
+	
+Known-Issues:
+	- Circles are growing too quickly. Will probably switch from using a resizing 
+		algorithm to simply using animated circles. Most likely an implementation for
+		1.4
+Intentional:
+
+-------------------------------------------------
 beta v1.3c // 7.30.2013
 -------------------------------------------------
 Added:

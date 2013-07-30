@@ -88,7 +88,8 @@ def rotateBackground(center, background, counter, rotationAngle):
 def showSplashScreen(c, stock):
     # throw down splash screen before beginning
     splashInfo = stock.campaign["Info Splash"]
-    splashInfo_rect = splashInfo.get_rect()
+    splashInfo = pygame.transform.scale(splashInfo, (c.DISPLAY_W, c.DISPLAY_H))
+    splashInfo_rect = splashInfo.get_rect(center=c.CENTER)
     # fade info in and out
     fade = 0
     pgext.color.setAlpha(splashInfo, fade, 1)
@@ -596,7 +597,7 @@ def campaign(c, background, stock):
         """PAUSE UNPAUSE"""
         if paused:
             pygame.mixer.music.pause()
-            quitGame = pauseScreen(c)
+            quitGame = pauseScreen(c, stock)
             if quitGame == 3:
                 going = False
             pygame.mixer.music.unpause()

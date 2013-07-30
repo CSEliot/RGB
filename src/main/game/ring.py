@@ -41,13 +41,13 @@ class Ring(pygame.sprite.Sprite):
             self.angle = 270
 
     def update(self):
+        self.glow_rect = self.glow.get_rect()
+        self.glow_rect.center = self.glow_center
         tempImage = self.OGImage.copy()
         tempImage.blit(self.glow, self.glow_rect)
         self.image = pygame.transform.rotozoom(tempImage, self.angle, 1)
 #         self.glow = pygame.transform.rotozoom(self.OGGlow, self.angle, 1)
         self.rect = self.image.get_rect(center=(self.OGCenter))
-#         self.glow_rect = self.glow.get_rect()
-#         self.glow_rect.center = self.glow_center
         
     def glowColor(self, color):
         pgext.color.setColor(self.glow, color)
