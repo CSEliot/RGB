@@ -1,6 +1,21 @@
 Changelog
 -------------------------------------------------
-beta v1.3a // 7.24.2013
+beta v1.3b // 7.30.2013
+-------------------------------------------------
+Added:
+Changed:
+Removed:
+Fixed:
+	- ring's color changing glow is off-center.
+	- Ring's glow goes way off in diagonal angles.
+Known-Issues:
+	- Circles are growing too quickly. Will probably switch from using a resizing 
+		algorithm to simply using animated circles. Most likely an implementation for
+		1.4
+Intentional:
+
+-------------------------------------------------
+beta v1.3a // 7.30.2013
 -------------------------------------------------
 Added:
 Changed:
@@ -16,7 +31,7 @@ Known-Issues:
 Intentional:
 
 -------------------------------------------------
-beta v1.3 + Major Changes since 1.2 // 7.24.2013
+beta v1.3 + Major Changes since 1.2 // 7.29.2013
 -------------------------------------------------
 Added:
 	- directX forced as video driver.
