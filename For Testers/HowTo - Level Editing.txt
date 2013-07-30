@@ -1,15 +1,10 @@
-If you want to make the game play to your own music, you can type out a simple
-string of commands to a commands.txt file and the game will play along to it.
+HOW TO:
+	circleCommands takes the following: W, WC, C, CSP, :Stop
+	starCommands takes the following: W, WF, F, FSP, :Stop
+	genCommands takes the following: JumpTo, BPM, WG, WC, WF
+		note: genCommands only sets parameters for BEFORE the song starts.
 
-YOU CAN FIND THIS FILE IN THE src/Main/Data/ folder. It must be there when being 
-read.
 
-The beta comes with 1 song and 1 file already made for it. The file.txt must
-be named commands.txt and the song must be named . You'll save both the song and the 
-songname.txt into the data folder. Then when the game starts, it'll prompt you
-asking if you want to import a new song. you give the songname and it will do 
-the rest. This won't be the only way to create levels for the music in the final
-version. Max actions per second is 30.
 
 Here are the commands:
 (each command must be separated with a space.)
@@ -38,7 +33,8 @@ CSP#		- this will change the standard	speed # at which ALL colors grow.
 Fx			- Spawn a shooting star at angle x.
 Fx,#		- Spawn a shooting star at angle x and speed #. 
 FSP#		- change the standard speed at which all stars move. 
-:Stop		- Stop the song.
+:Stop		- Stop the song. If either star/circle commands runs out of commands
+				the level will end.
 
 Required Commands: BPM, Play: :Stop
 

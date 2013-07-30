@@ -1,4 +1,4 @@
-import sys, pygame, os
+import sys, os
 from debug import debug
 
 def log(c):

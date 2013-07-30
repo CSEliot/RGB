@@ -42,11 +42,11 @@ def pauseScreen(c):
     
     
     
-    corners, __corners_rect = load_image(c, "pause/scrbx.png")
-    bReturn, __bReturn_rect = load_image(c, 'pause/return.png')
-    options, __options_rect = load_image(c, 'pause/options.png')
-    paused, __paused_rect = load_image(c, 'pause/paused.png')
-    bQuit, __bQuit_rect = load_image(c, 'pause/quit.png')
+    corners = load_image(c, "pause/scrbx.png")
+    bReturn = load_image(c, 'pause/return.png')
+    options = load_image(c, 'pause/options.png')
+    paused = load_image(c, 'pause/paused.png')
+    bQuit = load_image(c, 'pause/quit.png')
 
     # RESIZE TO FIT THE SMALL SCREEN.
     bReturnHeight = int(bReturn.get_height() * .5)
@@ -160,4 +160,6 @@ def pauseScreen(c):
 
 
 if __name__ == "__main__":
-    pauseScreen()
+    from constants import Constants
+    c = Constants()
+    pauseScreen(c)

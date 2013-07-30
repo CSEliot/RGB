@@ -4,7 +4,7 @@ from debug import debug
 
 
 
-def commander(c):
+def commander(c, genList, circleList, starList):
     # this function opens the commands.txt file and converts it into a list of
     # commands on how to play the level accompanying the song and put them into
     # a list. If a command is unrecognized, the game will close (for now).
@@ -12,18 +12,44 @@ def commander(c):
     # 2D list
     # RETURNS: A list of lists
     # DEFAULT VALUES
-    saveDir = os.path.join(c.DATA_DIR, 'commands.txt')
+    
     try:
-        commandsFile = open(saveDir, 'r')
+        genFile = open(genList, 'r')
     except pygame.error:
-        debug(c.DEBUG, ('Cannot open file: ', saveDir))
+        debug(c.DEBUG, ('Cannot open file: ', genList))
+        raise SystemExit(str(geterror()))
+    
+    
+    try:
+        circleFile = open(circleList, 'r')
+    except pygame.error:
+        debug(c.DEBUG, ('Cannot open file: ', circleList))
+        raise SystemExit(str(geterror()))
+    
+    
+    try:
+        starFile = open(starList, 'r')
+    except pygame.error:
+        debug(c.DEBUG, ('Cannot open file: ', starList))
         raise SystemExit(str(geterror()))
 
-    # list of commands
-    commands = commandsFile.read()
-    commands = commands.split()
-    commandList = []
-    for action in commands:
+    # list of general commands
+    genCommands = genFile.read()
+    genCommands = genCommands.split()
+    genCommandList = []
+
+    # list of circle commands
+    circleCommands = circleFile.read()
+    circleCommands = circleCommands.split()
+    circleCommandList = []
+    
+    
+    # list of star commands
+    starCommands = starFile.read()
+    starCommands = starCommands.split()
+    starCommandList = []
+    
+    for action in genCommands:
         # the action[0] just checks the first letter in the action.
         # Option 1: set the BPM
         if action[0] == 'B':
@@ -45,14 +71,62 @@ def commander(c):
             cSpeed = (c.RING_SIZE / c.FPS) * (bpm / 60.0)
             fSpeed = (c.RING_RADIUS / c.FPS) * (bpm / 60.0)
             # the BPM list is formatted as such:'B', WC, WF, CSP, and FSP
-            commandList.append(['B', cWait, fWait, cSpeed, fSpeed])
-        elif action[0] == 'P':
-            if action == 'Play:':
-                commandList.append(['P'])
+            genCommandList.append(['B', cWait, fWait, cSpeed, fSpeed])
+        #=======================================================================
+        # elif action[0] == 'P':
+        #     if action == 'Play:':
+        #         commandList.append(['P'])
+        #     else:
+        #         print "Invalid Play action given. See commands.txt"
+        #         sys.exit(UserWarning)
+        #=======================================================================
+        elif action[0] == 'J':
+            if "JumpTo," in action:
+                try:
+                    startTime = float(action.replace('JumpTo,', ''))
+                except Exception:
+                    print "Invalid start time given. Must be in seconds. See commands.txt"
+                    sys.exit(UserWarning)
+                genCommandList.append(['J', startTime])
             else:
-                print "Invalid Play action given. See commands.txt"
+                print "Invalid start time given. Must be 'JumpTo,X'. See commands.txt"
                 sys.exit(UserWarning)
-        elif action[0] == 'C':
+        elif action[0] == 'W':
+            if action[1] == 'G':
+                # a global constant wait time between each action
+                gWait = action.replace('W', '')
+                gWait = gWait.replace('G', '')
+                try:
+                    gWait = c.FPS * float(gWait)
+                except Exception:
+                    print "Invalid WG# given. See commands.txt"
+                    sys.exit(UserWarning)
+                genCommandList.append(['WG', gWait])
+            elif action[1] == 'C':
+                # a global constant wait time before each circle creation
+                cWait = action.replace('W', '')
+                cWait = cWait.replace('C', '')
+                try:
+                    cWait = c.FPS * float(cWait)
+                except Exception:
+                    print "Invalid WC# given. See commands.txt"
+                    sys.exit(UserWarning)
+                genCommandList.append(['WC', cWait])
+            elif action[1] == 'F':
+                # a global constant wait time before each star creation
+                fWait = action.replace('W', '')
+                fWait = fWait.replace('F', '')
+                try:
+                    fWait = c.FPS * float(fWait)
+                except Exception:
+                    print "Invalid WF# given. See commands.txt"
+                    sys.exit(UserWarning)
+                genCommandList.append(['WF', fWait])
+                
+                
+                
+    for action in circleCommands:
+        if action[0] == 'C':
             color = ''
             # we test to see if the action is for changing speed, or making circ
             if action[1] == 'S':
@@ -64,7 +138,7 @@ def commander(c):
                 except Exception:
                     print "Invalid CSP given. See commands.txt"
                     sys.exit(UserWarning)
-                commandList.append(['CS', cSpeed])
+                circleCommandList.append(['CS', cSpeed])
             # if it does not begin with CS, that means it is for making a circle
             else:
                 cSpeed = action.replace('C', '')
@@ -97,8 +171,40 @@ def commander(c):
                 if (R, G, B) == (0, 0, 0):
                     print "No colors found. See commands.txt"
                     sys.exit(UserWarning)
-                commandList.append(['C', (R, G, B), cSpeed])
-        elif action[0] == 'F':
+                circleCommandList.append(['C', (R, G, B), cSpeed])
+        elif action[0] == 'W':
+            if action[1] == 'C':
+                # a global constant wait time before each circle creation
+                cWait = action.replace('W', '')
+                cWait = cWait.replace('C', '')
+                try:
+                    cWait = c.FPS * float(cWait)
+                except Exception:
+                    print "Invalid WC# given. See commands.txt"
+                    sys.exit(UserWarning)
+                circleCommandList.append(['WC', cWait])
+            elif action[1].isdigit():
+                waitTime = action.replace('W', '')
+                # an instance wait, for only that call.
+                try:
+                    # how many frames before the next action occurs
+                    waitTime = c.FPS * float(waitTime)
+                except Exception:
+                    print "Invalid W# given. See commands.txt"
+                    sys.exit(UserWarning)
+                circleCommandList.append(['W', waitTime])
+        elif action[0] == ':':
+            if action == ':Stop':
+                circleCommandList.append(['S'])
+            else:
+                print "Invalid Stop given. See commands.txt"
+                sys.exit(UserWarning)
+                
+                
+                
+                
+    for action in starCommands:
+        if action[0] == 'F':
             # we test to see if the action is for changing speed, or making star
             if action[1] == 'S':
                 try:
@@ -108,7 +214,7 @@ def commander(c):
                 except Exception:
                     print "Invalid FSP given. See commands.txt"
                     sys.exit(UserWarning)
-                commandList.append(['FS', fSpeed])
+                starCommandList.append(['FS', fSpeed])
             else:
                 if action.find(',') != -1:
                     # if both an angle and speed is defined, we must split the
@@ -122,7 +228,7 @@ def commander(c):
                     except Exception:
                         print "Invalid  Fx/# given. See commands.txt"
                         sys.exit(UserWarning)
-                    commandList.append(['F', fAngle, fSpeed])
+                    starCommandList.append(['F', fAngle, fSpeed])
                 else:
                     fAngle = action.replace('F', '')
                     try:
@@ -130,7 +236,7 @@ def commander(c):
                     except Exception:
                         print "Invalid  Fx given. See commands.txt"
                         sys.exit(UserWarning)
-                    commandList.append(['F', fAngle, ''])
+                    starCommandList.append(['F', fAngle, ''])
         elif action[0] == 'W':
             if action[1].isdigit():
                 waitTime = action.replace('W', '')
@@ -141,27 +247,7 @@ def commander(c):
                 except Exception:
                     print "Invalid W# given. See commands.txt"
                     sys.exit(UserWarning)
-                commandList.append(['W', waitTime])
-            elif action[1] == 'G':
-                # a global constant wait time between each action
-                gWait = action.replace('W', '')
-                gWait = gWait.replace('G', '')
-                try:
-                    gWait = c.FPS * float(gWait)
-                except Exception:
-                    print "Invalid WG# given. See commands.txt"
-                    sys.exit(UserWarning)
-                commandList.append(['WG', gWait])
-            elif action[1] == 'C':
-                # a global constant wait time before each circle creation
-                cWait = action.replace('W', '')
-                cWait = cWait.replace('C', '')
-                try:
-                    cWait = c.FPS * float(cWait)
-                except Exception:
-                    print "Invalid WC# given. See commands.txt"
-                    sys.exit(UserWarning)
-                commandList.append(['WC', cWait])
+                starCommandList.append(['W', waitTime])
             elif action[1] == 'F':
                 # a global constant wait time before each star creation
                 fWait = action.replace('W', '')
@@ -171,23 +257,26 @@ def commander(c):
                 except Exception:
                     print "Invalid WF# given. See commands.txt"
                     sys.exit(UserWarning)
-                commandList.append(['WF', fWait])
+                starCommandList.append(['WF', fWait])
+            elif action[1].isdigit():
+                waitTime = action.replace('W', '')
+                # an instance wait, for only that call.
+                try:
+                    # how many frames before the next action occurs
+                    waitTime = c.FPS * float(waitTime)
+                except Exception:
+                    print "Invalid W# given. See commands.txt"
+                    sys.exit(UserWarning)
+                starCommandList.append(['W', waitTime])
         elif action[0] == ':':
             if action == ':Stop':
-                commandList.append(['S'])
+                starCommandList.append(['S'])
             else:
                 print "Invalid Stop given. See commands.txt"
                 sys.exit(UserWarning)
-        elif action[0] == 'J':
-            if "JumpTo," in action:
-                try:
-                    startTime = float(action.replace('JumpTo,', ''))
-                except Exception:
-                    print "Invalid start time given. Must be in seconds. See commands.txt"
-                    sys.exit(UserWarning)
-                commandList.append(['J', startTime])
-            else:
-                print "Invalid start time given. Must be 'JumpTo,X'. See commands.txt"
-                sys.exit(UserWarning)
-    debug(c.DEBUG, commandList)
-    return commandList
+                
+                
+                
+
+    debug(c.DEBUG, (genCommandList, circleCommandList, starCommandList))
+    return genCommandList, circleCommandList, starCommandList 

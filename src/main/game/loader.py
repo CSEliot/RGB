@@ -3,13 +3,31 @@ from pygame.locals import FULLSCREEN , DOUBLEBUF , HWSURFACE, RLEACCEL
 from pygame.compat import geterror  # @UnusedImport
 from debug import debug  # @Reimport
 
-# pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
+
+
+
+
+
+"""So ONE of these settings should work for windows, please try different ones
+if you get an error about the mixer"""
+#frequency, size, channels, buffersize = 22050, 16, 2, 4096
+#frequency, size, channels, buffersize = 44100, 16, 2, 2048
+#frequency, size, channels, buffersize = 44100, 16, 2, 1024
+frequency, size, channels, buffersize = 22050, 16, 2, 1024
+# if none of the above work, comment them all out and comment out pre_init line.
+pygame.mixer.pre_init(frequency, -size, channels, buffersize)
 
 os.environ['SDL_VIDEO_CENTERED'] = '1' # centers the window
-# if platform.system()== 'Windows':
-#     os.environ['SDL_VIDEODRIVER'] = 'directx'
+try:
+    if platform.system()== 'Windows':
+        os.environ['SDL_VIDEODRIVER'] = 'directx'
+except:
+    if platform.system()== 'Windows':
+        os.environ['SDL_VIDEODRIVER'] = 'windib'
+
 pygame.init()
 pygame.mixer.init()
+pygame.mixer.set_num_channels(32)
 #ignore mouse motion input
 pygame.event.set_blocked((pygame.MOUSEMOTION, pygame.ACTIVEEVENT))
 
@@ -88,8 +106,8 @@ def load_image(c, name, colorkey=None):
         if colorkey is -1:
             colorkey = image.get_at((0, 0))
         image.set_colorkey(colorkey, RLEACCEL)
-        return image, image.get_rect()
-    return image.convert_alpha(), image.get_rect()
+        return image
+    return image.convert_alpha()
 
 def load_song(c, name):
     fullname = os.path.join(c.MUSC_DIR, name)

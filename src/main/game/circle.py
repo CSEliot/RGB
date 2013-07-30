@@ -1,27 +1,24 @@
-import pygame, pgext  # @UnusedImport
-from pygame.locals import *  # @UnusedWildImport
-from debug import debug
-from math import *
+import pygame, pgext
 
 class Circle (pygame.sprite.Sprite):
 
-    def __init__(self, c, CENTER, speed, color, layer):
+    def __init__(self, image, CENTER, speed, color, layer):
         pygame.sprite.Sprite.__init__(self)
         self.size = 1
         self.speed = speed
         self.radius = 300  # for collision detection w/ stars . . . wtf?
         self.color = color # of the form: (r, g, b)
-        self.image, self.rect = c.CIRC_IMG.copy(), c.CIRC_RECT
+        self.image, self.rect = image.copy(), image.get_rect()
         self.OGCenter = CENTER
         self.rect.center = self.OGCenter
         self._layer = layer
         pgext.color.setColor(self.image, color)
         self.imageOG = self.image
-        self.MAX_SIZE = c.RING_SIZE
+        self.MAX_SIZE = 540
         self.fadeBy = 100
         self.captured = False
         self.catchable = False
-        debug(c.DEBUG, ("{0}'s speed: {1}".format(self.color, self.speed)))
+        
         self.dieing = False
         
     def update(self):
