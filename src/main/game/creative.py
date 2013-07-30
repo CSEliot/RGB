@@ -115,7 +115,8 @@ def showSplashScreen(c, stock):
         pgext.color.setAlpha(splashInfo, fade, 1)
         c.DISPLAYSURFACE.blit(stock.versionID, (0,0))
         pygame.display.flip()
-        if pygame.event.poll().type == KEYUP:
+        event = pygame.event.poll()
+        if event.type == KEYUP and event.key == K_SPACE:
             inInfoScreen = False
             break
     # if the info is still being read/no button pressed, just wait.
