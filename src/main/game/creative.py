@@ -454,7 +454,7 @@ def creative(c, background, stock):
         """PAUSE UNPAUSE"""
         if paused:
             pygame.mixer.music.pause()
-            quitGame = pauseScreen(c)
+            quitGame = pauseScreen(c, stock)
             if quitGame == 3:
                 pygame.mixer.music.stop()
                 return
@@ -1153,6 +1153,7 @@ def creative(c, background, stock):
             c.DISPLAYSURFACE.blit(box_img, box_rectR)
             c.DISPLAYSURFACE.blit(box_img, box_rectG)
             c.DISPLAYSURFACE.blit(box_img, box_rectB)
+            c.DISPLAYSURFACE.blit(stageDisplay, stageDisplay_rect)
             scoreSprite.draw(c.DISPLAYSURFACE)
             c.DISPLAYSURFACE.blit(versionID, (0,0))
 
