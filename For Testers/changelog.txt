@@ -1,5 +1,21 @@
 Changelog
 -------------------------------------------------
+beta v1.3e // 7.30.2013
+-------------------------------------------------
+Added:
+Changed:
+Removed:
+Fixed:
+	- Pause screen crashing in creative mode.	
+	- Creative Mode folder being empty.
+	- "Build Testing" notice not occurring in creative mode.
+Known-Issues:
+	- Circles are growing too quickly. Will probably switch from using a resizing 
+		algorithm to simply using animated circles. Most likely an implementation for
+		1.4
+Intentional:
+
+-------------------------------------------------
 beta v1.3d // 7.30.2013
 -------------------------------------------------
 Added:
