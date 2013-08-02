@@ -75,6 +75,14 @@ class playBox():
         self.isFirst = True
         self.layer = 0
 
+def pause(c, stock, image):
+    """PAUSE UNPAUSE"""
+    pygame.mixer.music.pause()
+    choice = pauseScreen(c, stock, image)
+    pygame.mixer.music.unpause()
+    return choice
+
+
 def rotateBackground(center, background, counter, rotationAngle):
     """ROTATION TESTING"""
     # rotate the background, but only 15 times/second, not 30.
@@ -130,7 +138,7 @@ def campaign(c, background, stock):
     dieingSprites = pygame.sprite.GroupSingle()
     scoreSprite = pygame.sprite.GroupSingle()
     pBox = playBox() # a jukebox for handling music settings.
-    pygame.mixer.music.set_endevent(USEREVENT)
+    
     
     ring = Ring(c.CENTER, stock.campaign["Ring"], stock.campaign["Ring Glow"])
     '''CREATE IMAGES'''
@@ -157,10 +165,12 @@ def campaign(c, background, stock):
     counter = 0
     starWaiting = False
     circleWaiting = False
+    pauseStartTime = None #datetime variable
+    pauseEndTime = None #datetime variable
     r = 0
     g = 0
     b = 0
-    paused = False
+    pause_selection = 0
     total_input = 0
     fpsList = []
     toggle_color_r = False
@@ -235,12 +245,12 @@ def campaign(c, background, stock):
     showSplashScreen(c, stock)
     load_song(c, "It's Melting.ogg")  # stops other music from playing too
 
-
+    pygame.mixer.music.set_endevent(USEREVENT)
     debug(c.DEBUG, "Song loading successful, main game loop about to begin.")
     # --Main Game Loop//--
-    going = True
+    playing_campaign = True
     pygame.mixer.music.play(0, startTime)
-    while going:
+    while playing_campaign:
         counter += 1
         waitCounterCirc += 1
         waitCounterStar += 1
@@ -292,7 +302,7 @@ def campaign(c, background, stock):
                     pBox.cWait = circleAction[1]
             elif circleAction[0] == 'S':
                 pygame.mixer.music.stop()
-                going = False
+                playing_campaign = False
         if circleWaiting:
             # All main actions have to wait before they can be performed,
             # so once an action is read, waiting becomes True, and we test to
@@ -349,12 +359,12 @@ def campaign(c, background, stock):
                 if starAction[0] == 'W':
                     starWaitStart = datetime.datetime.now()
                     starWaiting = True
-                    starWaitMade = datetime.datetime.now()
+                    starWaitMade = datetime.datetime.now() # for debug purposes
                 elif starAction[0] == 'WF':
                     pBox.fWait = starAction[1]
             elif starAction[0] == 'S':
                 pygame.mixer.music.stop()
-                going = False
+                playing_campaign = False
         if starWaiting:
             if starAction[0] == 'F':
                 if waitCounterStar >= pBox.fWait:
@@ -372,7 +382,7 @@ def campaign(c, background, stock):
             elif starAction[0] == 'W':
                 change = datetime.datetime.now() - starWaitStart
                 # if the starAction is to JUST wait x amount of time
-                if change.total_seconds() >= starAction[1] / 30.0:
+                if change.total_seconds() >= starAction[1] / c.FPS:
                     starWaiting = False
                     totalWaitTime = datetime.datetime.now() - starWaitMade 
                     debug(c.DEBUG, ("Wait Time: ", totalWaitTime.total_seconds()))
@@ -387,11 +397,10 @@ def campaign(c, background, stock):
         
         
         # test real quick to see if the song is over.
-        if finishedCircleActions and finishedStarActions:
-            if pygame.event.peek(USEREVENT):
-                pygame.mixer.music.stop()
-                going = False
-        
+        if pygame.event.peek(USEREVENT):
+            pygame.mixer.music.stop()
+            playing_campaign = False
+            debug(c.DEBUG, "MUSIC ENDED, CAMPAIGN SESSION OVER")
         
         
         
@@ -403,14 +412,20 @@ def campaign(c, background, stock):
         latest_events = pygame.event.get()
         for event in latest_events:
             if event.type == QUIT:
-                going = False
+                playing_campaign = False
                 pygame.quit()
                 sys.exit()
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 if c.DEBUG:
-                    going = False
+                    playing_campaign = False
                 else:
-                    paused = True
+                    # have to time how long pause takes, for the wait.
+                    pauseStartTime = datetime.datetime.now()
+                    pause_selection = pause(c, stock, c.DISPLAYSURFACE)
+                    pauseEndTime = datetime.datetime.now()
+                    pauseTotalTime = (pauseEndTime - pauseStartTime)
+                    starWaitStart += pauseTotalTime
+                    circleWaitStart += pauseTotalTime
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == controls[0]:
                 r = 255
@@ -495,12 +510,22 @@ def campaign(c, background, stock):
                     display_sprites = True
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == controls[7]:
-                paused = True
-
+                # have to time how long pause takes, for the wait.
+                pauseStartTime = datetime.datetime.now()
+                pause_selection = pause(c, stock, pygame.display.get_surface())
+                pauseEndTime = datetime.datetime.now()
+                pauseTotalTime = (pauseEndTime - pauseStartTime)
+                starWaitStart += pauseTotalTime
+                circleWaitStart += pauseTotalTime
+            
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
                 debug(c.DEBUG, (pygame.event.event_name(event.type), event.dict))
 
+        if pause_selection == 3:
+            playing_campaign = False
+            return
+        
         """CATCH CIRCLES MATCHING COLORS"""
         # catch matching circles!!
         for circle in circSprites.sprites():
@@ -593,15 +618,6 @@ def campaign(c, background, stock):
 
         """DELAY"""
         c.FPSCLOCK.tick(c.FPS)
-
-        """PAUSE UNPAUSE"""
-        if paused:
-            pygame.mixer.music.pause()
-            quitGame = pauseScreen(c, stock)
-            if quitGame == 3:
-                going = False
-            pygame.mixer.music.unpause()
-            paused = False
 
         """UPDATE"""
         pygame.display.flip()  # update()

@@ -3,12 +3,11 @@ import pgext, pygame.gfxdraw, pygame.surface  # @UnusedImport
 from numpy import *  # @UnusedWildImport
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
-from loader import load_image
 import math as m  # @UnusedImport
 from time import sleep
 
 
-def pauseScreen(c, stock):
+def pauseScreen(c, stock, background):
 
     # menu elements
     selected = 1  # tells which button is currently highlighted
@@ -20,26 +19,24 @@ def pauseScreen(c, stock):
     bQuitButton = 3
     entered = False  # tells if the user has chosen a button
 
-
+    # first in list are original copies, unmodified, then the second gets changed.
+    backgrounds = [background.copy(), background.copy()]
+    background_rect = background.get_rect(center = c.CENTER)
 
 
     #create a copy of our original surface that we can manipulate.
-    pgext.color.greyscale(c.DISPLAYSURFACE)
-    pgext.color.multiply(c.DISPLAYSURFACE, .3)
-    OGDisplay = c.DISPLAYSURFACE.copy()
-    OGRect = OGDisplay.get_rect()
+    #pgext.color.greyscale(c.DISPLAYSURFACE)
+    #pgext.color.multiply(c.DISPLAYSURFACE, .3)
 
     pixelize = 0
-    for pixelize in range(1, 15, 1):
+    for pixelize in range(1, 10):
         # we incrementally pixelize from the OriGinal image in order to cleanly
         # modify the image.
-        c.DISPLAYSURFACE.blit(OGDisplay, OGRect)
-        pgext.filters.pixelize(c.DISPLAYSURFACE, pixelize)
+        c.DISPLAYSURFACE.blit(backgrounds[0], background_rect)
+        backgrounds[0] = backgrounds[1].copy()
+        pgext.filters.pixelize(backgrounds[0], pixelize)
         pygame.display.flip()
-        sleep(0.02)#
-    OGDisplay = c.DISPLAYSURFACE.copy()
-    pygame.display.flip()
-    
+        sleep(0.05)#
     
     
     corners = stock.pause["Corners"]
@@ -88,28 +85,34 @@ def pauseScreen(c, stock):
 
 
     # --Main Game Loop//--
-    going = True
-    while going:
+    game_paused = True
+    while game_paused:
         """EVENT HANDLING INPUT"""
         # grab all the latest input
         latest_events = pygame.event.get()
         for event in latest_events:
             if event.type == QUIT:
-                going = False
+                sleep(2)
+                game_paused = False
+                pygame.quit()
+                sys.exit()
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                going = False
+                game_paused = False
+                sleep(2)
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == K_DOWN:
-                if selected < buttons:
-                    # set the unselected as the previous selected one.
-                    unselected = selected
-                    selected += 1
-                    newSelected = True
+                # set the unselected as the previous selected one.
+                unselected = selected
+                selected += 1
+                newSelected = True
+                if selected == 4:
+                    selected = 1
             elif event.type == KEYDOWN and event.key == K_UP:
-                if selected > 1:
-                    unselected = selected
-                    selected -= 1
-                    newSelected = True
+                unselected = selected
+                selected -= 1
+                newSelected = True
+                if selected == 0:
+                    selected = 3
             elif event.type == KEYDOWN and event.key == K_RETURN:
                 entered = True
 
@@ -147,8 +150,7 @@ def pauseScreen(c, stock):
         if entered:
             sleep(1)
             return selected
-
-        c.DISPLAYSURFACE.blit(OGDisplay , OGRect)
+        c.DISPLAYSURFACE.blit(backgrounds[0], background_rect)
         c.DISPLAYSURFACE.blit(corners, corners_rect)
         c.DISPLAYSURFACE.blit(paused, paused_rect)
         c.DISPLAYSURFACE.blit(bReturn, bReturn_rect)
@@ -161,5 +163,7 @@ def pauseScreen(c, stock):
 
 if __name__ == "__main__":
     from constants import Constants
+    from stock import Stock
     c = Constants()
-    pauseScreen(c)
+    stock = Stock(c)
+    pauseScreen(c, stock, c.DISPLAYSURFACE)
