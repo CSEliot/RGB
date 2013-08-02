@@ -1,8 +1,9 @@
-import pygame, pgext
+import pygame, pgext, sys
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
 from loader import load_song
 from RGB_alpha import gameAlpha
+
 def repositionButton(c,buttonRects):
     position = -50
     for buttonRect in buttonRects:
@@ -102,7 +103,7 @@ def menu(c, background, stock):
         """ROTATION TESTING"""
         # rotate the background, but only 15 times/second, not 30.
         # if the frame rate is 30/sec, then rotate when its an odd frame.
-        if frameCount%3 == 0:
+        if frameCount%5 == 0:
             c.BgAngle += .03
             background = pygame.transform.rotozoom(backgroundOrig, c.BgAngle%360 , 1)
             background_rect = background.get_rect()
@@ -115,23 +116,28 @@ def menu(c, background, stock):
         latest_events = pygame.event.get()
         for event in latest_events:
             if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
                 return 'QUIT'
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 entered = True
                 selected = 2 # 2 is always the return/quit button
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == K_DOWN:
-                if selected < 2:
-                    # set the unselected as the previous selected one.
-                    unselected = selected
-                    selected += 1
-                    newSelected = True
+                # set the unselected as the previous selected one.
+                unselected = selected
+                selected += 1
+                newSelected = True
+                if selected == 3:
+                    selected = 0
             elif event.type == KEYDOWN and event.key == K_UP:
-                if selected > 0:
-                    unselected = selected
-                    selected -= 1
-                    newSelected = True
-            elif event.type == KEYDOWN and event.key == K_RETURN:
+                unselected = selected
+                selected -= 1
+                newSelected = True
+                if selected == -1:
+                    selected = 2
+            elif event.type == KEYDOWN and \
+            (event.key == K_RETURN or event.key == K_SPACE):
                 entered = True
             elif event.type == KEYDOWN and event.key == K_a:
                 gameAlpha(c)

@@ -1,6 +1,24 @@
 Changelog
 -------------------------------------------------
-beta v1.3e // 7.30.2013
+beta v1.31 // 7.30.2013
+-------------------------------------------------
+Added:
+	- campaign ends when music stops. (Elwin)
+Changed:
+	- Enter is alternative to spacebar (Elwin)
+	- Pygame logo fixed (Elwin).
+	- Pause and menu selections now loop around. (Thomas)
+Removed:
+Fixed:
+	- circles and stars spawning due to pausing. (Elwin)
+Known-Issues:
+	- Circle timing still off, growing too quickly
+	- Objects disappear and aren't pixelized before pause screen.		
+Intentional:
+	- Pausing turned off for the first 2 phases of creative mode.
+
+-------------------------------------------------
+beta v1.3f // 7.30.2013
 -------------------------------------------------
 Added:
 Changed:

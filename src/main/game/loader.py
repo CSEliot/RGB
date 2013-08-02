@@ -107,7 +107,8 @@ def load_image(c, name, colorkey=None):
             colorkey = image.get_at((0, 0))
         image.set_colorkey(colorkey, RLEACCEL)
         return image
-    return image.convert_alpha()
+    perPixelAlphaImage = image.convert_alpha()
+    return perPixelAlphaImage
 
 def load_song(c, name):
     fullname = os.path.join(c.MUSC_DIR, name)

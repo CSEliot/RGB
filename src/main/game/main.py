@@ -74,8 +74,9 @@ def main():
     pgext.color.setAlpha(PygLogo, fade, 1)
     c.DISPLAYSURFACE.fill((0, 0, 0))
 
-    mult = 1.6
-    background = load_image(c, 'starBG.png')
+    mult = 1.7
+    background = load_image(c, 'starBG.png')#.convert_alpha()
+    #cut the background into a smaller, more manageable size.
     background = background.subsurface((0,0),(800*mult, 600*mult) ).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
@@ -98,8 +99,6 @@ def main():
     pgext.color.setAlpha(background, fade, 1)
 
 
-    
-    
     playing = True
     while playing:
         selected = menu(c, background, stock)

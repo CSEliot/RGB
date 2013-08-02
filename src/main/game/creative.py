@@ -24,7 +24,12 @@ from pause import pauseScreen
 from commander import commander
 
 
-
+def pause():
+    """PAUSE UNPAUSE"""
+    pygame.mixer.music.pause()
+    choice = pauseScreen(c, stock, c.DISPLAYSURFACE)
+    pygame.mixer.music.unpause()
+    return choice
 
 class clockCounter():
     # this class is meant to hold time variables, mostly for
@@ -116,7 +121,7 @@ def showSplashScreen(c, stock):
         c.DISPLAYSURFACE.blit(stock.versionID, (0,0))
         pygame.display.flip()
         event = pygame.event.poll()
-        if event.type == KEYUP and event.key == K_SPACE:
+        if event.type == KEYUP and (event.key == K_SPACE or event.key ==K_RETURN):
             inInfoScreen = False
             break
     # if the info is still being read/no button pressed, just wait.
@@ -167,6 +172,7 @@ def creative(c, background, stock):
     totalStarTime = 0
     newStartTime = 0
     oldStartTime = 0
+    pause_selection = 0
     newCircleColor = ''
     oldCircleColor = ''
     newStarAngle = ''
@@ -176,6 +182,8 @@ def creative(c, background, stock):
     circleColor = ''
     starWaitStart = 0
     starWaitMade = 0
+    pauseStartTime = None #datetime variable
+    pauseEndTime = None #datetime variable
     finishedCircleActions = False
     finishedStarActions = False
     circleAction = '_'
@@ -305,8 +313,16 @@ def creative(c, background, stock):
                 if c.DEBUG:
                     going = False
                     pygame.mixer.music.stop()
-                else:
-                    paused = True
+                #===============================================================
+                # else:
+                #     # have to time how long pause takes, for the wait.
+                #     pauseStartTime = datetime.datetime.now()
+                #     pause_selection = pause()
+                #     pauseEndTime = datetime.datetime.now()
+                #     pauseTotalTime = (pauseEndTime - pauseStartTime)
+                #     starWaitStart = starWaitStart + pauseTotalTime
+                #     circleWaitStart = circleWaitStart + pauseTotalTime
+                #===============================================================
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == controls[0]:
                 r = 255
@@ -360,7 +376,16 @@ def creative(c, background, stock):
                 debug(c.DEBUG, "new Start Time: %f" % newStartTime)  
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == controls[7]:
-                paused = True
+                None
+                #===============================================================
+                # # have to time how long pause takes, for the wait.
+                # pauseStartTime = datetime.datetime.now()
+                # pause_selection = pause()
+                # pauseEndTime = datetime.datetime.now()
+                # pauseTotalTime = (pauseEndTime - pauseStartTime)
+                # starWaitStart = starWaitStart + pauseTotalTime
+                # circleWaitStart = circleWaitStart + pauseTotalTime
+                #===============================================================
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
                 debug(c.DEBUG, (pygame.event.event_name(event.type), event.dict))
@@ -371,9 +396,11 @@ def creative(c, background, stock):
                 
                 
         if pygame.event.peek(USEREVENT):
-            pygame.mixer.music.stop()
             going = False
                 
+        if pause_selection == 3:
+            going = False
+            return
                 
         #if an action has been input, test total_inputs:
         """Get input to know if we should put in a wait action"""
@@ -451,16 +478,6 @@ def creative(c, background, stock):
         """DELAY"""
         c.FPSCLOCK.tick_busy_loop(c.FPS)
 
-        """PAUSE UNPAUSE"""
-        if paused:
-            pygame.mixer.music.pause()
-            quitGame = pauseScreen(c, stock)
-            if quitGame == 3:
-                pygame.mixer.music.stop()
-                return
-                going = False
-            pygame.mixer.music.unpause()
-            paused = False
 
         """UPDATE"""
         pygame.display.flip()  # update()
@@ -543,7 +560,16 @@ def creative(c, background, stock):
                     going = False
                     pygame.mixer.music.stop()
                 else:
-                    paused = True
+                    None
+                    #===========================================================
+                    # # have to time how long pause takes, for the wait.
+                    # pauseStartTime = datetime.datetime.now()
+                    # pause_selection = pause()
+                    # pauseEndTime = datetime.datetime.now()
+                    # pauseTotalTime = (pauseEndTime - pauseStartTime)
+                    # starWaitStart = starWaitStart + pauseTotalTime
+                    # circleWaitStart = circleWaitStart + pauseTotalTime
+                    #===========================================================
             # --game-play events//--
             # Ring Spinning
             elif event.type == KEYDOWN and event.key == controls[5]:
@@ -617,7 +643,16 @@ def creative(c, background, stock):
                 debug(c.DEBUG, "new Start Time: %f" % newStartTime)  
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == controls[7]:
-                paused = True
+                None
+                #===============================================================
+                # # have to time how long pause takes, for the wait.
+                # pauseStartTime = datetime.datetime.now()
+                # pause_selection = pause()
+                # pauseEndTime = datetime.datetime.now()
+                # pauseTotalTime = (pauseEndTime - pauseStartTime)
+                # starWaitStart = starWaitStart + pauseTotalTime
+                # circleWaitStart = circleWaitStart + pauseTotalTime
+                #===============================================================
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
                 debug(c.DEBUG, (pygame.event.event_name(event.type), event.dict))
@@ -631,6 +666,9 @@ def creative(c, background, stock):
             pygame.mixer.music.stop()
             going = False
                 
+        if pause_selection == 3:
+            going = False
+            return
                 
         #if an action has been input, test total_inputs:
         """Get input to know if we should put in a wait action"""
@@ -708,16 +746,6 @@ def creative(c, background, stock):
         """DELAY"""
         c.FPSCLOCK.tick_busy_loop(c.FPS)
 
-        """PAUSE UNPAUSE"""
-        if paused:
-            pygame.mixer.music.pause()
-            quitGame = pauseScreen(c)
-            if quitGame == 3:
-                return
-                pygame.mixer.music.stop()
-                going = False
-            pygame.mixer.music.unpause()
-            paused = False
 
         """UPDATE"""
         pygame.display.flip()  # update()
@@ -958,11 +986,13 @@ def creative(c, background, stock):
         
         
         # test real quick to see if the song is over.
-        if finishedCircleActions and finishedStarActions:
-            if pygame.event.peek(USEREVENT):
-                pygame.mixer.music.stop()
-                going = False
+        if pygame.event.peek(USEREVENT):
+            pygame.mixer.music.stop()
+            going = False
         
+        if pause_selection == 3:
+            going = False
+            return
         
         
         
@@ -981,7 +1011,13 @@ def creative(c, background, stock):
                 if c.DEBUG:
                     going = False
                 else:
-                    paused = True
+                    # have to time how long pause takes, for the wait.
+                    pauseStartTime = datetime.datetime.now()
+                    pause_selection = pause()
+                    pauseEndTime = datetime.datetime.now()
+                    pauseTotalTime = (pauseEndTime - pauseStartTime)
+                    starWaitStart = starWaitStart + pauseTotalTime
+                    circleWaitStart = circleWaitStart + pauseTotalTime
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == controls[0]:
                 r = 255
@@ -1060,7 +1096,13 @@ def creative(c, background, stock):
                     display_sprites = True
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == controls[7]:
-                paused = True
+                # have to time how long pause takes, for the wait.
+                pauseStartTime = datetime.datetime.now()
+                pause_selection = pause()
+                pauseEndTime = datetime.datetime.now()
+                pauseTotalTime = (pauseEndTime - pauseStartTime)
+                starWaitStart = starWaitStart + pauseTotalTime
+                circleWaitStart = circleWaitStart + pauseTotalTime
 
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
@@ -1159,16 +1201,6 @@ def creative(c, background, stock):
 
         """DELAY"""
         c.FPSCLOCK.tick_busy_loop(c.FPS)
-
-        """PAUSE UNPAUSE"""
-        if paused:
-            pygame.mixer.music.pause()
-            quitGame = pauseScreen(c)
-            if quitGame == 3:
-                return
-                going = False
-            pygame.mixer.music.unpause()
-            paused = False
 
         """UPDATE"""
         pygame.display.flip()  # update()
