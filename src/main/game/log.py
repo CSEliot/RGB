@@ -25,7 +25,7 @@ def log(c):
     # meaning, if it is still printing to the screen.
     if c.OG_STDOUT == sys.stdout:
         # create a file to print to.
-        logFile = open(saveDir, 'w')
+        logFile = open(saveDir, 'a')
         # set the sys.stdout equal to the file we're writing to.
         sys.stdout = logFile
         debug(c.DEBUG, "LOGGING TO FILE BEGINNING--")

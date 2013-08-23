@@ -1,0 +1,19 @@
+Only use method 2 if the game is crashing.
+
+Setting debug:
+	Method 1:
+		Launching RGB.py, changing in options, restarting RGB.
+		Normal logs made here.
+	Method 2:
+		Launching main.py (necessary if game crashes immediately.)
+		After crashing, a "crash-log" will be made.
+		
+		
+the log file will always be saved to the data/log folder.
+
+
+Running RGB.py, debug will be on or off depending on what you set it to in
+the default settings. It starts off. If the game is crashing BEFORE you can make
+it to the options screen, then launch main.py in the src/main folder.
+
+tl;dr:

@@ -26,7 +26,7 @@ from commander import commander
 
 
 
-class counter():
+class timer():
     # this class is meant to hold time variables, mostly for
     # organizational purposes.
     
@@ -120,9 +120,10 @@ def showSplashScreen(c, stock):
         if pygame.event.poll().type != NOEVENT:
             inInfoScreen = False
 
-def campaign(c, background, stock):
+def campaign(c, background, stock, store):
     
     debug(c.DEBUG, "ENTERING: campaign")
+    load_song(c, "It's Melting.ogg")
     
     
     versionID = stock.getVersion()
@@ -182,7 +183,7 @@ def campaign(c, background, stock):
     rightHold = False
     upHold = False
     downHold = False
-    quitGame = False  # if user returns a True from pause, we quit game, etc.
+    #quitGame = False  # if user returns a True from pause, we quit game, etc.
     startTime = 0
     genList = os.path.join(c.DATA_DIR, 'campaign commands/genCommands.txt')
     circleList = os.path.join(c.DATA_DIR, 'campaign commands/circleCommands.txt')
@@ -204,7 +205,7 @@ def campaign(c, background, stock):
             pBox.cSpeed = setting[3]
             pBox.fSpeed = setting[4]
         elif setting[0] == 'J':
-            startTime = setting[1]
+            __startTime = setting[1] #different startTime, unused
         # change the general speed for circles/stars
         elif setting[0][0] == 'W':
             if setting[0] == 'WG':
@@ -243,13 +244,13 @@ def campaign(c, background, stock):
 
     debug(c.DEBUG, "Variable and object instantiating successful.")
     showSplashScreen(c, stock)
-    load_song(c, "It's Melting.ogg")  # stops other music from playing too
-
-    pygame.mixer.music.set_endevent(USEREVENT)
+    songLength = store.music["Spicy Chips"].get_length()
+    #pygame.mixer.music.set_endevent(USEREVENT)
     debug(c.DEBUG, "Song loading successful, main game loop about to begin.")
     # --Main Game Loop//--
     playing_campaign = True
-    pygame.mixer.music.play(0, startTime)
+    startTime = datetime.datetime.now()
+    pygame.mixer.music.play()
     while playing_campaign:
         counter += 1
         waitCounterCirc += 1
@@ -257,9 +258,10 @@ def campaign(c, background, stock):
         # Paint the background
         c.DISPLAYSURFACE.fill((0,0,0))
         c.DISPLAYSURFACE.blit(background, background_rect)
-        if counter%5 == 0:
-            background, background_rect, rotAngle = \
-            rotateBackground(c.CENTER, OGBackground, counter, rotAngle)
+        if not c.FULLSCREEN:
+            if counter%2 == 0:
+                background, background_rect, rotAngle = \
+                rotateBackground(c.CENTER, OGBackground, counter, rotAngle)
             
             
             
@@ -268,13 +270,27 @@ def campaign(c, background, stock):
         """LOGGING output information: FPS, event info, AA, etc."""
         # for every 30 or FPS number of frames, print an average fps.
         fpsList.append(c.FPSCLOCK.get_fps())
-        if counter == (c.FPS*5):
-            debug(c.DEBUG, ("Average FPS: {0}".format(mean(fpsList))))
+        if counter == (c.FPS):
+            AverageFPS = mean(fpsList)
+            debug(c.DEBUG, ("Average FPS: {0}".format(AverageFPS)))
             debug(c.DEBUG, ("Current Score: {0}".format(scoreboard.scoreString)))
             counter = 0
             pygame.display.set_caption('RGB. FPS: {0}'.format(mean(fpsList)))
             fpsList = []
-
+            
+            #===================================================================
+            # this includes other things that i feel like should only be done 
+            # once a second, to save computation time, such as song ending check
+            #===================================================================
+            # test real quick to see if the song is over.
+            deltaTime = (datetime.datetime.now() - startTime).total_seconds()
+            if deltaTime > songLength  :
+                timeMessage = "SongTime: {0}, GameTIme: {1}".format(songLength, 
+                                                                    deltaTime)
+                debug(c.DEBUG, timeMessage)
+                pygame.mixer.music.stop()
+                playing_campaign = False
+                debug(c.DEBUG, "MUSIC ENDED, CAMPAIGN SESSION OVER")
 
 
 
@@ -396,11 +412,7 @@ def campaign(c, background, stock):
         
         
         
-        # test real quick to see if the song is over.
-        if pygame.event.peek(USEREVENT):
-            pygame.mixer.music.stop()
-            playing_campaign = False
-            debug(c.DEBUG, "MUSIC ENDED, CAMPAIGN SESSION OVER")
+
         
         
         
@@ -417,7 +429,9 @@ def campaign(c, background, stock):
                 sys.exit()
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 if c.DEBUG:
+                    # quit game
                     playing_campaign = False
+                    pygame.mixer.music.stop()
                 else:
                     # have to time how long pause takes, for the wait.
                     pauseStartTime = datetime.datetime.now()
@@ -523,6 +537,7 @@ def campaign(c, background, stock):
                 debug(c.DEBUG, (pygame.event.event_name(event.type), event.dict))
 
         if pause_selection == 3:
+            pygame.mixer.music.stop()
             playing_campaign = False
             return
         
@@ -617,7 +632,7 @@ def campaign(c, background, stock):
             c.DISPLAYSURFACE.blit(versionID, (0,0))
 
         """DELAY"""
-        c.FPSCLOCK.tick(c.FPS)
+        c.FPSCLOCK.tick_busy_loop(c.FPS)
 
         """UPDATE"""
         pygame.display.flip()  # update()
@@ -627,10 +642,12 @@ def campaign(c, background, stock):
 
 if __name__ == "__main__":
     from stock import Stock
+    from store import Store
     
     
     c = Constants()
     stock = Stock(c)
+    store = Store(c)
     background = load_image(c, 'starBG.png')
     background_rect = background.get_rect()
 
@@ -639,6 +656,6 @@ if __name__ == "__main__":
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
     
-    campaign(c, background, stock)
+    campaign(c, background, stock, store)
 
 

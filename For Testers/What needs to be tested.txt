@@ -1,12 +1,3 @@
-Version 1.3:
-	Star collision testing.
-	Star feel and feedback, gameplay concept.
-	Framerate, in campaign mode.
-	Menu feedback.
-	Sound mixer in loader.py. several different settings for mixer.pre_init()
-		should be tried, if default fails. (lines 13-18)
-	Also, in loader.py, i set default videodriver to directx this time around,
-		it might break, so, if you're getting an error about that, just 
-		delete or comment that part out.(lines 21&22)
-	Please keep in mind that making things look pretty is meant for the end of 
-	development. 
+Version 1.4:
+	If the sound is lagging at all. Various presets have been commented out
+	in loader.py. Switch between them if you're experiencing sound lag.

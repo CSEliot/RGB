@@ -1,7 +1,6 @@
 import pygame, pgext, sys
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
-from loader import load_song
 from RGB_alpha import gameAlpha
 
 def repositionButton(c,buttonRects):
@@ -12,11 +11,9 @@ def repositionButton(c,buttonRects):
     return
     
     
+def menu(c, background, stock, store):
 
-def menu(c, background, stock):
-
-    load_song(c, 'menuV3.ogg')
-    pygame.mixer.music.play()
+    
 
     if c.DEBUG:
         from time import time
@@ -31,12 +28,13 @@ def menu(c, background, stock):
 
 
     # menu elements
-    selected = 0  # tells which button is currently highlighted
+    selected = 1  # tells which button is currently highlighted
     newSelected = True  # tells if something new has been highlighted
-    unselected = selected  # used to change unhighlighted button back
-    button1 = 0  # represents placeholder for button
-    button2 = 1  # represents placeholder for button
-    button3 = 2
+    unselected = 0  # used to change unhighlighted button back
+    button1 = 1  # represents placeholder for button
+    button2 = 2  # represents placeholder for button
+    button3 = 3  
+    button4 = 4  # is always the quit button
     entered = False  # tells if the user has chosen a button
 
     #Other Variables
@@ -57,8 +55,12 @@ def menu(c, background, stock):
     playButtons = [
                    stock.menu["Campaign"],
                    stock.menu["Creative"],
-                   stock.menu["Return"]
+                   stock.menu["Alpha"]
     ]
+    
+    #a button independent of everything else, return. first in list is original,. second gets modified
+    returnButtons = [stock.menu["Return"].copy(), stock.menu["Return"].copy()] 
+    returnButton_rect = returnButtons[0].get_rect(center = (c.CENTER[0], c.CENTER[1] + 200))
     # start with main buttons.
     buttons = mainButtons
     # same with rects
@@ -89,26 +91,29 @@ def menu(c, background, stock):
     buttonsOrig = [buttons[0].copy(), buttons[1].copy(), buttons[2].copy()]
     backgroundOrig = background.copy()
     
-    # display the version ID
-    font_renderObj = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
-    versionID_SurfaceObj = font_renderObj
-    versionID_RectObj = versionID_SurfaceObj.get_rect()
-    versionID_RectObj.topleft = (0, 0)
+    # create the version ID object 
+    versionID_SurfaceObj = stock.version[0]
+    versionID_RectObj = stock.version[1]
     
-    
+    store.music['menu'].set_volume(1)
+    store.music['menu'].play()
+    store.music['menu'].fadeout(3000)
     # --Main Game Loop//--
     going = True
     oldTime = time()
     while going:
-        """ROTATION TESTING"""
-        # rotate the background, but only 15 times/second, not 30.
-        # if the frame rate is 30/sec, then rotate when its an odd frame.
-        if frameCount%5 == 0:
-            c.BgAngle += .03
-            background = pygame.transform.rotozoom(backgroundOrig, c.BgAngle%360 , 1)
-            background_rect = background.get_rect()
-            background_rect.center = c.CENTER
-        frameCount += 1
+        
+        # rotation causes the game to lag in fullscreen, so we don't rotate when in fullscreen.
+        if not c.FULLSCREEN:
+            """ROTATION TESTING"""
+            # rotate the background, but only 15 times/second, not 30.
+            # if the frame rate is 30/sec, then rotate when its an odd frame.
+            if frameCount%2 == 0:
+                c.BgAngle += .03
+                background = pygame.transform.rotozoom(backgroundOrig, c.BgAngle%360 , 1)
+                background_rect = background.get_rect()
+                background_rect.center = c.CENTER
+            frameCount += 1
         
         
         """EVENT HANDLING INPUT"""
@@ -121,66 +126,56 @@ def menu(c, background, stock):
                 return 'QUIT'
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 entered = True
-                selected = 2 # 2 is always the return/quit button
+                newSelected = True
+                unselected = selected
+                selected = button3 # 2 is always the return/quit button
+                store.sounds['scroll'].play()
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == K_DOWN:
                 # set the unselected as the previous selected one.
                 unselected = selected
                 selected += 1
                 newSelected = True
-                if selected == 3:
-                    selected = 0
+                if selected > button4:
+                    selected = button1
+                if selected == button1:
+                    store.sounds['Enter 1'].play()
+                elif selected == button2:
+                    store.sounds['Enter 2'].play()
+                elif selected == button3:
+                    store.sounds['Enter 3'].play()
             elif event.type == KEYDOWN and event.key == K_UP:
                 unselected = selected
                 selected -= 1
                 newSelected = True
-                if selected == -1:
-                    selected = 2
+                if selected < button1:
+                    selected = button4 
+                if selected == button1:
+                    store.sounds['Enter 1'].play()
+                elif selected == button2:
+                    store.sounds['Enter 2'].play()
+                elif selected == button3:
+                    store.sounds['Enter 3'].play()
             elif event.type == KEYDOWN and \
             (event.key == K_RETURN or event.key == K_SPACE):
+            # if the key is Enter or Spacebar, a button was selected.
                 entered = True
+                unselected = 0
+                store.sounds['scroll'].play()
             elif event.type == KEYDOWN and event.key == K_a:
                 gameAlpha(c)
 
-        # this function controls what each button means/does.
-        if entered:
-            if menuLocation == "main":
-                if selected == 0:
-                    buttons[0] = buttonsOrig[0]
-                    buttons = playButtons
-                    buttonRects = playButtonRects
-                    buttonsOrig = [buttons[0].copy(), buttons[1].copy(), buttons[2].copy()]
-                    newSelected = True
-                    menuLocation = "play"
-                    selected = 0
-                elif selected == 1:
-                    # do nothing, options not made yet :/
-                    None
-                elif selected == 2:
-                    return "QUIT"
-            elif menuLocation == "play":
-                if selected == 0:
-                    return 'campaign'
-                elif selected == 1:
-                    return 'creative'
-                elif selected == 2:
-                    buttons[2] = buttonsOrig[2]
-                    buttons = mainButtons
-                    buttonRects = mainButtonRects
-                    buttonsOrig = [buttons[0].copy(), buttons[1].copy(), buttons[2].copy()]
-                    newSelected = True
-                    menuLocation = "main"
-                    selected = 0
-            entered = False
-            
         if newSelected:
             # revert unselected button back
-            if unselected == button1:
-                buttons[0] = buttonsOrig[0]
-            elif unselected == button2:
-                buttons[1] = buttonsOrig[1]
-            elif unselected == button3:
-                buttons[2] = buttonsOrig[2]
+            if unselected:
+                if unselected == button1:
+                    buttons[0] = buttonsOrig[0]
+                elif unselected == button2:
+                    buttons[1] = buttonsOrig[1]
+                elif unselected == button3:
+                    buttons[2] = buttonsOrig[2]
+                elif unselected == button4:
+                    returnButtons[1] = returnButtons[0].copy() 
             # change image of newly selected
             if selected == button1:
                 buttons[0] = pygame.transform.smoothscale(buttons[0], (buttonRects[0].width + 2, \
@@ -196,7 +191,45 @@ def menu(c, background, stock):
                 pgext.color.setColor(buttons[2], (255, 0, 255))
             newSelected = False
             
-
+        # this function controls what each button means/does.
+        if entered:
+            if menuLocation == "main":
+                if selected == button1:
+                    buttons[0] = buttonsOrig[0]
+                    # make buttons a reference to the play buttons
+                    buttons = playButtons
+                    # copy the button surfaces, so they're independent, not a reference.
+                    buttons = [buttons[0].copy(), buttons[1].copy(), buttons[2].copy()]
+                    # make a set that are unmodified, so modified button can be turned back
+                    buttonsOrig = [buttons[0].copy(), buttons[1].copy(), buttons[2].copy()]
+                    # make a reference to the pay button rects, but leave it that way
+                    buttonRects = playButtonRects
+                    newSelected = True
+                    menuLocation = "play"
+                    selected = button1
+                    unselected = 0
+                elif selected == button2:
+                    # do nothing, options not made yet :/
+                    None
+                elif selected == button3:
+                    return "QUIT"
+            elif menuLocation == "play":
+                if selected == button1:
+                    return 'campaign'
+                elif selected == button2:
+                    return 'creative'
+                elif selected == button3:
+                    gameAlpha(c)
+                elif selected == button4:
+                    buttons[2] = buttonsOrig[2]
+                    buttons = mainButtons
+                    buttonRects = mainButtonRects
+                    buttonsOrig = [buttons[0].copy(), buttons[1].copy(), buttons[2].copy()]
+                    newSelected = True
+                    menuLocation = "main"
+                    selected = button1
+                    unselected = 0
+            entered = False
 
 
         fpsList.append(c.FPSCLOCK.get_fps())
@@ -210,7 +243,7 @@ def menu(c, background, stock):
             oldTime = time()
 
         # reset frame count once it exceeds 30 frames
-        if frameCount >= 30:
+        if frameCount >= c.FPS:
             frameCount = 0
             
 
@@ -222,6 +255,9 @@ def menu(c, background, stock):
         c.DISPLAYSURFACE.blit(buttons[0], buttonRects[0])
         c.DISPLAYSURFACE.blit(buttons[1], buttonRects[1])
         c.DISPLAYSURFACE.blit(buttons[2], buttonRects[2])
+        # we always blit the second image in the buttons list, since it gets 
+        # changed to show it being selected.
+        c.DISPLAYSURFACE.blit(returnButtons[1], returnButton_rect)
         if c.DEBUG:
             c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
         c.FPSCLOCK.tick_busy_loop(c.FPS)
@@ -234,14 +270,16 @@ if __name__ == "__main__":
     
     from constants import Constants
     from stock import Stock
+    from store import Store
     from loader import load_image
     
     c = Constants()
     stock = Stock(c)
+    store = Store(c)
     background = load_image(c, 'starBG.png')
     mult = 1.6
     background = background.subsurface((0,0),(800*mult, 600*mult) ).copy()
     background_rect = background.get_rect()
     background_rect.center = c.CENTER
 
-    menu(c, background, stock)
+    menu(c, background, stock, store)

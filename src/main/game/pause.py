@@ -45,35 +45,19 @@ def pauseScreen(c, stock, background):
     paused = stock.pause["Paused"]
     bQuit = stock.pause["Quit"]
 
-    # RESIZE TO FIT THE SMALL SCREEN.
-    bReturnHeight = int(bReturn.get_height() * .5)
-    bReturnWidth = int(bReturn.get_width() * .5)
-    bReturn = pygame.transform.smoothscale(bReturn, (bReturnWidth, bReturnHeight))
     bReturn_rect = bReturn.get_rect()
-    pausedHeight = int(paused.get_height() * .5)
-    pausedWidth = int(paused.get_width() * .5)
-    paused = pygame.transform.smoothscale(paused, (pausedWidth, pausedHeight))
     paused_rect = paused.get_rect()
-    optionsHeight = int(options.get_height() * .5)
-    optionsWidth = int(options.get_width() * .5)
-    options = pygame.transform.smoothscale(options, (optionsWidth, optionsHeight))
     options_rect = options.get_rect()
-    cornersHeight = int(corners.get_height() * .5)
-    cornersWidth = int(corners.get_width() * .5)
-    corners = pygame.transform.smoothscale(corners, (cornersWidth, cornersHeight))
     corners_rect = corners.get_rect()
-    bQuitHeight = int(bQuit.get_height() * .5)
-    bQuitWidth = int(bQuit.get_width() * .5)
-    bQuit = pygame.transform.smoothscale(bQuit, (bQuitWidth, bQuitHeight))
     bQuit_rect = bQuit.get_rect()
     # menu locations
-    bReturnPos = c.CENTER[0], c.CENTER[1] - 25  # adjusting by specific pixels
+    bReturnPos = c.CENTER[0], c.CENTER[1] - 50  # adjusting by specific pixels
     bReturn_rect.center = bReturnPos
-    bQuitPos = c.CENTER[0], c.CENTER[1] + 80
+    bQuitPos = c.CENTER[0], c.CENTER[1] + 4
     bQuit_rect.center = bQuitPos
     pausedPos = c.CENTER[0], c.CENTER[1] - 150  # adjusting by specific pixels
     paused_rect.center = pausedPos
-    optionsPos = c.CENTER[0], c.CENTER[1] + 25  # adjusting by specific pixels
+    optionsPos = c.CENTER[0], c.CENTER[1] + 50  # adjusting by specific pixels
     options_rect.center = optionsPos
     corners_rect.center = c.CENTER
 
@@ -103,16 +87,16 @@ def pauseScreen(c, stock, background):
             elif event.type == KEYDOWN and event.key == K_DOWN:
                 # set the unselected as the previous selected one.
                 unselected = selected
-                selected += 1
-                newSelected = True
-                if selected == 4:
-                    selected = 1
-            elif event.type == KEYDOWN and event.key == K_UP:
-                unselected = selected
                 selected -= 1
                 newSelected = True
                 if selected == 0:
                     selected = 3
+            elif event.type == KEYDOWN and event.key == K_UP:
+                unselected = selected
+                selected += 1
+                newSelected = True
+                if selected == 4:
+                    selected = 1
             elif event.type == KEYDOWN and event.key == K_RETURN:
                 entered = True
 
