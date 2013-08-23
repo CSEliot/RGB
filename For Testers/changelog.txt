@@ -1,6 +1,44 @@
 Changelog
 -------------------------------------------------
-beta v1.31 // 7.30.2013
+beta v1.4 // 8.xx.2013
+-------------------------------------------------
+Added:
+Changed:
+	- Scoreboard is in the top right of screen.
+	- Screencap set to 25
+	- some error messages can/will appear in boxes for now on.
+	- debugging is off by default. To turn on, please read the HowTo.
+	- Background won't rotate while in fullscreen.
+	- Menu sound effects.
+Removed:
+	- Start time / JumpTo function 
+	- Skipping in creative mode
+Fixed:
+Known-Issues:
+	- Circle timing still off, growing too quickly
+	- Objects disappear and aren't pixelized before pause screen.		
+Intentional:
+	- Pausing turned off for the first 2 phases of creative mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------
+beta v1.31 // 8.1.2013
 -------------------------------------------------
 Added:
 	- campaign ends when music stops. (Elwin)
@@ -8,6 +46,7 @@ Changed:
 	- Enter is alternative to spacebar (Elwin)
 	- Pygame logo fixed (Elwin).
 	- Pause and menu selections now loop around. (Thomas)
+	- Made credits more professional >_> (Elwin)
 Removed:
 Fixed:
 	- circles and stars spawning due to pausing. (Elwin)

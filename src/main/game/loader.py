@@ -2,6 +2,7 @@ import pygame, os, platform
 from pygame.locals import FULLSCREEN , DOUBLEBUF , HWSURFACE, RLEACCEL
 from pygame.compat import geterror  # @UnusedImport
 from debug import debug  # @Reimport
+from errorbox import errorbox as errorbox
 
 
 
@@ -14,7 +15,9 @@ if you get an error about the mixer"""
 #frequency, size, channels, buffersize = 44100, 16, 2, 2048
 #frequency, size, channels, buffersize = 44100, 16, 2, 1024
 frequency, size, channels, buffersize = 22050, 16, 2, 1024
-# if none of the above work, comment them all out and comment out pre_init line.
+
+"""if none of the above work, comment them all out and comment
+ out pre_init line. """
 pygame.mixer.pre_init(frequency, -size, channels, buffersize)
 
 os.environ['SDL_VIDEO_CENTERED'] = '1' # centers the window
@@ -99,7 +102,9 @@ def load_image(c, name, colorkey=None):
     try:
         image = pygame.image.load(fullname)
     except pygame.error:
-        debug(c.DEBUG, ('Cannot load image:', fullname))
+        message = 'Cannot load image: ' + fullname
+        errorbox("Failed Image Loading", message)
+        debug(c.DEBUG, message)
         raise SystemExit(str(geterror()))
     # image = image.convert()
     if colorkey is not None:
@@ -112,11 +117,13 @@ def load_image(c, name, colorkey=None):
 
 def load_song(c, name):
     fullname = os.path.join(c.MUSC_DIR, name)
-    pygame.mixer.music.set_volume(c.VOLUME)
     try:
         pygame.mixer.music.load(fullname)
+        pygame.mixer.music.set_volume(c.VOLUME)
     except pygame.error:
-        debug(c.DEBUG, ('COULD NOT LOAD MUSIC: ', fullname))
+        message = 'COULD NOT LOAD MUSIC: ' + fullname
+        debug(c.DEBUG, message)
+        errorbox("Failed Loading Song", message)
         raise SystemExit(str(geterror()))
     return
 
@@ -126,8 +133,11 @@ def load_image_C(gfx_dir, DEBUG, name, colorkey=None):
     fullname = os.path.join(gfx_dir, name)
     try:
         image = pygame.image.load(fullname)
+        print fullname
     except pygame.error:
-        debug(DEBUG, ('Cannot load image:', fullname))
+        message = 'Cannot load image: ' + fullname
+        errorbox("Failed Image Loading", message)
+        debug(DEBUG, ('Cannot load image: ', message))
         raise SystemExit(str(geterror()))
     # image = image.convert()
     if colorkey is not None:
@@ -136,3 +146,17 @@ def load_image_C(gfx_dir, DEBUG, name, colorkey=None):
         image.set_colorkey(colorkey, RLEACCEL)
         return image, image.get_rect()
     return image.convert_alpha(), image.get_rect()
+
+def load_sound(c, name):
+    fullname = os.path.join(c.SND_DIR, name)
+    try:
+        if not(os.path.isfile(fullname)):
+            raise NameError(fullname)
+        sound = pygame.mixer.Sound(fullname)
+        sound.set_volume(c.VOLUME)
+    except NameError:
+        message = 'Cannot load sound: ' + fullname
+        errorbox("Failed Sound Loading", message)
+        debug(c.DEBUG, ('Cannot load sound: ', fullname))
+        raise SystemExit(str(geterror()))
+    return sound

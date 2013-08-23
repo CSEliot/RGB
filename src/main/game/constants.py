@@ -41,9 +41,11 @@ class Constants(object):
         self.C_SPEED = 10
         self.F_SPEED = 10
         self.WAIT = 1
+        self.STAR_POINTS = 10
+        self.CIRC_POINTS = 1
         # --constants//--
         self.DISPLAYSURFACE = DISPLAYSURFACE
-        self.FPS = 30  # frames per second ceiling setting
+        self.FPS = 25  # frames per second ceiling setting
         self.RED = pygame.color.Color('red')
         self.GREEN = pygame.color.Color('green')
         self.BLUE = pygame.color.Color('blue')

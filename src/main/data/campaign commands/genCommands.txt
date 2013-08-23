@@ -1,1 +1,1 @@
-JumpTo,220
+JumpTo,0 BPM70
