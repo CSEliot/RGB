@@ -60,7 +60,8 @@ def menu(c, background, stock, store):
     
     #a button independent of everything else, return. first in list is original,. second gets modified
     returnButtons = [stock.menu["Return"].copy(), stock.menu["Return"].copy()] 
-    returnButton_rect = returnButtons[0].get_rect(center = (c.CENTER[0], c.CENTER[1] + 200))
+    pgext.color.setColor(returnButtons[1], (100, 100, 100))
+    returnButton_rect = returnButtons[0].get_rect(center = (c.CENTER[0], c.CENTER[1] + 145))
     # start with main buttons.
     buttons = mainButtons
     # same with rects
@@ -128,7 +129,7 @@ def menu(c, background, stock, store):
                 entered = True
                 newSelected = True
                 unselected = selected
-                selected = button3 # 2 is always the return/quit button
+                selected = button4 # 2 is always the return/quit button
                 store.sounds['scroll'].play()
             # --game-play events//--
             elif event.type == KEYDOWN and event.key == K_DOWN:
@@ -175,7 +176,8 @@ def menu(c, background, stock, store):
                 elif unselected == button3:
                     buttons[2] = buttonsOrig[2]
                 elif unselected == button4:
-                    returnButtons[1] = returnButtons[0].copy() 
+                    returnButtons[1] = returnButtons[0].copy()
+                    pgext.color.setColor(returnButtons[1], (100, 100, 100))
             # change image of newly selected
             if selected == button1:
                 buttons[0] = pygame.transform.smoothscale(buttons[0], (buttonRects[0].width + 2, \
@@ -189,6 +191,11 @@ def menu(c, background, stock, store):
                 buttons[2] = pygame.transform.smoothscale(buttons[2], (buttonRects[2].width + 2, \
                                                         buttonRects[2].height + 2))
                 pgext.color.setColor(buttons[2], (255, 0, 255))
+            elif selected == button4:
+                returnButtons[1] = pygame.transform.smoothscale(returnButtons[1], (returnButton_rect.width + 2, \
+                                                        returnButton_rect.height + 2))
+                returnButtons[1] = returnButtons[0].copy()
+                
             newSelected = False
             
         # this function controls what each button means/does.
@@ -211,7 +218,7 @@ def menu(c, background, stock, store):
                 elif selected == button2:
                     # do nothing, options not made yet :/
                     None
-                elif selected == button3:
+                elif selected == button3 or selected == button4:
                     return "QUIT"
             elif menuLocation == "play":
                 if selected == button1:
@@ -219,12 +226,14 @@ def menu(c, background, stock, store):
                 elif selected == button2:
                     return 'creative'
                 elif selected == button3:
+                    print "LAUNCHING GAME ALPHA"
                     gameAlpha(c)
                 elif selected == button4:
                     buttons[2] = buttonsOrig[2]
                     buttons = mainButtons
                     buttonRects = mainButtonRects
                     buttonsOrig = [buttons[0].copy(), buttons[1].copy(), buttons[2].copy()]
+                    pgext.color.setColor(returnButtons[1], (100, 100, 100))
                     newSelected = True
                     menuLocation = "main"
                     selected = button1
