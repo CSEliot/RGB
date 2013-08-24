@@ -39,7 +39,6 @@ def main(debugSet):
     stock = Stock(c)
     #holds and loads all the game's music/sounds.
     store = Store(c)
-    store.music["menu2"].play()
 
     if c.DEBUG:
         logFile = logger(c)
@@ -97,6 +96,7 @@ def main(debugSet):
     pgext.color.setAlpha(background, fade, 1)
     pygame.event.clear()
     # fade in BACKGROUND
+    store.music["menu2"].play()
     for fade in range(0, 200, 3):
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(background, background_rect)

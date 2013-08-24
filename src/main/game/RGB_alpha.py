@@ -183,37 +183,21 @@ def gameAlpha(c):
                     display_sprites = False
                 else:
                     display_sprites = True
-        # if q is pressed, print output to file log.txt
-            elif event.type == KEYDOWN and False:
-                if orig_stdout == sys.stdout:
-                    rep_log = open('data/log.txt', 'a')
-                    sys.stdout = rep_log
-                    print "LOGGING TO FILE BEGINNING--"
-                else:
-                    print "LOGGING TO FILE ENDING--"
-                    sys.stdout = orig_stdout
-                    rep_log.close()
         # if p is pressed, pause game.
             elif event.type == KEYUP and event.key == K_p:
                 pygame.event.pump()
                 for p in pygame.key.get_pressed():
                         if p == True:
-                            print "A KEY IS PRESSED, CAN NOT PAUSE"
                             paused = False
                             break
                         else:
                             paused = True
-                            print "INTO PAUSE!!"
         # if l is pressed, toggle black auto-black circle.
             elif event.type == KEYDOWN and event.key == K_l:
                 if total_input == 0:
                     total_input = 100
                 else:
                     total_input = 0
-            """LOGGING of inputs"""
-            if event.type == KEYDOWN or event.type == KEYUP:
-                print event.dict
-
         # --function controls//--
         # if paused is set to true, wait for p to be pressed again.
         """PAUSE WAIT STOP"""
@@ -223,12 +207,10 @@ def gameAlpha(c):
                     pygame.event.pump()
                     for p in pygame.key.get_pressed():
                         if p == True:
-                            print "A KEY IS PRESSED, CAN NOT UNPAUSE"
                             paused = True
                             break
                         else:
                             paused = False
-                            print "OUT OF PAUSE!"
                 if x_event.type == QUIT:
                     sys.exit()
                     pygame.quit()
@@ -324,20 +306,10 @@ def gameAlpha(c):
             c.DISPLAYSURFACE.blit(b_SurfaceObj, b_RectObj)
             c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
 
-        """LOGGING output information: FPS, event info, AA, etc."""
-        num_compare = "%d:%d" % (current_circle_quantity, len(circle_size_list))
-        print fpsClock.get_fps(), num_compare
-        if len(circle_size_list) > 0:
-            print circle_size_list[0]
-
         """UPDATE AND DELAY"""
         fpsClock.tick_busy_loop(FPS)
         pygame.display.flip()
 
-    try:
-        rep_log.close()
-    except Exception:
-        print "File never opened"
 #     pygame.quit()
 #     sys.exit()
 
