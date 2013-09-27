@@ -93,8 +93,7 @@ def menu(c, background, stock, store):
     backgroundOrig = background.copy()
     
     # create the version ID object 
-    versionID_SurfaceObj = stock.version[0]
-    versionID_RectObj = stock.version[1]
+    versionID_SurfaceObj = stock.version
     
     store.music['menu'].set_volume(1)
     store.music['menu'].play()
@@ -268,7 +267,7 @@ def menu(c, background, stock, store):
         # changed to show it being selected.
         c.DISPLAYSURFACE.blit(returnButtons[1], returnButton_rect)
         if c.DEBUG:
-            c.DISPLAYSURFACE.blit(versionID_SurfaceObj, versionID_RectObj)
+            c.DISPLAYSURFACE.blit(versionID_SurfaceObj, (0,0))
         c.FPSCLOCK.tick_busy_loop(c.FPS)
         pygame.display.flip()
         #         pygame.transform.set_smoothscale_backend(SSE)

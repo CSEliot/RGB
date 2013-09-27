@@ -25,7 +25,9 @@ class Constants(object):
                              setList[6], setList[7], setList[8], setList[9], \
                              setList[10]]
         self.FULLSCREEN = setList[0]
-        self.VOLUME = setList[1]
+        # the volume list will hold volume settings in this order:
+        # Master Volume, Music, In-game Sfx
+        self.VOLUME = [setList[1], None, None]
         ## BUILDING SCREEN FROM LOADER
         DISPLAYSURFACE, wDisplay, scnError, displayInfo = \
         make_gamescreen(self.FULLSCREEN)
@@ -56,7 +58,7 @@ class Constants(object):
         self.FPSCLOCK = pygame.time.Clock()
         self.FONT_LARGE = pygame.font.SysFont('arial', 32, True)
         self.FONT_SMALL = pygame.font.SysFont('arial', 16)
-        self.VERSION = 'betaV1.31'
+        self.VERSION = 'betaVpre-1.4'
         self.DISPLAY_W = self.DISPLAYSURFACE.get_width()
         self.CENTER_X = (self.DISPLAY_W / 2)
         self.DISPLAY_H = self.DISPLAYSURFACE.get_height()
