@@ -16,4 +16,3 @@ Running RGB.py, debug will be on or off depending on what you set it to in
 the default settings. It starts off. If the game is crashing BEFORE you can make
 it to the options screen, then launch main.py in the src/main folder.
 
-tl;dr:
