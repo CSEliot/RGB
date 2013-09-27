@@ -19,3 +19,7 @@ Anything like 1.31, 1.32, it'd be good just to hear that it works. One night,
 Thomas and I spent 2.5 hours trying to fix 2 things, which we did fix.
 Quickfixes should only be tested if you were the one who found the error, or i 
 ask you personally.
+
+
+//Also, pre-X means i'm not asking for any major critiquing, it's probably just
+//for online backup, or a small change that i'd like input on.

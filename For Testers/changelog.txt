@@ -1,6 +1,6 @@
 Changelog
 -------------------------------------------------
-beta v1.4 // 8.xx.2013
+beta pre-v1.4 // x.xx.2013
 -------------------------------------------------
 Added:
 Changed:
@@ -11,15 +11,20 @@ Changed:
 	- Background won't rotate while in fullscreen.
 	- Menu sound effects.
 Removed:
+	- Access to campaign and creative mode. (Will be changed a lot, so no point
+											 in going over them.)
 	- Start time / JumpTo function 
 	- Skipping in creative mode
 Fixed:
 	- Menu music not turning off
 Known-Issues:
 	- Circle timing still off, growing too quickly
-	- Objects disappear and aren't pixelized before pause screen.		
+	- Objects disappear and aren't pixelized before pause screen.
+	- Pausing loses objects in background.		
 Intentional:
 	- Pausing turned off for the first 2 phases of creative mode.
+	- Access to creative mode and campaign mode. 
+		(though they can still be by running them directly)
 
 
 

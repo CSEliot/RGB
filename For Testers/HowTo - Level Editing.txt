@@ -1,3 +1,7 @@
+
+
+--DEPRECATED-- Needs to be updated.
+
 HOW TO:
 	circleCommands takes the following: W, WC, C, CSP, :Stop
 	starCommands takes the following: W, WF, F, FSP, :Stop
