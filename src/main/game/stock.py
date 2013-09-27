@@ -32,8 +32,7 @@ class Stock(object):
                          "Ring Glow":load_image(c, 'campaign/ring_glow.png')
         }
         
-        self.version = [c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE), None]
-        self.version[1] = self.version[0].get_rect()
+        self.version = c.FONT_SMALL.render(c.VERSION, False, c.BLACK, c.WHITE)
         
         self.creative = {
                          "Info Splash":load_image(c, "creative/Creative Control Scheme.png"),
@@ -59,6 +58,6 @@ class Stock(object):
                       "Quit":load_image(c, 'pause/quit.png')}
     
     def getVersion(self):
-        return self.versionID
+        return self.version
                         
                                            

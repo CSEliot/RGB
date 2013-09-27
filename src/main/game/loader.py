@@ -119,7 +119,7 @@ def load_song(c, name):
     fullname = os.path.join(c.MUSC_DIR, name)
     try:
         pygame.mixer.music.load(fullname)
-        pygame.mixer.music.set_volume(c.VOLUME)
+        pygame.mixer.music.set_volume(c.VOLUME[0])
     except pygame.error:
         message = 'COULD NOT LOAD MUSIC: ' + fullname
         debug(c.DEBUG, message)
@@ -153,7 +153,8 @@ def load_sound(c, name):
         if not(os.path.isfile(fullname)):
             raise NameError(fullname)
         sound = pygame.mixer.Sound(fullname)
-        sound.set_volume(c.VOLUME)
+        print c.VOLUME
+        sound.set_volume(c.VOLUME[0])
     except NameError:
         message = 'Cannot load sound: ' + fullname
         errorbox("Failed Sound Loading", message)

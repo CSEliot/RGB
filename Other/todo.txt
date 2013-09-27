@@ -8,7 +8,10 @@ Added:
 		previous action.
 	- Change star commands from F to S.
 Changed: --
+	- Have the first return say Quit, and the Quit say Credits
 Fixed: --
+	- Pressing Enter into Campaign skips tutorial.
+	- Menu music doesn't stop upon entering campaign.
 	- Circles aren't in time correctly past 3
 		seconds. By makign spritesheets instead.
 		
@@ -34,7 +37,4 @@ v2+// 03.xx.2013.xx:xx -
 							-Fullscreen TOGGLE not working (all not working on mac)*
 *Final*
 1.0.0 // xx.xx.2013.xx:xx - Added:
-							-Gameplay
-							-Music
-							-Gameplay
 							-Pretty things

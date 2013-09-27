@@ -112,7 +112,8 @@ def main(debugSet):
 
     playing = True
     while playing:
-        selected = menu(c, background, stock, store)
+        selected = menu(c, background, stock, store) 
+        store.music['menu2'].stop()
         # menu will return a list, [gamemode,option,quit]. if it's gamemode
         # we have to look at the second number in the list.
         if selected == 'campaign':
