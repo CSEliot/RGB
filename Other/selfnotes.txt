@@ -8,7 +8,7 @@ How to have the background interract with gameplay:
 
 
 STAR TIME RIGHT: when pressing left/right, the ring opens&loses really quickly
-
+ 
 NEED TO ADD SEIZURE WARNING-ING-ING
 
 creative:
