@@ -23,10 +23,9 @@ class Store(object):
                        "test": load_sound(c, "test.ogg")
                        }
         # set volume by a factor of current volume.
-        self.sounds["Enter 1"].set_volume(self.sounds["Enter 1"].get_volume()/20.0)
-        self.sounds["Enter 2"].set_volume(self.sounds["Enter 2"].get_volume()/20.0)
-        self.sounds["Enter 3"].set_volume(self.sounds["Enter 3"].get_volume()/20.0)
-        self.sounds["scroll"].set_volume(self.sounds["scroll"].get_volume()/2.0)
-        
+        self.sounds["Enter 1"].set_volume(self.sounds["Enter 1"].get_volume()/35.0)
+        self.sounds["Enter 2"].set_volume(self.sounds["Enter 2"].get_volume()/35.0)
+        self.sounds["Enter 3"].set_volume(self.sounds["Enter 3"].get_volume()/35.0)
+        self.sounds["scroll"].set_volume(self.sounds["scroll"].get_volume()/30.0)
         
         
