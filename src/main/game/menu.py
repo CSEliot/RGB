@@ -15,10 +15,9 @@ def menu(c, background, stock, store):
 
     
 
-    if c.DEBUG:
-        from time import time
-        from numpy import mean
-        from debug import debug
+    from time import time
+    from numpy import mean
+    from debug import debug
     
     debug(c.DEBUG, "Entering: mainMenu")
     # the background is the current information from the screen. It's faster
