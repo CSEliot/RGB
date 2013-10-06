@@ -36,7 +36,7 @@ class Constants(object):
         self.whichDisplay = wDisplay
         self.screenError = scnError
         # default game values
-        self.DEBUG = True
+        self.DEBUG = False
         self.RING_SIZE = 540.0  # for circles  reference only!
         self.RING_RADIUS = 265.0  # for stars / speed
         self.BPM = 60.0
