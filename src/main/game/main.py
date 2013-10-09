@@ -118,10 +118,10 @@ def main(debugSet):
         # menu will return a list, [gamemode,option,quit]. if it's gamemode
         # we have to look at the second number in the list.
         if selected == 'campaign':
-            #campaign(c, background, stock, store)
+            campaign(c, background, stock, store)
             None
         elif selected == 'creative':
-            #creative(c, background, stock, store)
+            creative(c, background, stock, store)
             None
         elif selected == 'options':
             None

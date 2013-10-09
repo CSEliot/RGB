@@ -1,10 +1,18 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+
+FEEDBACK: The return button isn't obvious it is usable
+
 How to have the background interract with gameplay:
 	A star that successfully leaves the screen adds itself to the background. Larger combos from RGB input will make them
 	brighter. But will I use the 3D stars, or the rotating ones? Will I have the background change it's hue, and will
 	the stars change color???  hmmm
+	
+	
+Idea from J.Mo: A follow the leader type gameplay where the ring tells you what color to produce.
+
+
 
 
 STAR TIME RIGHT: when pressing left/right, the ring opens&loses really quickly

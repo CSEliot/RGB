@@ -118,7 +118,7 @@ def showSplashScreen(c, stock):
         c.DISPLAYSURFACE.fill((0, 0, 0))
         c.DISPLAYSURFACE.blit(splashInfo, splashInfo_rect)
         pgext.color.setAlpha(splashInfo, fade, 1)
-        c.DISPLAYSURFACE.blit(stock.versionID, (0,0))
+        c.DISPLAYSURFACE.blit(stock.version, (0,0))
         pygame.display.flip()
         event = pygame.event.poll()
         if event.type == KEYUP and (event.key == K_SPACE or event.key ==K_RETURN):
