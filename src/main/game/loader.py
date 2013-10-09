@@ -133,7 +133,7 @@ def load_image_C(gfx_dir, DEBUG, name, colorkey=None):
     fullname = os.path.join(gfx_dir, name)
     try:
         image = pygame.image.load(fullname)
-        print fullname
+        #print fullname
     except pygame.error:
         message = 'Cannot load image: ' + fullname
         errorbox("Failed Image Loading", message)
@@ -153,7 +153,7 @@ def load_sound(c, name):
         if not(os.path.isfile(fullname)):
             raise NameError(fullname)
         sound = pygame.mixer.Sound(fullname)
-        print c.VOLUME
+        #print c.VOLUME
         sound.set_volume(c.VOLUME[0])
     except NameError:
         message = 'Cannot load sound: ' + fullname
