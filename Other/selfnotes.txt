@@ -12,7 +12,7 @@ How to have the background interract with gameplay:
 	
 Idea from J.Mo: A follow the leader type gameplay where the ring tells you what color to produce.
 
-
+Sample song to use: http://www.youtube.com/watch?v=OzKnoMIzrkM&list=PL883C7C5BA042400E
 
 
 STAR TIME RIGHT: when pressing left/right, the ring opens&loses really quickly
