@@ -43,7 +43,7 @@ def make_gamescreen(fullBool):
     # Making a screen, w/ 4 different possible outcomes.
     if fullBool == True:
         try:
-            options = (FULLSCREEN | DOUBLEBUF | HWSURFACE)
+            options = (FULLSCREEN)
             std_res = (window_width, window_height)
             DISPLAYSURFACE = pygame.display.set_mode(std_res, options, 32)
             whichDisplay = "Display 1"

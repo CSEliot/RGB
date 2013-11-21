@@ -26,8 +26,6 @@ messagebox can sure be a lot nicer than a stack trace. ;]
 import sys
 
 
-
-
 def errorbox(title, message):
     "attempt to error with a gui"
     global handlers
@@ -43,16 +41,16 @@ def errorbox(title, message):
 
 def __wxpython(title, message):
     from wxPython.wx import *
-    class LameApp(wxApp):
+    class LameApp(wxApp):  # @UndefinedVariable
         def OnInit(self): return 1
     app = LameApp()
-    dlg = wxMessageDialog(None, message, title, wxOK|wxICON_EXCLAMATION)
+    dlg = wxMessageDialog(None, message, title, wxOK|wxICON_EXCLAMATION)  # @UndefinedVariable
     dlg.ShowModal()
     dlg.Destroy()
 
 
 def __gtk(title, message):
-    import GtkExtra
+    import GtkExtra  # @UnresolvedImport
     GtkExtra.message_box(title, message, ['Ok'])
    
 
