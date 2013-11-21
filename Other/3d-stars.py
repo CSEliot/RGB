@@ -15,7 +15,7 @@ import pygame, pygame.transform
 from random import *
 from pygame.surfarray import *
 from pygame.locals import *
-from Numeric import *
+from numpy import *
 
 # ------------------------------------------------------------------------------------
 # Glob decs
@@ -113,7 +113,7 @@ def update_stars(nstars,mstars,screen):
                 # Decrement the number of live stars so the next call to create_stars will make a new one...
                 nstars -= 1
                 continue
-        
+            i = int(i)
             # Draw the star's new position to the screen using the colour specified in the colour_map...
             screen.fill(COLOUR_MAP[STARS[i][0]], (COORDS[i][0], COORDS[i][1], 1, 1))            
 
