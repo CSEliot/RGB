@@ -1,13 +1,16 @@
 --Planned--
 -------------------------
-beta v1.4 // 07.xx.2013
+beta v1.4 // xx.xx.2013
 -------------------------	
 Added:
+	- make crashtest_toggle.txt to change debug mode on or off.
+	that way, when the game starts from an executable, you can control debugging
 	- Have things work in seconds. 
 	- Have actions be based on time since beginning of song, not time after
 		previous action.
 	- Change star commands from F to S.
 Changed: --
+	- all fonts based off system fonts (eventually based off font files in-src)
 	- Have the first return say Quit, and the Quit say Credits
 Fixed: --
 	- Pressing Enter into Campaign skips tutorial.

@@ -24,6 +24,9 @@ messagebox can sure be a lot nicer than a stack trace. ;]
 """
 
 import sys
+import os
+import pygame, pygame.font
+from pygame.locals import *
 
 
 def errorbox(title, message):
@@ -43,7 +46,7 @@ def __wxpython(title, message):
     from wxPython.wx import *
     class LameApp(wxApp):  # @UndefinedVariable
         def OnInit(self): return 1
-    app = LameApp()
+    app = LameApp()  # @UnusedVariable
     dlg = wxMessageDialog(None, message, title, wxOK|wxICON_EXCLAMATION)  # @UndefinedVariable
     dlg.ShowModal()
     dlg.Destroy()
@@ -61,16 +64,16 @@ def __tkinter(title, message):
 
 
 def __pygame(title, message):
-    import os
+
     try:
-        import pygame, pygame.font
-        from pygame.locals import *
+
+
         pygame.quit() #clean out anything running
         pygame.display.init()
         pygame.font.init()
         screen = pygame.display.set_mode((460, 140))
         pygame.display.set_caption(title)
-        font = pygame.font.Font(None, 18)
+        font = pygame.font.SysFont('arial', 18)
         foreg = 0, 0, 0
         backg = 200, 200, 200
         liteg = 255, 255, 255
