@@ -6,7 +6,7 @@
 #        A rhythm game based around the monitor's use of RGB pixels to create
 # images to be displayed to the screen.
 
-import sys, os, pygame.gfxdraw, pgext
+import sys, os, pygame.gfxdraw, pgext  # @UnresolvedImport
 from pygame.locals import *  # @UnusedWildImport
 from constants import Constants
 from loader import load_image
@@ -45,7 +45,7 @@ WHITE = (255, 255, 255)
 BLANK = (0, 233, 0, 10)
 BLACK = (0, 0, 0)
 fpsClock = pygame.time.Clock()
-fontObj_large = pygame.font.Font('freesansbold.ttf', 32)
+fontObj_large = pygame.font.SysFont('arial', 32, True)
 
 
 # --main//--

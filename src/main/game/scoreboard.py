@@ -6,7 +6,7 @@ class Scoreboard(pygame.sprite.Sprite):
     def __init__(self, DISPLAY_W, DISPLAY_H):
         pygame.sprite.Sprite.__init__(self)
         self.score = 0
-        self.FONT_LARGE = pygame.font.Font('freesansbold.ttf', 32)
+        self.FONT_LARGE = pygame.font.SysFont('arial', 32, True)
         self.scoreString = ''
         self.WHITE = (255, 255, 255)
         self.image = self.FONT_LARGE.render(self.scoreString, True, self.WHITE)

@@ -1,3 +1,4 @@
+#@PydevCodeAnalysisIgnore
 import pygame, pgext  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
 

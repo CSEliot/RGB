@@ -9,7 +9,7 @@
 #===============================================================================
 
 import pygame, sys, os, datetime, platform  # @UnusedImport
-import pgext, pygame.gfxdraw, pygame.surface  # @UnusedImport
+import pgext, pygame.gfxdraw, pygame.surface  # @UnusedImport @UnresolvedImport
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport
 import math as m  # @UnusedImport
@@ -161,6 +161,7 @@ def main(debugSet):
     pygame.quit()
     sys.exit()
 if __name__ == '__main__':
+    print "HEY THERE SEXY LADY"
     import logging
     DATE = datetime.date.timetuple(datetime.date.today())[0] , \
            datetime.date.timetuple(datetime.date.today())[1] , \
@@ -168,7 +169,7 @@ if __name__ == '__main__':
     MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
     MAIN_DIR = os.path.split(MAIN_DIR)[0]
     DATA_DIR = os.path.join(MAIN_DIR, 'data')
-    saveDir = os.path.join(DATA_DIR, 'logs/crash-log-{0}.txt'.format(DATE))
+    saveDir = os.path.join(DATA_DIR, 'logs','crash-log-{0}.txt'.format(DATE))
     logFile = open(saveDir, 'w')
     logFile.close()
     logging.basicConfig(level=logging.DEBUG, filename = saveDir)

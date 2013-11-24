@@ -21,16 +21,18 @@ from numpy import *
 # Glob decs
 
 # Screen resolution...
-RES 	= array((1100,700))
+RES 	= array((800,600))
 
 # We use this to provide the upper and lower bands of the initial x,y randomisation
 # and then as a modifier to shift negative x,y values back into our screen display range 
 RANGE_X   = RES[0]/2
 RANGE_Y   = RES[1]/2
 
+starCount = 690
+
 # An array of star positions Z,X,Y -- [In|De]crease length for different star numbers...
-STARS      = zeros((300,3))
-COORDS     = zeros((300,2))
+STARS      = zeros((starCount,3))
+COORDS     = zeros((starCount,2))
 
 # Initialise an array for storing RGB tuples
 COLOUR_MAP = [[]] * 256
@@ -42,21 +44,22 @@ global NUMSTARS
 
 # ------------------------------------------------------------------------------------
 def main():
-    "Inisalises display, precalculates the cosine values, and controls the update loop"
+    "Initializes display, calculates the cosine values, and controls the update loop"
     
     # Change this and the length of the STARS array for more stars...
-    MAXSTARS = 150
+    MAXSTARS = starCount
+    starSpeed = 5
+    #change this for starting star speed
+    
     # The number of live stars...
     NUMSTARS = 0 
     
-    # Initialise pygame, and grab an 8bit display.
+    # Initialize pygame, and grab an 8bit display.
     pygame.init()
     screen_surface = pygame.display.set_mode(RES, 0, 8)
-
     # setup the screen palette...
     for i in range(256):
         COLOUR_MAP[i] = (255-i,255-i,255-i)
-    #COLOUR_MAP[255] = (0,0,0)
     #print COLOUR_MAP
     # Slap the palette onto our display
     screen_surface.set_palette(COLOUR_MAP)
@@ -65,41 +68,47 @@ def main():
     # Create an initial star set...
     NUMSTARS = create_stars(NUMSTARS,MAXSTARS)
     FPSCLOCK = pygame.time.Clock()
-
+    screen_surface.fill((0,0,0))
     # Fruity loops...
     while 1:
     
         # Have we received an event to close the window?
         for e in pygame.event.get():
-            if e.type in (QUIT,KEYDOWN,MOUSEBUTTONDOWN):
+            if e.type is pygame.QUIT:
                 return
+            elif e.type is pygame.KEYDOWN:
+                if e.key == pygame.K_RIGHT:
+                    starSpeed += 1
+                elif e.key == pygame.K_LEFT:
+                    if starSpeed >0: starSpeed -= 1
+
+
 
         # Right, check for dead stars and make some new ones...
         NUMSTARS = create_stars(NUMSTARS, MAXSTARS)
         # Then update our star positions...
-        NUMSTARS = update_stars(NUMSTARS, MAXSTARS,screen_surface)
+        NUMSTARS = update_stars(NUMSTARS, MAXSTARS,screen_surface, starSpeed)
         # Show the results to our audience...
 
         pygame.display.update()
-        screen_surface.fill((0,0,0))
+        print FPSCLOCK.get_fps()
         FPSCLOCK.tick_busy_loop(30)
-        print FPSCLOCK.getFps()
-        pygame.display.flip()
+#         pygame.display.flip()
 # ------------------------------------------------------------------------------------
-def update_stars(nstars,mstars,screen):
+def update_stars(nstars,mstars,screen, starSpeed):
     "Erase old stars, and update the new ones before drawing them again..."
 
     # Loop through each star...
     for i in range(0,mstars):
 
         # Check the z-value for the star. If it's 0 we know we've found a dead star...
-        if(STARS[i][0] == 0):
+        if(STARS[i][2] == 0):
             # Ignore this and check the next star...
             nstars - 1
             continue
         else:
             # Ooo, we gotta live one. Erase it...
-            screen.fill((0,0,0), (COORDS[i][0], COORDS[i][1], 1, 1))            
+            screen.fill((0,0,0), (COORDS[i][0], COORDS[i][1], 4, 4))            
         
             # Calculate the new x/y coords for the star (This bitta maths nicked from Vulture/OUTLAW)...
             COORDS[i][0] = ((256 * STARS[i][1]) / STARS[i][0]) + RANGE_X
@@ -113,17 +122,16 @@ def update_stars(nstars,mstars,screen):
                 # Decrement the number of live stars so the next call to create_stars will make a new one...
                 nstars -= 1
                 continue
-            i = int(i)
             # Draw the star's new position to the screen using the colour specified in the colour_map...
-            screen.fill(COLOUR_MAP[STARS[i][0]], (COORDS[i][0], COORDS[i][1], 1, 1))            
+            screen.fill(COLOUR_MAP[int(STARS[i][0])], (COORDS[i][0], COORDS[i][1], 2, 2))            
 
             # Decrement the z value for the star... (Increment to zoom out)
             # Not checking for the z value == 1 caused a bastard bud I've been hunting all night :)
-            if (STARS[i][0] < 4):
-                STARS[i][0] -= 1
+            if (STARS[i][0] < starSpeed+1):
+                STARS[i][0] -= starSpeed
                 nstars -= 1
             else:
-                STARS[i][0] -= 1
+                STARS[i][0] -= starSpeed
                 
     return nstars
 # ------------------------------------------------------------------------------------

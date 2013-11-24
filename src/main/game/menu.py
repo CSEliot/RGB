@@ -1,3 +1,4 @@
+#@PydevCodeAnalysisIgnore
 import pygame, pgext, sys
 from pygame.locals import *  # @UnusedWildImport
 from pygame.compat import geterror  # @UnusedImport

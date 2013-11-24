@@ -1,4 +1,4 @@
-import pygame, pgext
+import pygame, pgext  #@PydevCodeAnalysisIgnore
 
 class Circle (pygame.sprite.Sprite):
 
