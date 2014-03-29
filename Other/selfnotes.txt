@@ -1,6 +1,10 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+UNITY VERSION: instead of resizing a circle, just move one in from a distance away, gets bigger and closer, 3D!
+
+ALTERNATE IDEA T CIRCLES: The star color dictates RGB input, not circle. . . .@_@
+
 
 FEEDBACK: The return button isn't obvious it is usable
 
