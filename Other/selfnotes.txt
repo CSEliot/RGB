@@ -5,6 +5,11 @@ UNITY VERSION: instead of resizing a circle, just move one in from a distance aw
 
 ALTERNATE IDEA T CIRCLES: The star color dictates RGB input, not circle. . . .@_@
 
+IN-GAME SONG EDITING!! It's possible, just pause game, edit the .level txt file, then save it, the hit a button X that 
+reloads the file from whatever command it last took in. It'll actually open a psuedo file that only contains commands that
+have not yet been read in. So, it'll make a .txt with the rest of the commands, you edit it, then the file merges the old
+with the new.
+
 
 FEEDBACK: The return button isn't obvious it is usable
 
