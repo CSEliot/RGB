@@ -1,8 +1,9 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
-UNITY VERSION: instead of resizing a circle, just move one in from a distance away, gets bigger and closer, 3D!
-
+Unreal VERSION: instead of resizing a circle, just move one in from a distance away, gets bigger and closer, 3D!
+				Also, have stars from center super small and get larger as they get closer to imply distance.
+				AND, have circle size increase exponential too.
 ALTERNATE IDEA T CIRCLES: The star color dictates RGB input, not circle. . . .@_@
 
 IN-GAME SONG EDITING!! It's possible, just pause game, edit the .level txt file, then save it, the hit a button X that 
