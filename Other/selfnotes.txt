@@ -1,6 +1,8 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+ALSO, what if instead of resizing circles, we had a ring of tiny stars expand outward together with a certain color on them??
+
 Unreal VERSION: instead of resizing a circle, just move one in from a distance away, gets bigger and closer, 3D!
 				Also, have stars from center super small and get larger as they get closer to imply distance.
 				AND, have circle size increase exponential too.
