@@ -139,9 +139,9 @@ def campaign(c, background, stock, store):
     dieingSprites = pygame.sprite.GroupSingle()
     scoreSprite = pygame.sprite.GroupSingle()
     pBox = playBox() # a jukebox for handling music settings.
-    
-    
-    ring = Ring(c.CENTER, stock.campaign["Ring"], stock.campaign["Ring Glow"])
+
+
+    ring = Ring(c.CENTER, stock.campaign["Ring"], stock.campaign["Ring Glow"], c.FULLSCREEN)
     '''CREATE IMAGES'''
     ring.add(ringSprite, allSprites)
     scoreboard = Scoreboard(c.DISPLAY_W, c.DISPLAY_H)
@@ -256,12 +256,12 @@ def campaign(c, background, stock, store):
         waitCounterCirc += 1
         waitCounterStar += 1
         # Paint the background
-        c.DISPLAYSURFACE.fill((0,0,0))
-        c.DISPLAYSURFACE.blit(background, background_rect)
-        if not c.FULLSCREEN:
-            if counter%2 == 0:
-                background, background_rect, rotAngle = \
-                rotateBackground(c.CENTER, OGBackground, counter, rotAngle)
+        #c.DISPLAYSURFACE.fill((0,0,0))
+        #c.DISPLAYSURFACE.blit(background, background_rect)
+        #if not c.FULLSCREEN:
+         #   if counter%2 == 0:
+          #      background, background_rect, rotAngle = \
+           #     rotateBackground(c.CENTER, OGBackground, counter, rotAngle)
             
             
             

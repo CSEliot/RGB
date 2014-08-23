@@ -1,15 +1,21 @@
 #@PydevCodeAnalysisIgnore
 import pygame, pgext  # @UnusedImport
 from pygame.locals import *  # @UnusedWildImport
+from debug import debug
 
 class Ring(pygame.sprite.Sprite):
 
 
-    def __init__(self, CENTER, image, glow):
+    def __init__(self, CENTER, image, glow, isFullscreen):
         pygame.sprite.Sprite.__init__(self)
         self.image, self.rect = image, image.get_rect()
         self.glow, self.glow_rect = glow, glow.get_rect()
-        self.glow_center = (CENTER[0]-63, CENTER[1]-10)
+        if isFullscreen:
+            debug(True, "setting ring adjustment to fullscreen size")
+            self.glow_center = (CENTER[0]-345, CENTER[1]-46)
+        else:
+            debug(True, "setting ring adjustment to WINDOWed size")
+            self.glow_center = (CENTER[0]-63, CENTER[1]-10)
         self.glow_rect.center = self.glow_center
         self.OGImage = self.image.copy()
         self.OGCenter = CENTER
