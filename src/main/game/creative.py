@@ -131,7 +131,7 @@ def showSplashScreen(c, stock):
         if pygame.event.poll().type == KEYUP:
             inInfoScreen = False
     
-def creative(c, background, stock):
+def creative(c, background, stock, store):
     
     debug(c.DEBUG, "ENTERING: campaign")
     
