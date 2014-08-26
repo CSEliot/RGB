@@ -51,14 +51,14 @@ class Constants(object):
         self.RED = pygame.color.Color('red')
         self.GREEN = pygame.color.Color('green')
         self.BLUE = pygame.color.Color('blue')
-        self.NO_MOUSE = pygame.mouse.set_visible(0)
+        self.NO_MOUSE = pygame.mouse.set_visible(1)
         self.WHITE = (255, 255, 255)
         self.BLANK = (0, 233, 0, 10)
         self.BLACK = (0, 0, 0)
         self.FPSCLOCK = pygame.time.Clock()
         self.FONT_LARGE = pygame.font.SysFont('arial', 32, True)
         self.FONT_SMALL = pygame.font.SysFont('arial', 16)
-        self.VERSION = 'betaVpre-1.4'
+        self.VERSION = 'beta-SHOWCASE-.8'
         self.DISPLAY_W = self.DISPLAYSURFACE.get_width()
         self.CENTER_X = (self.DISPLAY_W / 2)
         self.DISPLAY_H = self.DISPLAYSURFACE.get_height()

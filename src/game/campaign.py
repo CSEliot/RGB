@@ -172,6 +172,7 @@ def campaign(c, background, stock, store):
     g = 0
     b = 0
     pause_selection = 0
+    gamePaused = False
     total_input = 0
     fpsList = []
     toggle_color_r = False
@@ -256,7 +257,7 @@ def campaign(c, background, stock, store):
         waitCounterCirc += 1
         waitCounterStar += 1
         # Paint the background
-        #c.DISPLAYSURFACE.fill((0,0,0))
+        c.DISPLAYSURFACE.fill((0,0,0))
         #c.DISPLAYSURFACE.blit(background, background_rect)
         #if not c.FULLSCREEN:
          #   if counter%2 == 0:
@@ -524,13 +525,8 @@ def campaign(c, background, stock, store):
                     display_sprites = True
             # if P is pressed, pause game.
             elif event.type == KEYUP and event.key == controls[7]:
-                # have to time how long pause takes, for the wait.
-                pauseStartTime = datetime.datetime.now()
-                pause_selection = pause(c, stock, pygame.display.get_surface())
-                pauseEndTime = datetime.datetime.now()
-                pauseTotalTime = (pauseEndTime - pauseStartTime)
-                starWaitStart += pauseTotalTime
-                circleWaitStart += pauseTotalTime
+                gamePaused = True
+                
             
             """LOGGING of inputs"""
             if event.type == KEYDOWN or event.type == KEYUP:
@@ -637,6 +633,16 @@ def campaign(c, background, stock, store):
         """UPDATE"""
         pygame.display.flip()  # update()
 
+        # have to time how long pause takes, for the wait.
+        if gamePaused:
+            pauseStartTime = datetime.datetime.now()
+            pause_selection = pause(c, stock, pygame.display.get_surface())
+            pauseEndTime = datetime.datetime.now()
+            pauseTotalTime = (pauseEndTime - pauseStartTime)
+            starWaitStart += pauseTotalTime
+            circleWaitStart += pauseTotalTime
+            gamePaused = False
+
 
     return
 
@@ -657,5 +663,7 @@ if __name__ == "__main__":
     background_rect.center = c.CENTER
     
     campaign(c, background, stock, store)
-
+    
+    pygame.quit()
+    sys.exit()
 
