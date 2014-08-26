@@ -160,8 +160,8 @@ def main(debugSet):
         
     pygame.quit()
     sys.exit()
-if __name__ == '__main__':
-    print "HEY THERE SEXY LADY"
+def debugMain():
+    print "HEY THERE WE'RE DOING SPECIAL DEBUGGING"
     import logging
     DATE = datetime.date.timetuple(datetime.date.today())[0] , \
            datetime.date.timetuple(datetime.date.today())[1] , \

@@ -1,2 +1,2 @@
 import game.main
-game.main.main(1)
+game.main.debugMain()
