@@ -2075,3 +2075,36 @@ DEBUG INFO:  ENTERING: campaign
 DEBUG INFO:  COULD NOT LOAD MUSIC: /home/eliot2/rgb/src/music/It's Melting.ogg
 ERROR: Failed Loading Song
 COULD NOT LOAD MUSIC: /home/eliot2/rgb/src/music/It's Melting.ogg
+
+DEBUG INFO:  LOGGING TO FILE BEGINNING--
+
+DEBUG INFO:  (2014, 8, 25)
+
+DEBUG INFO:  Display Info: Display 1, Window Error: None
+
+DEBUG INFO:  ('Display 1', 'Window Error: None')
+
+DEBUG INFO:  Linux
+x11
+<VideoInfo(hw = 0, wm = 1,video_mem = 0
+	     blit_hw = 0, blit_hw_CC = 0, blit_hw_A = 0,
+	     blit_sw = 0, blit_sw_CC = 0, blit_sw_A = 0,
+	     bitsize  = 32, bytesize = 4,
+	     masks =  (16711680, 65280, 255, 0),
+	     shifts = (16, 8, 0, 0),
+	     losses =  (0, 0, 0, 8),
+	     current_w = 1366, current_h = 768
+>
+
+{'fswindow': 31457282, 'wmwindow': 31457283, 'window': 31457293, 'lock_func': <PyCObject object at 0x7fd45e086c60>, 'unlock_func': <PyCObject object at 0x7fd45e086c88>, 'display': <PyCObject object at 0x7fd45e086c38>}
+
+
+DEBUG INFO:  ENTERING: main
+
+DEBUG INFO:  Entering: mainMenu
+
+DEBUG INFO:  36.393442623
+
+DEBUG INFO:  ENTERING: campaign
+ERROR: Main Error
+TypeError('__init__() takes exactly 5 arguments (4 given)',)
