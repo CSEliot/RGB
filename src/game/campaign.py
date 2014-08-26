@@ -185,9 +185,9 @@ def campaign(c, background, stock, store):
     downHold = False
     #quitGame = False  # if user returns a True from pause, we quit game, etc.
     startTime = 0
-    genList = os.path.join(c.DATA_DIR, 'campaign commands/genCommands.txt')
-    circleList = os.path.join(c.DATA_DIR, 'campaign commands/circleCommands.txt')
-    starList = os.path.join(c.DATA_DIR, 'campaign commands/starCommands.txt')
+    genList = os.path.join(c.DATA_DIR, 'campaign_commands/genCommands.txt')
+    circleList = os.path.join(c.DATA_DIR, 'campaign_commands/circleCommands.txt')
+    starList = os.path.join(c.DATA_DIR, 'campaign_commands/starCommands.txt')
     genList, circleList, starList = commander(c, 
                                               genList, 
                                               circleList, 

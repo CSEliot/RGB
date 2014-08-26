@@ -214,9 +214,9 @@ def creative(c, background, stock, store):
     colorList = ""
     
     # open the files that we'll be saving to.
-    genFile = os.path.join(c.DATA_DIR, 'creative commands/genCommands.txt')
-    circleFile = os.path.join(c.DATA_DIR, 'creative commands/circleCommands.txt')
-    starFile = os.path.join(c.DATA_DIR, 'creative commands/starCommands.txt')
+    genFile = os.path.join(c.DATA_DIR, 'creative_commands/genCommands.txt')
+    circleFile = os.path.join(c.DATA_DIR, 'creative_commands/circleCommands.txt')
+    starFile = os.path.join(c.DATA_DIR, 'creative_commands/starCommands.txt')
     genFile = open(genFile, 'w')
     circleFile = open(circleFile, 'w')
     starFile = open(starFile, 'w')
