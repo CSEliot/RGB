@@ -19,7 +19,7 @@ class Constants(object):
         self.MUSC_DIR = os.path.join(self.MAIN_DIR, 'music')
         self.GAME_DIR = os.path.join(self.MAIN_DIR, 'game')
         # --controls and options//--
-        setList = self.get_OPTIONS()
+        setList = self.set_DEFAULT()
         # In order: R, G, B, Up, down, left, right, pause, debug
         self.CONTROL_LIST = [setList[2], setList[3], setList[4], setList[5], \
                              setList[6], setList[7], setList[8], setList[9], \
@@ -74,6 +74,8 @@ class Constants(object):
         self.BgAngle = 0
     def get_OPTIONS(self):
         optFile = open(os.path.join(self.DATA_DIR, 'options.dat'), 'r')
+        print optFile
+        #print "LOC: " + optFile.readlines()[0]
         optList = cPickle.load(optFile)
         optFile.close()
         return optList
@@ -83,3 +85,5 @@ class Constants(object):
                        K_p, K_i]
         optFile = open(os.path.join(self.DATA_DIR, 'options.dat'), 'w')
         cPickle.dump(defaultList, optFile)
+        optFile.close()
+        return defaultList
