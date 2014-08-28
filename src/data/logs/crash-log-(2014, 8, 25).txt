@@ -1,9 +1,0 @@
-ERROR:root:Oops: 
-Traceback (most recent call last):
-  File "/home/eliot2/rgb/src/game/main.py", line 177, in debugMain
-    main(1)
-  File "/home/eliot2/rgb/src/game/main.py", line 124, in main
-    creative(c, background, stock, store)
-  File "/home/eliot2/rgb/src/game/creative.py", line 153, in creative
-    ring = Ring(c.CENTER, stock.campaign["Ring"], stock.campaign["Ring Glow"])
-TypeError: __init__() takes exactly 5 arguments (4 given)
