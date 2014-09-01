@@ -1,7 +1,0 @@
-Version 1.4:
-	Sound Lag
-		(If the sound is lagging at all. Various presets have been commented out
-		in loader.py. Switch between them if you're experiencing sound lag.)
-	Menu stuff
-	
-	Note: DON'T WORRY ABOUT GAMEPLAY, it's all getting changed.

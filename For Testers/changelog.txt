@@ -1,4 +1,43 @@
 Changelog
+Changelog
+-------------------------------------------------
+beta v1.5a-SHOWCASE // x.xx.2014
+-------------------------------------------------
+Added:
+Changed:
+	- FPS set to 30.
+	- menu BG is scrolling stars. game BG is zooming.
+	- creative = How To Play, Alpha is Practice
+	- good bleep, bad bleep
+Removed:
+	- campaign mode
+	- How to play in campaign
+Fixed:
+	- pause pixelation not getting all
+Known-Issues:		
+Intentional:
+	- No options
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -------------------------------------------------
 beta pre-v1.4 // x.xx.2013
 -------------------------------------------------
@@ -25,23 +64,6 @@ Intentional:
 	- Pausing turned off for the first 2 phases of creative mode.
 	- Access to creative mode and campaign mode. 
 		(though they can still be by running them directly)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -------------------------------------------------
 beta v1.31 // 8.1.2013
