@@ -1,6 +1,13 @@
 Disclaimer: These are notes to myself, nobody has to read this. In fact,
 please don't, possible spoilers ahead.
 
+Okay, hold spacebar to enable auto-snap (up down left right), otherwise, left and right rotate. ALSO, stars are the dragged notes. 
+Basically a star shoots from the center, then you catch it with the ring, and on the star, it shows that you have to rotate 
+the ring up adn right 180* where another star will be arriving for you to catch. If you do it right, the star will release from
+there and shoot out. So basically, each star shows how you move it around, and the end of that moving there will be another
+star RIGHT there waiting for you. So you have to do the movements timed properly such that you get to the final star's location
+when the new one arrives. Capiche?
+
 ALSO, what if instead of resizing circles, we had a ring of tiny stars expand outward together with a certain color on them??
 
 Unreal VERSION: instead of resizing a circle, just move one in from a distance away, gets bigger and closer, 3D!
